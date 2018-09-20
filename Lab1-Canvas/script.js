@@ -125,7 +125,6 @@ function applyEraser(p1, p2, p3) {
     }
 
     if (canvas !== screen && eraserType !== 'swapClear') {
-        console.log('reset')
         canvas = screen;
         setCanvasVariables();
     }
@@ -281,9 +280,9 @@ function collisionInRightDirection(collision, direction) {
 // Возвращает направление линии (-1, 0, 1)
 function getLineDirection(p1, p2) {
     return {
-        x: Math.min(Math.max(Math.round(p2.x - p1.x), -1), 1), 
+        x: Math.min(Math.max(Math.round(p2.x - p1.x), -1), 1),
         y: Math.min(Math.max(Math.round(p2.y - p1.y), -1), 1)
-    }
+    };
 }
 
 
