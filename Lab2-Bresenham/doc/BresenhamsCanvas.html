@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>BresenhamsCanvas - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-link nav-home-link"><a id="clientDocLink" class="otherDocLink" href="../client/index.html">Switch to client doc</a></li><li class="nav-link nav-home-link"><a id="serverDocLink" class="otherDocLink" href="../server/index.html">Switch to server doc</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BresenhamsCanvas.html">BresenhamsCanvas</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#renderer">renderer</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#shapes">shapes</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#add">add</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#clear">clear</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#drawCircle">drawCircle</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#drawLine">drawLine</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#getDrawMethodName">getDrawMethodName</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Brush.html">Brush</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#end">end</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#reset">reset</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#setType">setType</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#start">start</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RenderArray.html">RenderArray</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="RenderArray.html#array">array</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RenderArray.html#add">add</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RenderArray.html#clear">clear</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RenderArray.html#remove">remove</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Renderer.html">Renderer</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#canvas">canvas</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#canvasData">canvasData</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#color">color</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#ctx">ctx</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#height">height</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#width">width</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#clearCanvas">clearCanvas</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#drawClearPixel">drawClearPixel</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#drawColoredPixel">drawColoredPixel</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#drawPixel">drawPixel</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#pixelIsInside">pixelIsInside</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#update">update</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title" id="BresenhamsCanvas">BresenhamsCanvas</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<!-- <header>
+    
+        <h2>
+        BresenhamsCanvas
+        </h2>
+        
+    
+</header> -->
+
+<article class="BresenhamsCanvas" id="main-article">
+    <div class="container-overview">
+    
+        
+
+<div class="
+    section-method
+    
+    
+">
+
+    
+
+    <h4 class="name" id="BresenhamsCanvas"><span class="type-signature"></span>new BresenhamsCanvas<span class="signature">(canvas, width, height, color)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Холст для рисования линий и окружностей по алгоритму Брезенхема.
+Конструктор создает рендерер для рисования пикселей на холсте и массив для хранения фигур для рисования.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>canvas</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>HTMLCanvasElement</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>HTML-элемент холст</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>ширина холста</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>высота холста</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>array</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>цвет рисования по холсту [r, g, b, a]</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title" id="members">Members</h3>
+
+        <div class="subsection-links">
+            
+                 
+<code class="
+	subsection-code
+	
+	
+"><a href="#renderer">renderer</a></code>
+
+
+            
+                 
+<code class="
+	subsection-code
+	
+	
+"><a href="#shapes">shapes</a></code>
+
+
+            
+        </div>
+
+        
+            
+<div class="
+    section-members
+    
+    
+">
+<h4 class="name" id="renderer"><span class="type-signature"></span>renderer<span class="type-signature"> :<a href="Renderer.html">Renderer</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Объект, рисующий пиксели на холсте.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+<!-- 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="Renderer.html">Renderer</a></code></span>
+
+
+        </li>
+    </ul>
+ -->
+
+
+
+
+</div>
+
+        
+            
+<div class="
+    section-members
+    
+    
+">
+<h4 class="name" id="shapes"><span class="type-signature"></span>shapes<span class="type-signature"> :<a href="RenderArray.html">RenderArray</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Массив с фигурами для рисования.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+<!-- 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="RenderArray.html">RenderArray</a></code></span>
+
+
+        </li>
+    </ul>
+ -->
+
+
+
+
+</div>
+
+        
+    
+
+    
+        <h3 class="subsection-title" id="methods">Methods</h3>
+
+        <div class="subsection-links">        
+            
+                
+<code class="
+	subsection-code
+	
+	
+"><a href="#add">add</a></code>
+
+            
+                
+<code class="
+	subsection-code
+	
+	
+"><a href="#clear">clear</a></code>
+
+            
+                
+<code class="
+	subsection-code
+	
+	
+"><a href="#drawCircle">drawCircle</a></code>
+
+            
+                
+<code class="
+	subsection-code
+	
+	
+"><a href="#drawLine">drawLine</a></code>
+
+            
+                
+<code class="
+	subsection-code
+	
+	
+"><a href="#getDrawMethodName">getDrawMethodName</a></code>
+
+            
+        </div>
+
+        
+            
+
+<div class="
+    section-method
+    
+    
+">
+
+    
+
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(type, p1, p2)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Создает, добавляет в массив и возвращает фигуру для рисования.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>тип фигуры ('line' или 'circle')</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>p1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>point</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>первая точка</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>p2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>point</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>вторая точка</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>object</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>Фигура в виде {type, p1, p2}.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+
+        
+            
+
+<div class="
+    section-method
+    
+    
+">
+
+    
+
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Очищает массив и холст.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+            
+
+<div class="
+    section-method
+    
+    
+">
+
+    
+
+    <h4 class="name" id="drawCircle"><span class="type-signature"></span>drawCircle<span class="signature">(p1, p2)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Рисует круг по алгоритму.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line114">line 114</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>p1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>point</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>первая точка</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>p2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>point</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>вторая точка</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+            
+
+<div class="
+    section-method
+    
+    
+">
+
+    
+
+    <h4 class="name" id="drawLine"><span class="type-signature"></span>drawLine<span class="signature">(p1, p2)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Рисует линию по алгоритму.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>p1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>point</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>первая точка</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>p2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>point</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>вторая точка</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+            
+
+<div class="
+    section-method
+    
+    
+">
+
+    
+
+    <h4 class="name" id="getDrawMethodName"><span class="type-signature"></span>getDrawMethodName<span class="signature">(type)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Возвращает названия метода для рисования на основе типа фигуры.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="BresenhamsCanvas.js.html">BresenhamsCanvas.js</a>, <a href="BresenhamsCanvas.js.html#line64">line 64</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>тип фигуры ('line' или 'circle')</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>string</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>Названия метода для рисования.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Sep 21 2018 23:42:49 GMT+0300 (Moscow Standard Time) using the Minami theme (modified).
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/jquery-1.9.1.min.js"></script>
+<script src="scripts/custom-scripts.js"></script>
+</body>
+</html>

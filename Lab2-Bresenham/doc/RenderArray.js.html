@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>RenderArray.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-link nav-home-link"><a id="clientDocLink" class="otherDocLink" href="../client/index.html">Switch to client doc</a></li><li class="nav-link nav-home-link"><a id="serverDocLink" class="otherDocLink" href="../server/index.html">Switch to server doc</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BresenhamsCanvas.html">BresenhamsCanvas</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#renderer">renderer</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#shapes">shapes</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#add">add</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#clear">clear</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#drawCircle">drawCircle</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#drawLine">drawLine</a></span></li><li class="nav-item BresenhamsCanvas"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="BresenhamsCanvas.html#getDrawMethodName">getDrawMethodName</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Brush.html">Brush</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#end">end</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#reset">reset</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#setType">setType</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#start">start</a></span></li><li class="nav-item Brush"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Brush.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="RenderArray.html">RenderArray</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="RenderArray.html#array">array</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RenderArray.html#add">add</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RenderArray.html#clear">clear</a></span></li><li class="nav-item RenderArray"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="RenderArray.html#remove">remove</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Renderer.html">Renderer</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#canvas">canvas</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#canvasData">canvasData</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#color">color</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#ctx">ctx</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#height">height</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="Renderer.html#width">width</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#clearCanvas">clearCanvas</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#drawClearPixel">drawClearPixel</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#drawColoredPixel">drawColoredPixel</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#drawPixel">drawPixel</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#pixelIsInside">pixelIsInside</a></span></li><li class="nav-item Renderer"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Renderer.html#update">update</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title" id="RenderArray.js">RenderArray.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* exported RenderArray */
+class RenderArray {
+
+    /**
+    * Массив для хранения фигур для рисования.
+    * @class
+    */
+    constructor() {
+
+        /**
+        * Массив с фигурами.
+        * @type {Array}
+        */
+        this.array = [];
+    }
+
+    /**
+    * Добавляет фигуру в массив.
+    * @param  {object} shape фигура
+    */
+    add(shape) {
+        this.array.push(shape);
+    }
+
+    /**
+    * Убирает фигуру из массива.
+    * @param  {object} shape фигура
+    */
+    remove(shape) {
+        let index = this.array.indexOf(shape);
+
+        if (index != -1) {
+            this.array.splice(index, 1);
+        }
+        else {
+            console.warn(`Trying to remove shape that's not on the render array`, shape, this);
+        }
+    }
+
+    /** Очищает массив. */
+    clear() {
+        this.array.length = 0;
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Sep 21 2018 23:42:49 GMT+0300 (Moscow Standard Time) using the Minami theme (modified).
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/jquery-1.9.1.min.js"></script>
+<script src="scripts/custom-scripts.js"></script>
+</body>
+</html>
