@@ -13,6 +13,8 @@ class Brush {
         this.p2 = null;
         this.shape = null;
         this.type = type;
+        this.lastUpdate = 0;
+        this.updateInterval = 10;
     }
 
     /**
@@ -38,6 +40,8 @@ class Brush {
         this.p2 = Object.assign({}, this.p1);
         this.shape = this.canvas.add(this.type, this.p1, this.p2);
         this.isDown = true;
+        this.lastUpdate = Date.now();
+        this.canvas.update();
     }
 
     /**
@@ -49,6 +53,14 @@ class Brush {
         if (!this.isDown) {
             return;
         }
+
+        let now = Date.now();
+
+        if (now - this.lastUpdate < this.updateInterval) {
+            return;
+        }
+
+        this.lastUpdate = now;
 
         this.shape.p2.x = event.offsetX;
         this.shape.p2.y = event.offsetY;
@@ -79,5 +91,6 @@ class Brush {
         this.shape = null;
         this.p1 = null;
         this.p2 = null;
+        this.lastUpdate = 0;
     }
 }
