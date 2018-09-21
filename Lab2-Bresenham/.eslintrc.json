@@ -25,9 +25,10 @@
         "semi": "warn"
     },
     "globals": {
+        "$": true,
         "Renderer": true,
         "BresenhamsCanvas": true,
         "Brush": true,
-        "RenderStack": true
+        "RenderArray": true
     }
 }

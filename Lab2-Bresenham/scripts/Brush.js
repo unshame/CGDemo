@@ -1,6 +1,11 @@
 /* exported Brush */
 class Brush {
 
+    /**
+    * Кисть для рисования при помощи мыши.
+    * @param  {HTMLCanvasElement} canvas HTML-элемент холст
+    * @param  {string} type   изначальный тип фигуры для рисования
+    */
     constructor(canvas, type) {
         this.canvas = canvas;
         this.isDown = false;
@@ -10,7 +15,12 @@ class Brush {
         this.type = type;
     }
 
+    /**
+    * Устанавливает тип фигуры для рисования.
+    * @param {string} type тип фигуры
+    */
     setType(type) {
+
         if(this.isDown) {
             this.reset();
         }
@@ -19,6 +29,10 @@ class Brush {
         this.canvas.update();
     }
 
+    /**
+    * Начинает рисование, устанавливая начальную точку.
+    * @param  {MouseEvent} event объект с информацией о событии
+    */
     start(event) {
         this.p1 = { x: event.offsetX, y: event.offsetY };
         this.p2 = Object.assign({}, this.p1);
@@ -26,7 +40,12 @@ class Brush {
         this.isDown = true;
     }
 
-    update() {
+    /**
+    * Продолжает рисование, обновляя конечную точку и вызывая перерисовку холста.
+    * @param  {MouseEvent} event объект с информацией о событии
+    */
+    update(event) {
+
         if (!this.isDown) {
             return;
         }
@@ -36,7 +55,12 @@ class Brush {
         this.canvas.update();
     }
 
+    /**
+    * Завершает рисования, обновляя конечную точку и вызывая перерисовку холста.
+    * @param  {MouseEvent} event объект с информацией о событии
+    */
     end(event) {
+
         if (!this.isDown) {
             return;
         }
@@ -47,6 +71,9 @@ class Brush {
         this.canvas.update();
     }
 
+    /**
+    * Сбрасывает состояние объекта.
+    */
     reset() {
         this.isDown = false;
         this.shape = null;

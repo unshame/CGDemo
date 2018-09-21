@@ -1,15 +1,45 @@
 /* exported Renderer */
 class Renderer {
 
+    /**
+    * Рисует пиксели на холсте.
+    * @class
+    * @param {HTMLCanvasElement} canvas  HTML-элемент холст
+    * @param {number}            width   ширина холста
+    * @param {number}            height  высота холста
+    * @param {array}             color   цвет рисования по холсту [r, g, b, a]
+    */
     constructor(canvas, width, height, color) {
+
+        /**
+        * Холст.
+        * @type {HTMLCanvasElement}
+        */
         this.canvas = canvas;
+
+        /**
+        * Контекст для рисования на холсте.
+        * @type {CanvasRenderingContext2D}
+        */
         this.ctx = canvas.getContext('2d');
+
         this.width = width;
         this.height = height;
+
+        /**
+        * Массив, представляющий пиксели холста.
+        * @type {array}
+        */
         this.canvasData = this.ctx.getImageData(0, 0, width, height);
+
+        /**
+        * Установленный цвет рисования на холсте.
+        * @type {array}
+        */
         this.color = color;
     }
 
+    /** Ширина холста. */
     get width() {
         return this.canvas.width;
     }
@@ -18,6 +48,7 @@ class Renderer {
         this.canvas.width = width;
     }
 
+    /** Высота холста. */
     get height() {
         return this.canvas.height;
     }
@@ -26,11 +57,18 @@ class Renderer {
         this.canvas.height = height;
     }
 
+    /** Обновляет изображение на холсте. */
     update() {
         this.ctx.putImageData(this.canvasData, 0, 0);
     }
 
+    /**
+    * Рисует пиксель на холсте.
+    * @param  {point} p      координаты пикселя
+    * @param  {array} color  цвет пикселя
+    */
     drawPixel(p, color) {
+
         if (!this.pixelIsInside(p)) {
             return;
         }
@@ -44,14 +82,23 @@ class Renderer {
         canvasData.data[index + 3] = color[3];
     }
 
+    /**
+    * Рисует пиксель установленного цвета на холсте.
+    * @param  {point} p      координаты пикселя
+    */
     drawColoredPixel(p) {
         this.drawPixel(p, this.color);
     }
 
+    /**
+    * Рисует прозрачный пиксель на холсте.
+    * @param  {point} p      координаты пикселя
+    */
     drawClearPixel(p) {
         this.drawPixel(p, [255, 255, 255, 0]);
     }
 
+    /** Очищает холст. */
     clearCanvas() {
         let canvasData = this.canvasData;
 
@@ -60,16 +107,12 @@ class Renderer {
         }
     }
 
-    clearRect(p1, p2) {
-
-        for (let x = p1.x; x <= p2.x; x++) {
-
-            for (let y = p1.y; y <= p2.y; y++) {
-                this.drawClearPixel({ x, y });
-            }
-        }
-    }
-
+    /**
+    * Проверяет, находится ли пиксель внутри холста.
+    * @param  {point} p      координаты пикселя
+    *
+    * @return {bool}
+    */
     pixelIsInside(p) {
         return p.x >= 0 && p.x < this.width && p.y >= 0 && p.y < this.height;
     }
