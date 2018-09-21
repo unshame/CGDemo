@@ -58,38 +58,36 @@ class BresenhamsCanvas {
     }
 
     drawCircle(p1, p2) {
-        let x0 = p1.x;
-        let y0 = p1.y;
         let lx = Math.abs(p2.x - p1.x);
         let ly = Math.abs(p2.y - p1.y);
         let radius = Math.round(Math.sqrt(lx * lx + ly * ly));
-        var x = radius - 1;
-        var y = 0;
-        var dx = 1;
-        var dy = 1;
-        var diameter = radius * 2;
-        var decisionOver2 = dx - diameter;   // Decision criterion divided by 2 evaluated at x=r, y=0
+        let x = radius - 1;
+        let y = 0;
+        let dx = 1;
+        let dy = 1;
+        let diameter = radius * 2;
+        let err = dx - diameter;
 
         while (x >= y) {
-            this.renderer.drawColoredPixel({x: x + x0, y: y + y0});
-            this.renderer.drawColoredPixel({x: y + x0, y: x + y0});
-            this.renderer.drawColoredPixel({x: -x + x0, y: y + y0});
-            this.renderer.drawColoredPixel({x: -y + x0, y: x + y0});
-            this.renderer.drawColoredPixel({x: -x + x0, y: -y + y0});
-            this.renderer.drawColoredPixel({x: -y + x0, y: -x + y0});
-            this.renderer.drawColoredPixel({x: x + x0, y: -y + y0});
-            this.renderer.drawColoredPixel({x: y + x0, y: -x + y0});
+            this.renderer.drawColoredPixel({x: x + p1.x, y: y + p1.y});
+            this.renderer.drawColoredPixel({x: y + p1.x, y: x + p1.y});
+            this.renderer.drawColoredPixel({x: -x + p1.x, y: y + p1.y});
+            this.renderer.drawColoredPixel({x: -y + p1.x, y: x + p1.y});
+            this.renderer.drawColoredPixel({x: -x + p1.x, y: -y + p1.y});
+            this.renderer.drawColoredPixel({x: -y + p1.x, y: -x + p1.y});
+            this.renderer.drawColoredPixel({x: x + p1.x, y: -y + p1.y});
+            this.renderer.drawColoredPixel({x: y + p1.x, y: -x + p1.y});
 
-            if (decisionOver2 <= 0) {
+            if (err <= 0) {
                 y++;
-                decisionOver2 += dy; // Change in decision criterion for y -> y+1
+                err += dy;
                 dy += 2;
             }
 
-            if (decisionOver2 > 0) {
+            if (err > 0) {
                 x--;
                 dx += 2;
-                decisionOver2 += (-diameter) + dx; // Change for y -> y+1, x -> x-1
+                err += dx - diameter;
             }
         }
     }
