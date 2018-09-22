@@ -4,12 +4,14 @@ html {
 }
 
 body {
+    position: relative;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
 
     min-height: 100%;
+    min-width: 964px;
     padding: 16px;
 
     background: #EEEEEE;
@@ -43,7 +45,9 @@ button.clear {
 	margin: 8px 12px 8px 0px;
 
 	width: 32px;
-	height: 32px;
+    height: 32px;
+    
+    outline: none;
 }
 
 button.clear:before {
@@ -89,12 +93,12 @@ button.mode {
     color:#009688;
     
     outline: none;
+    transition: all 0.3s;
 }
 
 button.mode.active {
     background: #009688;
     color: #FAFAFA;
-
 }
 
 button.mode::before {
