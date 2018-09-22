@@ -22,6 +22,8 @@ $(() => {
         main.addClass('back');
     }
 
+    location.hash = '';
+
     body.addClass('transition');
     main.show().addClass('ready');
     main.removeClass('back');
