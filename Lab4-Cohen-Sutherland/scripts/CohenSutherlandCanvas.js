@@ -1,9 +1,22 @@
 const CODES = {
     INSIDE: 0b0000,
-    LEFT: 0b0001,
-    RIGHT: 0b0010,
-    TOP: 0b0100,
+    LEFT:   0b0001,
+    RIGHT:  0b0010,
+    TOP:    0b0100,
     BOTTOM: 0b1000
+};
+
+CODES.toString = {
+    [CODES.INSIDE]: 'INSIDE',
+    [CODES.LEFT]:   'LEFT',
+    [CODES.RIGHT]:  'RIGHT',
+    [CODES.TOP]:    'TOP',
+    [CODES.BOTTOM]: 'BOTTOM',
+
+    [CODES.TOP    | CODES.LEFT]:  'TOP LEFT',
+    [CODES.TOP    | CODES.RIGHT]: 'TOP RIGHT',
+    [CODES.BOTTOM | CODES.LEFT]:  'BOTTOM LEFT',
+    [CODES.BOTTOM | CODES.RIGHT]: 'BOTTOM RIGHT',
 };
 
 /* exported CohenSutherlandCanvas */
@@ -176,8 +189,10 @@ class CohenSutherlandCanvas {
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        for(let shape of this.shapes.array) {
-            this[this.getDrawMethodName(shape.type)](shape.p1, shape.p2, shape.special);
+        for(let i = 0; i < this.shapes.array.length; i++) {
+            let shape = this.shapes.array[i];
+            let isLast = i === this.shapes.array.length - 1;
+            this[this.getDrawMethodName(shape.type)](shape.p1, shape.p2, shape.special, isLast);
         }
     }
 
@@ -210,10 +225,15 @@ class CohenSutherlandCanvas {
     * @param {point}  p1    первая точка
     * @param {point}  p2    вторая точка
     */
-    drawLine(p1, p2, special) {
+    drawLine(p1, p2, special, printInfo) {
 
         if (this.clippingEnabled && !special) {
-            [p1, p2] = this.clipLine(p1, p2);
+            [p1, p2] = this.clipLine(p1, p2, printInfo);
+
+            if (printInfo) {
+                console.log('Clipped to', p1, p2);
+                console.log('');
+            }
         }
 
         if(!p1 || !p2) {
@@ -248,31 +268,62 @@ class CohenSutherlandCanvas {
      * @param {point} start точка начала отрезка
      * @param {point} end точка конца отрезка
      */
-    clipLine(start, end) {
+    clipLine(start, end, printInfo) {
 
         // Находим области точек
         let o1 = this.getOutCode(start);
         let o2 = this.getOutCode(end);
+        let o1str = CODES.toString[o1];
+        let o2str = CODES.toString[o2];
+
+        if (printInfo) {
+            console.log(`Clipping`, start, `(${o1str})`, end, `(${o2str})`);
+        }
 
         // Обе точки находятся внутри прямоугольника
         if (o1 === CODES.INSIDE && o2 === CODES.INSIDE) {
+
+            if (printInfo) {
+                console.log(`Both points are INSIDE`);
+            }
+
             return [start, end];
         }
         // Обе точки находятся снаружи в одной зоне
         else if (o1 & o2) {
+
+            if (printInfo) {
+                console.log(`Both points are around the ${CODES.toString[o1 & o2]} area`);
+            }
+
             return [null, null];
         }
         // Точки находятся в разных зонах
         else {
 
+            if (printInfo) {
+                console.log(`Points are in different areas`);
+            }
+
             // Отрезаем первую попавшуюся часть линии, находящуюся снаружи и запускаем алгоритм с новой начальной/конечной точкой
             if (o1 !== CODES.INSIDE) {
-                let newStart = this.findIntersection(o1, start, end);
-                return this.clipLine(newStart, end);
+                
+                let newStart = this.findIntersection(o1, start, end, printInfo);
+
+                if (printInfo) {
+                    console.log(`New starting point is`, newStart);
+                }
+
+                return this.clipLine(newStart, end, printInfo);
             }
             else {
-                let newEnd = this.findIntersection(o2, start, end);
-                return this.clipLine(start, newEnd);
+                let newEnd = this.findIntersection(o2, start, end, printInfo);
+
+                if (printInfo) {
+                    console.log(`New end point is`, newEnd);
+                }
+
+                return this.clipLine(start, newEnd, printInfo);
             }
         }
     }
@@ -304,7 +355,7 @@ class CohenSutherlandCanvas {
         return outcode;
     }
 
-    findIntersection(outcode, start, end) {
+    findIntersection(outcode, start, end, printInfo) {
 
         // В уравнении прямой линии y = mx + c
         // m = (y2-y1)/(x2-x1)
@@ -323,8 +374,11 @@ class CohenSutherlandCanvas {
 
         // Пересечение
         let intersection = null;
+        let clipArea = null;
 
         if (outcode & CODES.BOTTOM) {
+
+            clipArea = CODES.BOTTOM;
 
             // Пересечение линии x = ymax
             intersection = {
@@ -334,6 +388,8 @@ class CohenSutherlandCanvas {
         }
         else if (outcode & CODES.TOP) {
 
+            clipArea = CODES.TOP;
+
             // Пересечение линии x = ymin
             intersection = {
                 x: (pr.ymin - c) / m,
@@ -342,6 +398,7 @@ class CohenSutherlandCanvas {
         }
         else if (outcode & CODES.RIGHT) {
 
+            clipArea = CODES.RIGHT;
             // Пересечение линии y = xmax
             intersection = {
                 x: pr.xmax,
@@ -350,11 +407,17 @@ class CohenSutherlandCanvas {
         }
         else if (outcode & CODES.LEFT) {
 
+            clipArea = CODES.LEFT;
+
             // Пересечение линии y=xmin
             intersection = {
                 x: pr.xmin,
                 y: (m * pr.xmin + c)
             };
+        }
+
+        if (printInfo) {
+            console.log(`Clipped ${CODES.toString[clipArea]} area`);
         }
 
         return intersection;
