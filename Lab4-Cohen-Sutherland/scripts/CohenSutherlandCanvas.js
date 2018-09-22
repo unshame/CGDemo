@@ -1,3 +1,11 @@
+const CODES = {
+    INSIDE: 0b0000,
+    LEFT: 0b0001,
+    RIGHT: 0b0010,
+    TOP: 0b0100,
+    BOTTOM: 0b1000
+};
+
 /* exported CohenSutherlandCanvas */
 class CohenSutherlandCanvas {
 
@@ -41,6 +49,9 @@ class CohenSutherlandCanvas {
         */
         this.shapes = new RenderArray();
 
+        /**
+        * Прямоугольник.
+        */
         this.rectangle = {
             type: 'rectangle',
             p1: {},
@@ -48,9 +59,9 @@ class CohenSutherlandCanvas {
             properties: null
         };
 
-        this.dashedLines = [];
+        this.guidingLines = [];
         for(let i = 0; i < 4; i++) {
-            this.dashedLines.push(this.add('line', { x: 0, y: 0 }, { x: 0, y: 0 }, false, true));
+            this.guidingLines.push(this.add('line', { x: 0, y: 0 }, { x: 0, y: 0 }, 'dashed'));
         }
 
         this.shapes.add(this.rectangle);
@@ -77,11 +88,13 @@ class CohenSutherlandCanvas {
         this.canvas.height = height;
     }
 
+    /** Цвет кисти в виде массива. */
     get color() {
-        return this.ctx.strokeStyle;
+        return this._color;
     }
 
     set color(color) {
+        this._color = color.slice();
         this.ctx.strokeStyle = `rgba(${color.join(',')})`;
     }
 
@@ -108,36 +121,37 @@ class CohenSutherlandCanvas {
             ymax: Math.max(p1.y, p2.y)
         };
 
-        this.dashedLines[0].p1.x = 0;
-        this.dashedLines[0].p1.y = pr.ymin;
-        this.dashedLines[0].p2.x = this.width;
-        this.dashedLines[0].p2.y = pr.ymin;
+        this.guidingLines[0].p1.x = 0;
+        this.guidingLines[0].p1.y = pr.ymin;
+        this.guidingLines[0].p2.x = this.width;
+        this.guidingLines[0].p2.y = pr.ymin;
 
-        this.dashedLines[1].p1.x = 0;
-        this.dashedLines[1].p1.y = pr.ymax;
-        this.dashedLines[1].p2.x = this.width;
-        this.dashedLines[1].p2.y = pr.ymax;
+        this.guidingLines[1].p1.x = 0;
+        this.guidingLines[1].p1.y = pr.ymax;
+        this.guidingLines[1].p2.x = this.width;
+        this.guidingLines[1].p2.y = pr.ymax;
 
-        this.dashedLines[2].p1.x = pr.xmin;
-        this.dashedLines[2].p1.y = 0;
-        this.dashedLines[2].p2.x = pr.xmin;
-        this.dashedLines[2].p2.y = this.height;
+        this.guidingLines[2].p1.x = pr.xmin;
+        this.guidingLines[2].p1.y = 0;
+        this.guidingLines[2].p2.x = pr.xmin;
+        this.guidingLines[2].p2.y = this.height;
 
-        this.dashedLines[3].p1.x = pr.xmax;
-        this.dashedLines[3].p1.y = 0;
-        this.dashedLines[3].p2.x = pr.xmax;
-        this.dashedLines[3].p2.y = this.height;
+        this.guidingLines[3].p1.x = pr.xmax;
+        this.guidingLines[3].p1.y = 0;
+        this.guidingLines[3].p2.x = pr.xmax;
+        this.guidingLines[3].p2.y = this.height;
     }
 
     /**
     * Создает, добавляет в массив и возвращает фигуру для рисования.
     * @param {string} type  тип фигуры ('line' или 'circle')
-    * @param {point}  p1    первая точка
-    * @param {point}  p2    вторая точка
+    * @param {point}  p1        первая точка
+    * @param {point}  p2        вторая точка
+    * @param {string}   special   указывает специальный тип линии ('moving' или 'dashed')
     *
-    * @return {object} Фигура в виде {type, p1, p2}.
+    * @return {object} Фигура в виде {type, p1, p2, special}.
     */
-    add(type, p1, p2, moving, dashed) {
+    add(type, p1, p2, special = '') {
 
         if (type == 'rectangle') {
             this.rectangle.p1.x = p1.x;
@@ -149,27 +163,27 @@ class CohenSutherlandCanvas {
 
         let shape = {
             type: type,
-            p1, p2, moving, dashed
+            p1, p2, special
         };
 
         this.shapes.add(shape);
         return shape;
     }
 
-    /* Очищает холст и выводит все фигуры из массива. */
+    /* Очищает холст и выводит все фигуры из массива, кроме прямоугольника и направляющих линий. */
     update() {
         this.updateRectangleProperties();
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         for(let shape of this.shapes.array) {
-            this[this.getDrawMethodName(shape.type)](shape.p1, shape.p2, shape.moving, shape.dashed);
+            this[this.getDrawMethodName(shape.type)](shape.p1, shape.p2, shape.special);
         }
     }
 
     /**
     * Возвращает названия метода для рисования на основе типа фигуры.
-    * @param  {string} type  тип фигуры ('line' или 'circle')
+    * @param  {string} type  тип фигуры ('line' или 'rectangle')
     *
     * @return {string} Названия метода для рисования.
     */
@@ -181,7 +195,7 @@ class CohenSutherlandCanvas {
     clear() {
         this.shapes.clear();
 
-        for (let line of this.dashedLines) {
+        for (let line of this.guidingLines) {
             this.shapes.add(line);
         }
 
@@ -192,13 +206,13 @@ class CohenSutherlandCanvas {
     }
 
     /**
-    * Рисует линию по алгоритму.
+    * Рисует линию.
     * @param {point}  p1    первая точка
     * @param {point}  p2    вторая точка
     */
-    drawLine(p1, p2, moving, dashed) {
+    drawLine(p1, p2, special) {
 
-        if (this.clippingEnabled && !moving && !dashed) {
+        if (this.clippingEnabled && !special) {
             [p1, p2] = this.clipLine(p1, p2);
         }
 
@@ -207,8 +221,8 @@ class CohenSutherlandCanvas {
         }
 
         let ctx = this.ctx;
-        ctx.lineWidth = dashed ? 2 : 1;
-        ctx.setLineDash(dashed ? [5, 2] : []);
+        ctx.lineWidth = special == 'dashed' ? 2 : 1;
+        ctx.setLineDash(special == 'dashed' ? [5, 2] : []);
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
@@ -216,7 +230,7 @@ class CohenSutherlandCanvas {
     }
 
     /**
-    * Рисует круг по алгоритму.
+    * Рисует прямоугольник.
     * @param {point}  p1    первая точка
     * @param {point}  p2    вторая точка
     */
@@ -229,94 +243,71 @@ class CohenSutherlandCanvas {
         ctx.strokeRect(p1.x, p1.y, w, h);
     }
 
+    /**
+     * Применяет алгоритм к отрезку.
+     * @param {point} start точка начала отрезка
+     * @param {point} end точка конца отрезка
+     */
     clipLine(start, end) {
 
+        // Находим области точек
         let o1 = this.getOutCode(start);
         let o2 = this.getOutCode(end);
 
-        //Both the outcodes are 0. This means both end points are inside the viewport
-        if (o1 == 0 && o2 == 0) {
+        // Обе точки находятся внутри прямоугольника
+        if (o1 === CODES.INSIDE && o2 === CODES.INSIDE) {
             return [start, end];
         }
-
-        //both the outcodes have the same bit set when both end points are outside viewport
-        else if ((o1 & o2) != 0) {
+        // Обе точки находятся снаружи в одной зоне
+        else if (o1 & o2) {
             return [null, null];
         }
-
-        //When both end points are outside viewport but portion of line is inside
+        // Точки находятся в разных зонах
         else {
-            let newStart = start;
-            let newEnd = end;
 
-            if (o1 != 0) {
-                let intersections = this.findIntersections(o1, start, end);
-                newStart = this.findFurthestIntersection(start, intersections);
+            // Отрезаем первую попавшуюся часть линии, находящуюся снаружи и запускаем алгоритм с новой начальной/конечной точкой
+            if (o1 !== CODES.INSIDE) {
+                let newStart = this.findIntersection(o1, start, end);
+                return this.clipLine(newStart, end);
             }
-
-            if (o2 != 0) {
-                let intersections = this.findIntersections(o2, start, end);
-                newEnd = this.findFurthestIntersection(end, intersections);
+            else {
+                let newEnd = this.findIntersection(o2, start, end);
+                return this.clipLine(start, newEnd);
             }
-
-            let startNewStart = this.getDistance(start, newStart);
-            let startNewEnd = this.getDistance(start, newEnd);
-            let endNewEnd = this.getDistance(end, newEnd);
-            let endNewStart = this.getDistance(end, newStart);
-
-            if (startNewStart > startNewEnd || endNewEnd > endNewStart) {
-                return [null, null];
-            }
-
-            return [newStart, newEnd];
         }
     }
 
+    // Находит область точки по отношению к прямоугольнику
     getOutCode(p) {
-        let outcode = 0b0000;
+        let outcode = CODES.INSIDE;
 
         let x = p.x;
         let y = p.y;
         let pr = this.rectangle.properties;
 
         if (y > pr.ymax){
-            outcode |= 0b1000;
+            outcode |= CODES.BOTTOM;
         }
 
         if (y < pr.ymin){
-            outcode |= 0b0100;
+            outcode |= CODES.TOP;
         }
 
         if (x > pr.xmax){
-            outcode |= 0b0010;
+            outcode |= CODES.RIGHT;
         }
 
         if (x < pr.xmin){
-            outcode |= 0b0001;
+            outcode |= CODES.LEFT;
         }
 
         return outcode;
     }
 
-    findFurthestIntersection(p, intersections) {
-        let furthest = intersections[0];
-        let longestDistance = this.getDistance(p, furthest);
+    findIntersection(outcode, start, end) {
 
-        for (let i = 1; i < intersections.length; i++) {
-            let distance = this.getDistance(p, intersections[i]);
-            if (distance > longestDistance) {
-                longestDistance = distance;
-                furthest = intersections[i];
-            }
-        }
-
-        return furthest;
-    }
-
-    findIntersections(outcode, start, end) {
-
-        //All lines are of the form y = mx + c
-        //m = (y2-y1)/(x2-x1)
+        // В уравнении прямой линии y = mx + c
+        // m = (y2-y1)/(x2-x1)
         let x1 = start.x;
         let x2 = end.x;
         let y1 = start.y;
@@ -324,61 +315,48 @@ class CohenSutherlandCanvas {
 
         let pr = this.rectangle.properties;
 
-        //Keeps track of all intersections
-        //We use a list because if the outcode contains 2 '1's, we need to calculate 2 intersections
-        let intersections = [];
-
-        //find slope
+        // Находим m
         let m = (y2 - y1) / (x2 - x1);
 
-        //find constant 'c' by substituting one of the end points for x and y
+        // Находим c, подставив одну из точек
         let c = y1 - m * x1;
 
-        if ((outcode & 0b1000) != 0) {
-            //intersection is on the line x=ymax
-            //The abscissa of intersect is to be calculated as (x, ymax)
-            //Ordinate of intersect is same as ymax
-            intersections.push({
+        // Пересечение
+        let intersection = null;
+
+        if (outcode & CODES.BOTTOM) {
+
+            // Пересечение линии x = ymax
+            intersection = {
                 x: (pr.ymax - c) / m,
                 y: pr.ymax
-            });
+            };
         }
+        else if (outcode & CODES.TOP) {
 
-        if ((outcode & 0b0100) != 0) {
-            //Intersection is on the line x=ymin
-
-            intersections.push({
+            // Пересечение линии x = ymin
+            intersection = {
                 x: (pr.ymin - c) / m,
                 y: pr.ymin
-            });
+            };
         }
+        else if (outcode & CODES.RIGHT) {
 
-        if ((outcode & 0b0010) != 0) {
-            //Intersection on line y=xmax
-            //The abscissa of intersect is same as xmax
-            //The ordinate of intersect is to be calculated
-            intersections.push({
+            // Пересечение линии y = xmax
+            intersection = {
                 x: pr.xmax,
                 y: (m * pr.xmax + c)
-            });
+            };
         }
+        else if (outcode & CODES.LEFT) {
 
-        if ((outcode & 0b0001) != 0) {
-            //Intersection is on the line y=xmin
-            intersections.push({
+            // Пересечение линии y=xmin
+            intersection = {
                 x: pr.xmin,
                 y: (m * pr.xmin + c)
-            });
+            };
         }
 
-        return intersections;
+        return intersection;
     }
-
-    getDistance(p1, p2) {
-        let dx = Math.abs(p2.x - p1.x);
-        let dy = Math.abs(p2.y - p1.y);
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-
 }

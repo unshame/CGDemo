@@ -38,8 +38,7 @@ class Brush {
     start(event) {
         this.p1 = { x: event.offsetX, y: event.offsetY };
         this.p2 = Object.assign({}, this.p1);
-        this.shape = this.canvas.add(this.type, this.p1, this.p2);
-        this.shape.moving = true;
+        this.shape = this.canvas.add(this.type, this.p1, this.p2, 'moving');
         this.isDown = true;
         this.lastUpdate = Date.now();
         this.canvas.update();
@@ -91,7 +90,7 @@ class Brush {
         this.isDown = false;
 
         if(this.shape) {
-            this.shape.moving = false;
+            this.shape.special = '';
         }
 
         this.shape = null;
