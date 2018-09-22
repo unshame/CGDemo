@@ -6,13 +6,13 @@ let canvas = screen;
 
 /* ОЦПИИ */
 
-let canvasWidth = canvas.width = page1.width = page2.width = 600;
-let canvasHeight = canvas.height = page1.height = page2.height = 400;
-let p2 = { x: 15, y: 80 };
-let p3 = { x: 120, y: 120 };
-let color1 = [255, 0, 255, 255];
-let color2 = [0, 255, 0, 255];
-let color3 = [0, 0, 200, 255];
+let canvasWidth = canvas.width = page1.width = page2.width = 800;
+let canvasHeight = canvas.height = page1.height = page2.height = 540;
+let p2 = { x: 15, y: -80 };
+let p3 = { x: 120, y: 20 };
+let color1 = [216, 27, 96, 255];
+let color2 = [216, 27, 96, 255];
+let color3 = [216, 27, 96, 255];
 let angle = 13;
 
 
@@ -43,6 +43,8 @@ document.querySelectorAll('input[name="eraser"]').forEach((el) => {
 let interval = getInterval();
 document.getElementById('interval').addEventListener('change', () => interval = getInterval());
 document.getElementById('interval').addEventListener('keyup', () => interval = getInterval());
+
+document.getElementById('button_clear').addEventListener('click', () => clearScreen());
 
 // Инициализация треугольника в центре экрана
 let hw = canvasWidth / 2;

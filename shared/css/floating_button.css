@@ -40,7 +40,6 @@
 }
 
 .button_floating:active {
-    background: #009688;
     color: #FAFAFA;
 }
 
@@ -62,6 +61,14 @@
 
 .button_floating.forward::after {
     background: url('../images/forward_cyan.png');
+}
+
+.button_floating:active.back::after {
+    background: url('../images/back.png');
+}
+
+.button_floating:active.forward::after {
+    background: url('../images/forward.png');
 }
 
 .button_floating:active.back::after {

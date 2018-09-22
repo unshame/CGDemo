@@ -1,0 +1,36 @@
+
+#page1, #page2 {
+    display: none;
+}
+
+input[type="number"] {
+    width: 40px;
+}
+
+header {
+	background-color: #D81B60;
+}
+
+canvas {
+    cursor: default;
+}
+
+button.mode {
+    color:#D81B60;
+}
+
+button.mode.active {
+    background: #D81B60;
+}
+
+.button_floating:active {
+    background: #D81B60;
+}
+
+.button_floating.back::after {
+    background: url('../../shared/images/back_red.png');
+}
+
+.button_floating.forward::after {
+    background: url('../../shared/images/forward_red.png');
+}

@@ -42,6 +42,10 @@ button.mode.active.button_circle::after {
     background: url('../../shared/images/circle.png');
 }
 
+.button_floating:active {
+    background: #2196F3;
+}
+
 .button_floating.back::after {
     background: url('../../shared/images/back_blue.png');
 }
@@ -50,10 +54,3 @@ button.mode.active.button_circle::after {
     background: url('../../shared/images/forward_blue.png');
 }
 
-.button_floating:active.back::after {
-    background: url('../../shared/images/back.png');
-}
-
-.button_floating:active.forward::after {
-    background: url('../../shared/images/forward.png');
-}

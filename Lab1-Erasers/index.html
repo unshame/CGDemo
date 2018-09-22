@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Erasing Methods</title>
+        <link href="../shared/css/reset.css" rel="stylesheet" type="text/css">
+        <link href="../shared/css/floating_button.css" rel="stylesheet" type="text/css">
+        <link href="../shared/css/layout.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+    </head>
+    
+    <body>
+        <main>
+            <div class="elevated">
+                <header>
+                    <button title="Clear Canvas" class="toolbar clear" id="button_clear"></button>
+                    <div class="title">Erasing Methods</div>
+                </header>
+                <canvas id="screen"></canvas>
+            </div>
+            <fieldset>
+                <legend>Erasing Method</legend>
+                <label><input type="radio" value="fullClear" name="eraser" checked>Full clear</label>
+                <label><input type="radio" value="boxClear" name="eraser">Bounding box</label>
+                <label><input type="radio" value="swapClear" name="eraser">Page swap</label>
+                <label><input type="radio" value="noClear" name="eraser">Disabled</label>
+            </fieldset>
+            <fieldset>
+                <legend>Triangle Options</legend>
+                Update interval: <input type="number" value="10" min="1" max="1000" id="interval"> ms
+            </fieldset>
+            <canvas id="page1" class="pages"></canvas><canvas id="page2" class="pages"></canvas>
+        </main>
+        <a class="button_floating forward" href="../Lab2-Bresenham/index.html" title="Bresenham's Line Algorithm"></a>
+        <script src="./script.js"></script>
+    </body>
+</html>

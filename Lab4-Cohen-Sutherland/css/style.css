@@ -1,5 +1,3 @@
-
-
 header {
 	background-color: #009688;
 }
@@ -72,6 +70,9 @@ button.mode.active.button_unclip::after {
     background: url('../../shared/images/unclip.png');
 }
 
+.button_floating:active {
+    background: #009688;
+}
 
 .button_floating.back::after {
     background: url('../../shared/images/back_cyan.png');
@@ -79,12 +80,4 @@ button.mode.active.button_unclip::after {
 
 .button_floating.forward::after {
     background: url('../../shared/images/forward_cyan.png');
-}
-
-.button_floating:active.back::after {
-    background: url('../../shared/images/back.png');
-}
-
-.button_floating:active.forward::after {
-    background: url('../../shared/images/forward.png');
 }
