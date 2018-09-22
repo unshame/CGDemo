@@ -40,12 +40,12 @@ function addArrowClickEvent(button, direction, event) {
         main.addClass(direction);
         body.addClass('transition');
         setTimeout(() => {
-            location.href = button.attr('href');
+            location.href = button.attr('href') + '#' + direction;
         }, location.host ? 100 : 150);
         return false;
     });
 
     button.attr('href', (i, attr) => {
-        return attr + '/' + indexHtml + '#' + direction;
+        return attr + '/' + indexHtml;
     })
 }
