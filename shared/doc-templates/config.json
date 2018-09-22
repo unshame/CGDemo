@@ -1,0 +1,16 @@
+{
+	"opts": {
+	    "template": "./doc/templates/minami-custom",        
+	    "recurse": true, 
+	    "readme": "./README.md"
+	},
+	"plugins": [
+	    "plugins/markdown",
+	    "doc/jsdoc-custom-plugin.js"
+	],
+	"templates": {
+		"default":{
+			"useLongnameInNav": true
+		}
+	}
+}

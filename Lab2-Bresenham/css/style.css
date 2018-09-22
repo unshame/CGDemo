@@ -1,121 +1,13 @@
-html {
-    width: auto;
-    height: 100%;
-}
-
-body {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-
-    min-height: 100%;
-    padding: 16px;
-
-    background: #EEEEEE;
-    font-family: sans-serif;
-}
-
-.elevated {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    width: 800px;
-}
-
 header {
-    height: 48px;
-    z-index: 1;
-    position: relative;
 	background-color: #2196F3;
-	color: #fafafa;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-}
-
-header .title {
-    padding: 16px;
-    font-size: 20px;
-    user-select: none;
-}
-
-button.clear {
-    position: relative;
-    float: right;
-
-	margin: 8px 12px 8px 0px;
-
-	width: 32px;
-	height: 32px;
-}
-
-button.clear:before {
-    content: '';
-    display: block;
-    position: absolute;
-
-	left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-
-    z-index: 3;
-    
-    background: url('../images/clear.png');
-}
-
-canvas {
-    width: 100%;
-    height: 540px;
-    background: #FAFAFA;
-    cursor: crosshair;
-}
-
-.buttons {
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 button.mode {
-    display: block;
-    position: relative;
-    margin-top: 8px;
-	padding: 0 8px;
-    
-    width: 150px;    
-    height: 48px;
-    
-    font-weight: bold;
-    background:#FAFAFA;
-    color:#2196F3;
-    
-    outline: none;
+    color: #2196F3;
 }
 
 button.mode.active {
     background: #2196F3;
-    color: #FAFAFA;
-
-}
-
-button.mode::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: -1;
-    background: transparent;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
-}
-
-button.mode::after {
-    content: '';
-    display: block;
-    position: absolute;
-    z-index: 2;
-    width: 48px;
-    height: 48px;
 }
 
 
@@ -127,11 +19,11 @@ button.mode.button_line, button.mode.button_line::before {
 button.mode.button_line::after {
     top: 0;
     left: 8px;
-    background: url('../images/line_blue.png');
+    background: url('../../shared/images/line_blue.png');
 }
 
 button.mode.active.button_line::after {
-    background: url('../images/line.png');
+    background: url('../../shared/images/line.png');
 }
 
 button.mode.button_circle, button.mode.button_circle::before {
@@ -142,9 +34,26 @@ button.mode.button_circle, button.mode.button_circle::before {
 button.mode.button_circle::after {
     top: 0;
     right: 8px;
-    background: url('../images/circle_blue.png');
+    background: url('../../shared/images/circle_blue.png');
 }
 
+
 button.mode.active.button_circle::after {
-    background: url('../images/circle.png');
+    background: url('../../shared/images/circle.png');
+}
+
+.button_floating.back::after {
+    background: url('../../shared/images/back_blue.png');
+}
+
+.button_floating.forward::after {
+    background: url('../../shared/images/forward_blue.png');
+}
+
+.button_floating:active.back::after {
+    background: url('../../shared/images/back.png');
+}
+
+.button_floating:active.forward::after {
+    background: url('../../shared/images/forward.png');
 }
