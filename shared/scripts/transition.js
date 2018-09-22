@@ -5,7 +5,6 @@ let body = $('body');
 
 let indexHtml = location.host ? '' : 'index.html';
 
-
 if(buttonBack.length > 0) {
     addArrowClickEvent(buttonBack, 'back', event)
 }
@@ -42,7 +41,7 @@ function addArrowClickEvent(button, direction, event) {
         body.addClass('transition');
         setTimeout(() => {
             location.href = button.attr('href');
-        }, 100);
+        }, location.host ? 100 : 150);
         return false;
     });
 
