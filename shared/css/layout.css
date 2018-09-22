@@ -18,13 +18,13 @@ body {
     font-family: sans-serif;
 }
 
-main {
-    transition: margin 1s;
-    margin-left: -150%;
+body.transition {
+    overflow-x: hidden;
 }
 
-main.ready {
-    margin-left: 0;
+main {
+    opacity: 0;
+    margin: 0;
 }
 
 main.forward {
@@ -33,6 +33,17 @@ main.forward {
 
 main.back {
     margin-right: -150%;
+}
+
+main.ready {
+    transition: margin 0.5s;
+    opacity: 1;
+    margin: 0;
+}
+
+main.transition {
+    transition: margin 0.5s;
+    opacity: 1;
 }
 
 .elevated {
