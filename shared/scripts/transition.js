@@ -6,11 +6,11 @@ let body = $('body');
 let indexHtml = location.host ? '' : 'index.html';
 
 if(buttonBack.length > 0) {
-    addArrowClickEvent(buttonBack, 'back', event)
+    addArrowClickEvent(buttonBack, 'back');
 }
 
 if (buttonForward.length > 0) {
-    addArrowClickEvent(buttonForward, 'forward', event)
+    addArrowClickEvent(buttonForward, 'forward');
 }
 
 $(() => {
@@ -33,7 +33,7 @@ $(() => {
 });
 
 
-function addArrowClickEvent(button, direction, event) {
+function addArrowClickEvent(button, direction) {
     button.click((event) => {
         main.removeClass('ready');
         main.addClass('transition');
@@ -41,7 +41,7 @@ function addArrowClickEvent(button, direction, event) {
         body.addClass('transition');
         setTimeout(() => {
             location.href = button.attr('href') + '#' + direction;
-        }, location.host ? 100 : 150);
+        }, location.host ? 125 : 200);
         return false;
     });
 
