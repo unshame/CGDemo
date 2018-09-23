@@ -231,7 +231,7 @@ class CohenSutherlandCanvas {
             [p1, p2] = this.clipLine(p1, p2, printInfo);
 
             if (printInfo) {
-                console.log('Clipped to', p1, p2);
+                console.log('Clipped to', this.convertToCartesianCoord(p1), this.convertToCartesianCoord(p2));
                 console.log('');
             }
         }
@@ -277,7 +277,7 @@ class CohenSutherlandCanvas {
         let o2str = CODES.toString[o2];
 
         if (printInfo) {
-            console.log(`Clipping`, start, `(${o1str})`, end, `(${o2str})`);
+            console.log(`Clipping`, this.convertToCartesianCoord(start), `(${o1str})`, this.convertToCartesianCoord(end), `(${o2str})`);
         }
 
         // Обе точки находятся внутри прямоугольника
@@ -311,7 +311,7 @@ class CohenSutherlandCanvas {
                 let newStart = this.findIntersection(o1, start, end, printInfo);
 
                 if (printInfo) {
-                    console.log(`New starting point is`, newStart);
+                    console.log(`New starting point is`, this.convertToCartesianCoord(newStart));
                 }
 
                 return this.clipLine(newStart, end, printInfo);
@@ -320,7 +320,7 @@ class CohenSutherlandCanvas {
                 let newEnd = this.findIntersection(o2, start, end, printInfo);
 
                 if (printInfo) {
-                    console.log(`New end point is`, newEnd);
+                    console.log(`New end point is`, this.convertToCartesianCoord(newEnd));
                 }
 
                 return this.clipLine(start, newEnd, printInfo);
@@ -409,7 +409,7 @@ class CohenSutherlandCanvas {
 
             clipArea = CODES.LEFT;
 
-            // Пересечение линии y=xmin
+            // Пересечение линии y = xmin
             intersection = {
                 x: pr.xmin,
                 y: (m * pr.xmin + c)
@@ -421,5 +421,12 @@ class CohenSutherlandCanvas {
         }
 
         return intersection;
+    }
+
+    convertToCartesianCoord(p) {
+        return p && {
+            x: Math.round(p.x),
+            y: Math.round(this.height - p.y)
+        };
     }
 }
