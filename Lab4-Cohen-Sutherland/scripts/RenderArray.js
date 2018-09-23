@@ -16,7 +16,7 @@ class RenderArray {
 
     /**
     * Добавляет фигуру в массив.
-    * @param  {object} shape фигура
+    * @param {object} shape фигура
     */
     add(shape) {
         this.array.push(shape);
@@ -24,7 +24,7 @@ class RenderArray {
 
     /**
     * Убирает фигуру из массива.
-    * @param  {object} shape фигура
+    * @param {object} shape фигура
     */
     remove(shape) {
         let index = this.array.indexOf(shape);

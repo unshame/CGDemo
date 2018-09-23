@@ -170,13 +170,14 @@ $(function () {
 	var private = $('.quickaccess-private').filter(function(){
 		return $(this).css('display') != 'none';
 	});
+	var source = $('.tag-source');
 
+	li = addTag('Toggle:', title);
+	addToggle(source, 'source', 'jsdoc-quickaccess-hide-source', li);
 	if(inhereted.size() || private.size()){
-		li = addTag('Toggle:', title);
 		addToggle(inhereted, 'inhereted', 'jsdoc-quickaccess-hide-inhereted', li);
 		addToggle(private, 'private', 'jsdoc-quickaccess-hide-private', li);
 	}
-
 });
 
 function addTag(text, title){
@@ -186,7 +187,7 @@ function addTag(text, title){
 		
 		title.after(dl);
 	}
-	dl.append('<dt class="tag-source">' + text + '</dt>');
+	dl.append('<dt>' + text + '</dt>');
 	var dd = $('<dd>');
 	dd.html('<ul class="dummy"><li></li></ul>');
 	dl.append(dd);

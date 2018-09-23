@@ -3,17 +3,57 @@ class Brush {
 
     /**
     * Кисть для рисования при помощи мыши.
-    * @param  {HTMLCanvasElement} canvas HTML-элемент холст
-    * @param  {string} type   изначальный тип фигуры для рисования
+    * @param {HTMLCanvasElement} canvas элемент холст
+    * @param {string}            type   изначальный тип фигуры для рисования
     */
     constructor(canvas, type) {
+
+        /**
+        * Холст.
+        * @type {HTMLCanvasElement}
+        */
         this.canvas = canvas;
+
+        /**
+        * Рисует ли кисть в данный момент.
+        * @type {Boolean}
+        */
         this.isDown = false;
+
+        /**
+        * Начальная точка рисования.
+        * @type {point}
+        */
         this.p1 = null;
+
+        /**
+        * Конечная точка рисования.
+        * @type {point}
+        */
         this.p2 = null;
+
+        /**
+        * Обект рисуемой фигуры.
+        * @type {object}
+        */
         this.shape = null;
+
+        /**
+        * Тип рисуемой фигуры.
+        * @type {string}
+        */
         this.type = type;
+
+        /**
+        * Последнее обновление позиции кисти.
+        * @type {Number}
+        */
         this.lastUpdate = 0;
+
+        /**
+        * Интервал обновления кисти.
+        * @type {Number}
+        */
         this.updateInterval = 10;
     }
 
@@ -68,7 +108,7 @@ class Brush {
     }
 
     /**
-    * Завершает рисования, обновляя конечную точку и вызывая перерисовку холста.
+    * Завершает рисование, обновляя конечную точку и вызывая перерисовку холста.
     * @param  {MouseEvent} event объект с информацией о событии
     */
     end(event) {

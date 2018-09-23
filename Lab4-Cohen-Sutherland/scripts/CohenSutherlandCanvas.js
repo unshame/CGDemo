@@ -1,38 +1,22 @@
-const CODES = {
-    INSIDE: 0b0000,
-    LEFT:   0b0001,
-    RIGHT:  0b0010,
-    TOP:    0b0100,
-    BOTTOM: 0b1000
-};
-
-CODES.toString = {
-    [CODES.INSIDE]: 'INSIDE',
-    [CODES.LEFT]:   'LEFT',
-    [CODES.RIGHT]:  'RIGHT',
-    [CODES.TOP]:    'TOP',
-    [CODES.BOTTOM]: 'BOTTOM',
-
-    [CODES.TOP    | CODES.LEFT]:  'TOP LEFT',
-    [CODES.TOP    | CODES.RIGHT]: 'TOP RIGHT',
-    [CODES.BOTTOM | CODES.LEFT]:  'BOTTOM LEFT',
-    [CODES.BOTTOM | CODES.RIGHT]: 'BOTTOM RIGHT',
-};
-
 /* exported CohenSutherlandCanvas */
 class CohenSutherlandCanvas {
 
     /**
-    * Холст для рисования линий и окружностей по алгоритму Брезенхема.
-    * Конструктор создает рендерер для рисования пикселей на холсте и массив для хранения фигур для рисования.
+    * Холст для рисования линий и их отсекания по алгоритму Коэна-Сазерленда.
+    * Конструктор создает массив для хранения фигур для рисования.
     * @class
     * @param {HTMLCanvasElement} canvas  HTML-элемент холст
     * @param {number}            width   ширина холста
     * @param {number}            height  высота холста
     * @param {array}             color   цвет рисования по холсту [r, g, b, a]
+    * @param {bool}              enabled включен ли режим отсечения по умолчанию
     */
     constructor(canvas, width, height, color, enabled) {
 
+        /**
+        * Включен ли режим отсечения.
+        * @type {bool}
+        */
         this.clippingEnabled = enabled;
 
         /**
@@ -72,6 +56,10 @@ class CohenSutherlandCanvas {
             properties: null
         };
 
+        /**
+        * Навправляющие линии прямоугольника.
+        * @type {point[]}
+        */
         this.guidingLines = [];
         for(let i = 0; i < 4; i++) {
             this.guidingLines.push(this.add('line', { x: 0, y: 0 }, { x: 0, y: 0 }, 'dashed'));
@@ -83,7 +71,10 @@ class CohenSutherlandCanvas {
         this.update();
     }
 
-    /** Ширина холста. */
+    /**
+    * Ширина холста.
+    * @type {number}
+    */
     get width() {
         return this.canvas.width;
     }
@@ -92,7 +83,10 @@ class CohenSutherlandCanvas {
         this.canvas.width = width;
     }
 
-    /** Высота холста. */
+    /**
+    * Высота холста.
+    * @type {number}
+    */
     get height() {
         return this.canvas.height;
     }
@@ -101,7 +95,10 @@ class CohenSutherlandCanvas {
         this.canvas.height = height;
     }
 
-    /** Цвет кисти в виде массива. */
+    /**
+    * Цвет кисти в виде массива.
+    * @type {number[]}
+    */
     get color() {
         return this._color;
     }
@@ -111,6 +108,7 @@ class CohenSutherlandCanvas {
         this.ctx.strokeStyle = `rgba(${color.join(',')})`;
     }
 
+    /** Восстанавливает позицию и размер прямоугольника. */
     resetRectangle() {
         let w = this.width - 300;
         let h = this.height - 200;
@@ -122,6 +120,7 @@ class CohenSutherlandCanvas {
         this.rectangle.properties = null;
     }
 
+    /** Обновляет объект свойст прямоугольника. */
     updateRectangleProperties() {
         let p1 = this.rectangle.p1;
         let p2 = this.rectangle.p2;
@@ -157,10 +156,11 @@ class CohenSutherlandCanvas {
 
     /**
     * Создает, добавляет в массив и возвращает фигуру для рисования.
-    * @param {string} type  тип фигуры ('line' или 'circle')
-    * @param {point}  p1        первая точка
-    * @param {point}  p2        вторая точка
-    * @param {string}   special   указывает специальный тип линии ('moving' или 'dashed')
+    * Новые прямоугольники не создается, используется уже существующий.
+    * @param {string} type    тип фигуры ('line' или 'rectangle')
+    * @param {point}  p1      первая точка
+    * @param {point}  p2      вторая точка
+    * @param {string} special указывает специальный тип линии ('moving' или 'dashed')
     *
     * @return {object} Фигура в виде {type, p1, p2, special}.
     */
@@ -198,7 +198,7 @@ class CohenSutherlandCanvas {
 
     /**
     * Возвращает названия метода для рисования на основе типа фигуры.
-    * @param  {string} type  тип фигуры ('line' или 'rectangle')
+    * @param {string} type тип фигуры ('line' или 'rectangle')
     *
     * @return {string} Названия метода для рисования.
     */
@@ -221,16 +221,17 @@ class CohenSutherlandCanvas {
     }
 
     /**
-    * Рисует линию.
-    * @param {point}  p1    первая точка
-    * @param {point}  p2    вторая точка
+    * Рисует линию, отсекая ее, если флаг `this.clippingEnabled` установлен.
+    * @param {point}  p1      первая точка
+    * @param {point}  p2      вторая точка
+    * @param {string} special указывает специальный тип линии ('moving' или 'dashed')
     */
-    drawLine(p1, p2, special, printInfo) {
+    drawLine(p1, p2, special, shouldPrintInfo) {
 
         if (this.clippingEnabled && !special) {
-            [p1, p2] = this.clipLine(p1, p2, printInfo);
+            [p1, p2] = this.clipLine(p1, p2, shouldPrintInfo);
 
-            if (printInfo) {
+            if (shouldPrintInfo) {
                 console.log('Clipped to', this.convertToCartesianCoord(p1), this.convertToCartesianCoord(p2));
                 console.log('');
             }
@@ -251,8 +252,8 @@ class CohenSutherlandCanvas {
 
     /**
     * Рисует прямоугольник.
-    * @param {point}  p1    первая точка
-    * @param {point}  p2    вторая точка
+    * @param {point} p1 первая точка
+    * @param {point} p2 вторая точка
     */
     drawRectangle(p1, p2) {
         let w = p2.x - p1.x;
@@ -264,11 +265,14 @@ class CohenSutherlandCanvas {
     }
 
     /**
-     * Применяет алгоритм к отрезку.
-     * @param {point} start точка начала отрезка
-     * @param {point} end точка конца отрезка
-     */
-    clipLine(start, end, printInfo) {
+    * Отсекает отрезок по алгоритму.
+    * @param {point} start           точка начала отрезка
+    * @param {point} end             точка конца отрезка
+    * @param {bool}  shouldPrintInfo нужно ли печатать информацию
+    *
+    * @return {point[]} Полученный отрезок.
+    */
+    clipLine(start, end, shouldPrintInfo) {
 
         // Находим области точек
         let o1 = this.getOutCode(start);
@@ -276,14 +280,14 @@ class CohenSutherlandCanvas {
         let o1str = CODES.toString[o1];
         let o2str = CODES.toString[o2];
 
-        if (printInfo) {
+        if (shouldPrintInfo) {
             console.log(`Clipping`, this.convertToCartesianCoord(start), `(${o1str})`, this.convertToCartesianCoord(end), `(${o2str})`);
         }
 
         // Обе точки находятся внутри прямоугольника
         if (o1 === CODES.INSIDE && o2 === CODES.INSIDE) {
 
-            if (printInfo) {
+            if (shouldPrintInfo) {
                 console.log(`Both points are INSIDE`);
             }
 
@@ -292,7 +296,7 @@ class CohenSutherlandCanvas {
         // Обе точки находятся снаружи в одной зоне
         else if (o1 & o2) {
 
-            if (printInfo) {
+            if (shouldPrintInfo) {
                 console.log(`Both points are around the ${CODES.toString[o1 & o2]} area`);
             }
 
@@ -301,34 +305,34 @@ class CohenSutherlandCanvas {
         // Точки находятся в разных зонах
         else {
 
-            if (printInfo) {
+            if (shouldPrintInfo) {
                 console.log(`Points are in different areas`);
             }
 
             // Отрезаем первую попавшуюся часть линии, находящуюся снаружи и запускаем алгоритм с новой начальной/конечной точкой
             if (o1 !== CODES.INSIDE) {
-                
-                let newStart = this.findIntersection(o1, start, end, printInfo);
 
-                if (printInfo) {
+                let newStart = this.findIntersection(o1, start, end, shouldPrintInfo);
+
+                if (shouldPrintInfo) {
                     console.log(`New starting point is`, this.convertToCartesianCoord(newStart));
                 }
 
-                return this.clipLine(newStart, end, printInfo);
+                return this.clipLine(newStart, end, shouldPrintInfo);
             }
             else {
-                let newEnd = this.findIntersection(o2, start, end, printInfo);
+                let newEnd = this.findIntersection(o2, start, end, shouldPrintInfo);
 
-                if (printInfo) {
+                if (shouldPrintInfo) {
                     console.log(`New end point is`, this.convertToCartesianCoord(newEnd));
                 }
 
-                return this.clipLine(start, newEnd, printInfo);
+                return this.clipLine(start, newEnd, shouldPrintInfo);
             }
         }
     }
 
-    // Находит область точки по отношению к прямоугольнику
+    /** Находит область точки по отношению к прямоугольнику */
     getOutCode(p) {
         let outcode = CODES.INSIDE;
 
@@ -355,7 +359,16 @@ class CohenSutherlandCanvas {
         return outcode;
     }
 
-    findIntersection(outcode, start, end, printInfo) {
+    /**
+    * Находит первую точку пересечения.
+    * @param  {CODES} outcode         код области точки
+    * @param  {point} start           точка начала отрезка
+    * @param  {point} end             точка конца отрезка
+    * @param  {bool}  shouldPrintInfo нужно ли печатать информацию
+    *
+    * @return {point}                 Точка пересечения.
+    */
+    findIntersection(outcode, start, end, shouldPrintInfo) {
 
         // В уравнении прямой линии y = mx + c
         // m = (y2-y1)/(x2-x1)
@@ -416,13 +429,19 @@ class CohenSutherlandCanvas {
             };
         }
 
-        if (printInfo) {
+        if (shouldPrintInfo) {
             console.log(`Clipped ${CODES.toString[clipArea]} area`);
         }
 
         return intersection;
     }
 
+    /**
+    * Конвертирует screen-space координаты в декартовые.
+    * @param {point} p точка
+    *
+    * @return {point} Конвертированная точка.
+    */
     convertToCartesianCoord(p) {
         return p && {
             x: Math.round(p.x),
@@ -430,3 +449,33 @@ class CohenSutherlandCanvas {
         };
     }
 }
+
+/**
+* Коды зон.
+* @enum {number}
+*/
+const CODES = {
+    /** 0b0000 */
+    INSIDE: 0b0000,
+    /** 0b0001 */
+    LEFT:   0b0001,
+    /** 0b0010 */
+    RIGHT:  0b0010,
+    /** 0b0100 */
+    TOP:    0b0100,
+    /** 0b1000 */
+    BOTTOM: 0b1000
+};
+
+CODES.toString = {
+    [CODES.INSIDE]: 'INSIDE',
+    [CODES.LEFT]:   'LEFT',
+    [CODES.RIGHT]:  'RIGHT',
+    [CODES.TOP]:    'TOP',
+    [CODES.BOTTOM]: 'BOTTOM',
+
+    [CODES.TOP    | CODES.LEFT]:  'TOP LEFT',
+    [CODES.TOP    | CODES.RIGHT]: 'TOP RIGHT',
+    [CODES.BOTTOM | CODES.LEFT]:  'BOTTOM LEFT',
+    [CODES.BOTTOM | CODES.RIGHT]: 'BOTTOM RIGHT',
+};

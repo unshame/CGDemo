@@ -1,12 +1,11 @@
 {
 	"opts": {
-	    "template": "./doc/templates/minami-custom",        
-	    "recurse": true, 
-	    "readme": "./README.md"
+	    "template": "./shared/doc-templates/templates/minami-custom",        
+	    "recurse": true
 	},
 	"plugins": [
 	    "plugins/markdown",
-	    "doc/jsdoc-custom-plugin.js"
+	    "./shared/doc-templates/jsdoc-custom-plugin.js"
 	],
 	"templates": {
 		"default":{

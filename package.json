@@ -1,0 +1,20 @@
+{
+  "name": "jscgdemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "doc3": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab2-Bresenham/doc -r ./Lab2-Bresenham/README.md ./Lab2-Bresenham/scripts",
+    "doc4": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab4-Cohen-Sutherland/doc  -r ./Lab4-Cohen-Sutherland/README.md ./Lab4-Cohen-Sutherland/scripts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unshame/CGDemo.git"
+  },
+  "author": "UnShame",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unshame/CGDemo/issues"
+  },
+  "homepage": "https://github.com/unshame/CGDemo#readme"
+}
