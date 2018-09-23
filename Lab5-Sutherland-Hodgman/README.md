@@ -1,1 +1,1 @@
-https://unshame.github.io/CGDemo/Lab4-Cohen-Sutherland
+https://unshame.github.io/CGDemo/Lab5-Sutherland-Hodgman
