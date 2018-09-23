@@ -75,10 +75,9 @@ button.clear {
     height: 32px;
     
     outline: none;
-    background: url('../../shared/images/clear.png');
 }
 
-button.clear:before {
+button.clear::before {
     content: '';
     display: block;
     position: absolute;
@@ -89,6 +88,17 @@ button.clear:before {
     right: 0;
 
     z-index: 3;
+
+    background: url('../../shared/images/clear.png');
+    background-position: -8px -8px;
+
+    transition: transform 0.3s;
+    transform: rotate(-360deg);
+}
+
+button.clear:active::before {    
+    transition: transform 0s;
+    transform: rotate(0);
 }
 
 canvas {

@@ -34,6 +34,10 @@ buttonRectangle.click(() => setMode('rectangle'));
 buttonClip.click(() => setClip(true));
 buttonUnclip.click(() => setClip(false));
 
+canvasInterface.add('line', { x: 0, y: 0 }, { x: 800, y: 540 });
+canvasInterface.add('line', { x: 0, y: 540 }, { x: 800, y: 0 });
+canvasInterface.update();
+
 // Устанавливает режим рисования
 function setMode(_mode) {
     mode = _mode;
