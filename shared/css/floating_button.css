@@ -43,11 +43,11 @@
     color: #FAFAFA;
 }
 
-.button_floating.back {
+.button_floating.back, .button_floating.left {
     left: 16px;
 }
 
-.button_floating.forward {
+.button_floating.forward, .button_floating.right {
     right: 16px;
 }
 
@@ -55,14 +55,6 @@
     opacity: 1;
 }
 
-.button_floating.back::after {
-    background: url('../images/back_cyan.png');
-}
-
-.button_floating.forward::after {
-    background: url('../images/forward_cyan.png');
-}
-
 .button_floating:active.back::after {
     background: url('../images/back.png');
 }
@@ -71,10 +63,6 @@
     background: url('../images/forward.png');
 }
 
-.button_floating:active.back::after {
-    background: url('../images/back.png');
-}
-
-.button_floating:active.forward::after {
-    background: url('../images/forward.png');
+.button_floating:active.home::after {
+    background: url('../images/home.png');
 }

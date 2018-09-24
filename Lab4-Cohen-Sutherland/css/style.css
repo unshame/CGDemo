@@ -81,3 +81,7 @@ button.mode.active.button_unclip::after {
 .button_floating.forward::after {
     background: url('../../shared/images/forward_cyan.png');
 }
+
+.github-corner svg {
+    fill: #009688;
+}

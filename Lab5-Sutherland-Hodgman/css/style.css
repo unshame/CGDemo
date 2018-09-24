@@ -54,3 +54,11 @@ button.mode.active.button_circle::after {
     background: url('../../shared/images/forward_green.png');
 }
 
+.button_floating.home::after {
+    background: url('../../shared/images/home_green.png');
+}
+
+.github-corner svg {
+    fill: #689F38;
+}
+

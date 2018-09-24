@@ -34,3 +34,10 @@ button.mode.active {
 .button_floating.forward::after {
     background: url('../../shared/images/forward_red.png');
 }
+.button_floating.home::after {
+    background: url('../../shared/images/home_red.png');
+}
+
+.github-corner svg {
+    fill: #D81B60;
+}

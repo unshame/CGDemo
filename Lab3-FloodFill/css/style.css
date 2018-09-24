@@ -54,3 +54,6 @@ button.mode.active.button_circle::after {
     background: url('../../shared/images/forward_blue.png');
 }
 
+.github-corner svg {
+    fill: #2196F3;
+}
