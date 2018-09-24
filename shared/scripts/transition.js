@@ -5,6 +5,11 @@ let cards = $('.card');
 let main = $('main');
 let body = $('body');
 
+let transitionRelation = {
+    'back': 'forward',
+    'forward': 'back'
+};
+
 let indexHtml = location.host ? '' : 'index.html';
 
 if(buttonBack.length > 0) {
@@ -43,6 +48,9 @@ function processTransition(hash) {
         pageNum = parseInt(transition.substr('middle'.length), 10) || 0;
         pageNum = Math.min(Math.max(pageNum, 1), cards.length);
         transition = 'middle';
+    }
+    else {
+        transition = transitionRelation[transition] || transition;
     }
 
     main.addClass(transition);
