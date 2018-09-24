@@ -82,6 +82,7 @@ function processTransition(hash) {
         card.css('opacity', 0);
         card.addClass('card_force_hover');
         animateAllCardsExcept(card[0], { opacity: 1 }, 300);
+
         setTimeout(() => {
             main.addClass('ready');
             cardCopy.detach();
@@ -98,9 +99,11 @@ function addArrowClickEvent(button, direction, time, timeLocal, pageNum) {
         main.addClass('transition');
         main.addClass(direction);
         body.addClass('transition');
+
         setTimeout(() => {
             location.href = button.attr('href') + '#' + direction + (pageNum !== undefined ? pageNum : '');
         }, location.host ? time : timeLocal);
+
         return false;
     });
 
@@ -111,6 +114,11 @@ function addArrowClickEvent(button, direction, time, timeLocal, pageNum) {
 
 function addCardTransition(card, index) {
     card.click((event) => {
+
+        if(!main.hasClass('ready')) {
+            return false;
+        }
+
         let cardCopy = copyCard(card);
         moveCardToCard(cardCopy, card);
 
@@ -120,9 +128,11 @@ function addCardTransition(card, index) {
 
         main.addClass('transition');
         body.addClass('transition');
+
         setTimeout(() => {
             location.href = card.attr('href') + '#middle';
         }, 200);
+
         animateAllCardsExcept(card[0], {opacity: 0 }, 150);
         return false;
     });
@@ -148,6 +158,7 @@ function centerCard(card) {
 function moveCardToCard(cardCopy, card) {
     let offset = card.offset();
     let margin = parseInt(card.css('margin-left'), 10) || 0;
+
     cardCopy.css({
         left: offset.left - margin + 'px',
         top: offset.top - margin + 'px'
@@ -155,8 +166,10 @@ function moveCardToCard(cardCopy, card) {
 }
 
 function animateAllCardsExcept(card, animation, time) {
+
     cards.each((i, otherCard) => {
         otherCard = otherCard;
+
         if (otherCard != card) {
             $(otherCard).animate(animation, time);
         }
