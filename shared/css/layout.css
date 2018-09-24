@@ -41,14 +41,14 @@ main.middle {
 }
 
 main.ready {
-    transition: margin 0.5s ease-out, transform 0.5s ease-out;
+    transition: margin 0.5s ease-out, transform 0.3s ease-out;
     opacity: 1;
     margin: 0;
     transform: none;
 }
 
 main.transition {
-    transition: margin 0.25s ease-in;
+    transition: margin 0.25s ease-in, transform 0.3s ease-out;
     opacity: 1;
 }
 
@@ -71,7 +71,7 @@ header .title {
     user-select: none;
 }
 
-button.clear {
+.button_toolbar {
     position: relative;
     float: right;
 
@@ -83,7 +83,7 @@ button.clear {
     outline: none;
 }
 
-button.clear::before {
+.button_toolbar::before {
     content: '';
     display: block;
     position: absolute;
@@ -95,16 +95,23 @@ button.clear::before {
 
     z-index: 3;
 
-    background: url('../../shared/images/clear.png');
     background-position: -8px -8px;
+}
+
+.button_toolbar.clear::before {
+    background-image: url('../../shared/images/clear.png');
 
     transition: transform 0.3s;
     transform: rotate(-360deg);
 }
 
-button.clear:active::before {    
+.button_toolbar.clear:active::before {    
     transition: transform 0s;
     transform: rotate(0);
+}
+
+.button_toolbar.close::before {
+    background-image: url('../../shared/images/close.png');
 }
 
 canvas {

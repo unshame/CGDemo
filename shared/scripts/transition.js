@@ -1,5 +1,6 @@
 let buttonBack = $('.button_floating.back');
 let buttonForward = $('.button_floating.forward');
+let buttonHome = $('.button_toolbar.close');
 let cards = $('.card');
 let main = $('main');
 let body = $('body');
@@ -7,11 +8,15 @@ let body = $('body');
 let indexHtml = location.host ? '' : 'index.html';
 
 if(buttonBack.length > 0) {
-    addArrowClickEvent(buttonBack, 'back');
+    addArrowClickEvent(buttonBack, 'back', 125, 200);
 }
 
 if (buttonForward.length > 0) {
-    addArrowClickEvent(buttonForward, 'forward');
+    addArrowClickEvent(buttonForward, 'forward', 125, 200);
+}
+
+if (buttonHome.length > 0) {
+    addArrowClickEvent(buttonHome, 'middle', 300, 300);
 }
 
 if(cards.length > 0) {
@@ -20,27 +25,32 @@ if(cards.length > 0) {
     })
 }
 
-    if (location.hash.search('#back') != -1) {
-        main.addClass('forward');
-    }
-    else if (location.hash.search('#forward') != -1) {
-        main.addClass('back');
-    }
-    else if (location.hash.search('#middle') != -1) {
-        main.addClass('middle');
-    }
+if (location.hash.search('#back') != -1) {
+    main.addClass('forward');
+}
+else if (location.hash.search('#forward') != -1) {
+    main.addClass('back');
+}
+else if (location.hash.search('#middle') != -1) {
+    main.addClass('middle');
+}
 
-    history.replaceState(null, null, '#');
+history.replaceState(null, null, '#');
 
+if(cards.length == 0) { 
     body.addClass('transition');
     main.show().addClass('ready');
     main.removeClass('back forward middle');
     setTimeout(() => {
         body.removeClass('transition');
-    }, 500)
+    }, 500);
+}
+else {
+
+}
 
 
-function addArrowClickEvent(button, direction) {
+function addArrowClickEvent(button, direction, time, timeLocal) {
     button.click((event) => {
         main.removeClass('ready');
         main.addClass('transition');
@@ -48,7 +58,7 @@ function addArrowClickEvent(button, direction) {
         body.addClass('transition');
         setTimeout(() => {
             location.href = button.attr('href') + '#' + direction;
-        }, location.host ? 125 : 200);
+        }, location.host ? time : timeLocal);
         return false;
     });
 
@@ -61,10 +71,11 @@ function addCardTransition(card, index) {
     card.click((event) => {
         main.removeClass('ready');
         let offset = card.offset();
+        let margin = parseInt(card.css('margin-left'), 10) || 0;
         let cardCopy = card.clone();
         cardCopy.css({
-            left: offset.left - 8 + 'px',
-            top: offset.top - 8 + 'px'
+            left: offset.left - margin + 'px',
+            top: offset.top - margin + 'px'
         });
         cardCopy.addClass('card_copy');
         cards.hide();
@@ -77,7 +88,7 @@ function addCardTransition(card, index) {
         body.addClass('transition');
         setTimeout(() => {
             location.href = card.attr('href') + '#middle';
-        }, 300);
+        }, 200);
         return false;
     });
 
