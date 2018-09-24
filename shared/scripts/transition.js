@@ -14,11 +14,11 @@ let transitionRelation = {
 let indexHtml = location.host ? '' : 'index.html';
 
 if(buttonBack.length > 0) {
-    addArrowClickEvent(buttonBack, 'back', 125, 200);
+    addArrowClickEvent(buttonBack, 'back', 175, 200);
 }
 
 if (buttonForward.length > 0) {
-    addArrowClickEvent(buttonForward, 'forward', 125, 200);
+    addArrowClickEvent(buttonForward, 'forward', 175, 200);
 }
 
 if (buttonHome.length > 0) {
