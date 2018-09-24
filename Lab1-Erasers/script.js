@@ -1,3 +1,5 @@
+window.pageNum = 1;
+
 let screen = document.getElementById('screen');
 let page1 = document.getElementById('page1');
 let page2 = document.getElementById('page2');

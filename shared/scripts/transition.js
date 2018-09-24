@@ -16,74 +16,99 @@ if (buttonForward.length > 0) {
 }
 
 if (buttonHome.length > 0) {
-    addArrowClickEvent(buttonHome, 'middle', 300, 300);
+    addArrowClickEvent(buttonHome, 'middle', 300, 300, window.pageNum);
 }
 
 if(cards.length > 0) {
     cards.each((i, card) => {
         addCardTransition($(card), i + 1);
-    })
+    });
 }
 
-if (location.hash.search('#back') != -1) {
-    main.addClass('forward');
-}
-else if (location.hash.search('#forward') != -1) {
-    main.addClass('back');
-}
-else if (location.hash.search('#middle') != -1) {
-    main.addClass('middle');
-}
-
+processTransition(location.hash);
 history.replaceState(null, null, '#');
 
-if(cards.length == 0) { 
-    body.addClass('transition');
-    main.show().addClass('ready');
-    main.removeClass('back forward middle');
-    setTimeout(() => {
-        body.removeClass('transition');
-    }, 500);
-}
-else {
+
+function processTransition(hash) {
+    let transition, pageNum;
+
+    if (!hash || hash.length === 0) {
+        main.addClass('ready');
+        return;
+    }
+
+    transition = location.hash.substr(1);
+
+    if (transition.startsWith('middle')) {
+        pageNum = parseInt(transition.substr('middle'.length), 10) || 0;
+        pageNum = Math.min(Math.max(pageNum, 1), cards.length);
+        transition = 'middle';
+    }
+
+    main.addClass(transition);
+
+    if (cards.length == 0) {
+        body.addClass('transition');
+        main.show().addClass('ready');
+
+        main.removeClass(transition);
+
+        setTimeout(() => {
+            body.removeClass('transition');
+        }, 500);
+    }
+    else {
+        let card = cards[pageNum - 1];
+
+        if(!card) {
+            console.error('No card for page', pageNum);
+            main.addClass('ready');
+            return;
+        }
+
+        card = $(card);
+        let cardCopy = copyCard(card);
+        cardCopy.appendTo(body);
+        centerCard(cardCopy);
+        moveCardToCard(cardCopy, card);
+        card.css('opacity', 0);
+        card.addClass('card_force_hover');
+        setTimeout(() => {
+            main.addClass('ready');
+            cardCopy.detach();
+            card.css('opacity', 1);
+            card.removeClass('card_force_hover');
+        }, 300);
+    }
 
 }
 
-
-function addArrowClickEvent(button, direction, time, timeLocal) {
+function addArrowClickEvent(button, direction, time, timeLocal, pageNum) {
     button.click((event) => {
         main.removeClass('ready');
         main.addClass('transition');
         main.addClass(direction);
         body.addClass('transition');
         setTimeout(() => {
-            location.href = button.attr('href') + '#' + direction;
+            location.href = button.attr('href') + '#' + direction + (pageNum !== undefined ? pageNum : '');
         }, location.host ? time : timeLocal);
         return false;
     });
 
     button.attr('href', (i, attr) => {
         return attr + '/' + indexHtml;
-    })
+    });
 }
 
 function addCardTransition(card, index) {
     card.click((event) => {
-        main.removeClass('ready');
-        let offset = card.offset();
-        let margin = parseInt(card.css('margin-left'), 10) || 0;
-        let cardCopy = card.clone();
-        cardCopy.css({
-            left: offset.left - margin + 'px',
-            top: offset.top - margin + 'px'
-        });
-        cardCopy.addClass('card_copy');
+        let cardCopy = copyCard(card);
+        moveCardToCard(cardCopy, card);
         cards.hide();
-        cardCopy.appendTo(body).show();
-        cardCopy.css({
-            left: body.width() / 2 - cardCopy.width() / 2 + 'px',
-            top: body.height() / 2 - cardCopy.height() / 2 + 'px'
-        });
+        cardCopy.appendTo(body);
+        cardCopy.show();
+        centerCard(cardCopy);
+
         main.addClass('transition');
         body.addClass('transition');
         setTimeout(() => {
@@ -94,5 +119,27 @@ function addCardTransition(card, index) {
 
     card.attr('href', (i, attr) => {
         return attr + '/' + indexHtml;
-    })
+    });
+}
+
+function copyCard(card) {
+    let cardCopy = card.clone();
+    cardCopy.addClass('card_copy');
+    return cardCopy;
+}
+
+function centerCard(card) {
+    card.css({
+        left: body.width() / 2 - card.width() / 2 + 'px',
+        top: body.height() / 2 - card.height() / 2 - 20 + 'px'
+    });
+}
+
+function moveCardToCard(cardCopy, card) {
+    let offset = card.offset();
+    let margin = parseInt(card.css('margin-left'), 10) || 0;
+    cardCopy.css({
+        left: offset.left - margin + 'px',
+        top: offset.top - margin + 'px'
+    });
 }

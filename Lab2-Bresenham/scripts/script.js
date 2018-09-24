@@ -1,3 +1,5 @@
+window.pageNum = 2;
+
 let mode = 'line'; // Режим рисования (line или circle)
 let buttonLine = $('#button_line'); // Кнопка переключения в режим линии
 let buttonCircle = $('#button_circle'); // Кнопка переключения в режим окружности

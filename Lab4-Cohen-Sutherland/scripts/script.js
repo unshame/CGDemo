@@ -1,3 +1,5 @@
+window.pageNum = 4;
+
 let mode = 'line'; // Режим рисования (line или rectangle)
 let clip = true;   // Включено ли отсечение
 let buttonLine = $('#button_line'); // Кнопка переключения в режим линии
