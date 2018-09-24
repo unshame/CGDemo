@@ -20,18 +20,11 @@
                 </header>
                 <canvas id="screen"></canvas>
             </div>
-            <fieldset>
-                <legend>Erasing Method</legend>
-                <label><input type="radio" value="fullClear" name="eraser" checked>Full clear</label>
-                <label><input type="radio" value="boxClear" name="eraser">Bounding box</label>
-                <label><input type="radio" value="swapClear" name="eraser">Page swap</label>
-                <label><input type="radio" value="noClear" name="eraser">Disabled</label>
-            </fieldset>
-            <fieldset>
-                <legend>Triangle Options</legend>
-                Update interval: <input type="number" value="10" min="1" max="1000" id="interval"> ms
-            </fieldset>
-            <canvas id="page1" class="pages"></canvas><canvas id="page2" class="pages"></canvas>
+            <div class="buttons">
+                <button id="button_clear_full" class="mode button_clear_full">Full Clear</button>
+                <button id="button_clear_disabled" class="mode button_clear_disabled">Disabled</button>
+                <button id="button_clear_box" class="mode button_clear_box">Box Clear</button>
+            </div>
         </main>
         <a class="button_floating home left" href=".." title="Back to previews"></a>
         <a class="button_floating forward" href="../Lab2-Bresenham" title="Bresenham's Line Algorithm"></a>

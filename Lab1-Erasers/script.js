@@ -1,20 +1,16 @@
 window.pageNum = 1;
 
 let screen = document.getElementById('screen');
-let page1 = document.getElementById('page1');
-let page2 = document.getElementById('page2');
 let canvas = screen;
 
 
 /* ОЦПИИ */
 
-let canvasWidth = canvas.width = page1.width = page2.width = 800;
-let canvasHeight = canvas.height = page1.height = page2.height = 540;
+let canvasWidth = canvas.width = 800;
+let canvasHeight = canvas.height = 540;
 let p2 = { x: 15, y: -80 };
 let p3 = { x: 120, y: 20 };
 let color1 = [216, 27, 96, 255];
-let color2 = [216, 27, 96, 255];
-let color3 = [216, 27, 96, 255];
 let angle = 13;
 
 
@@ -27,24 +23,12 @@ let canvasBoxWidth = canvasWidth + 2;
 let canvasBoxHeight = canvasHeight + 2;
 canvas.style.width = canvasBoxWidth + 'px';
 canvas.style.height = canvasBoxHeight  + 'px';
-page1.style.width = canvasBoxWidth / 2 + 'px';
-page1.style.height = canvasBoxHeight / 2 + 'px';
-page2.style.width = canvasBoxWidth / 2 + 'px';
-page2.style.height = canvasBoxHeight / 2 + 'px';
-document.querySelectorAll('fieldset').forEach((el) => {
-    el.style.width = canvasBoxWidth + 'px';
-});
 
 // Инициализация "стирателя"
-let eraserType = getEraserType();
-document.querySelectorAll('input[name="eraser"]').forEach((el) => {
-    el.addEventListener('change', () => eraserType = getEraserType());
-});
+let eraserType = 'fullClear';
 
 // Инициализация интервала
-let interval = getInterval();
-document.getElementById('interval').addEventListener('change', () => interval = getInterval());
-document.getElementById('interval').addEventListener('keyup', () => interval = getInterval());
+let interval = 10;
 
 document.getElementById('button_clear').addEventListener('click', () => clearScreen());
 
@@ -57,16 +41,38 @@ let triangleHeight = boundaries[1].y - boundaries[0].y;
 let offset = { x: hw - triangleWidth / 2, y: hh - triangleHeight / 2 };
 moveTriangle(offset, p2, p3, angle);
 
+let buttons = {
+    'fullClear': $('#button_clear_full'),
+    'boxClear': $('#button_clear_box'),
+    'disabled': $('#button_clear_disabled')
+};
+
+for (let m of Object.keys(buttons)) {
+    buttons[m].click(() => setMode(m));
+}
+
+setMode('boxClear');
+
+// Устанавливает режим рисования
+function setMode(_mode) {
+    eraserType = _mode;
+
+    for(let m of Object.keys(buttons)) {
+
+        if (m == eraserType) {
+            buttons[m].addClass('active');
+        }
+        else {
+            buttons[m].removeClass('active');
+        }
+    }
+}
+
+
 
 /* ФУНКЦИИ */
 
 // Интервал/таймаут
-
-function getInterval() {
-    let interval = document.getElementById('interval').value;
-    console.log(interval);
-    return interval;
-}
 
 // Таймаут дает браузеру время на вывод изображения на экран
 function timeout() {
@@ -91,32 +97,12 @@ function updateCanvas() {
     ctx.putImageData(canvasData, 0, 0);
 }
 
-function swapCanvas() {
-    if (canvas === page1) {
-        canvas = page2;
-    }
-    else {
-        canvas = page1;
-    }
-    setCanvasVariables();
-}
-
 /* Способ стирания */
-
-function getEraserType() {
-    let eraserType = document.querySelector('input[name="eraser"]:checked').value;
-    console.log(eraserType);
-    return eraserType;
-}
 
 // Стирание
 function applyEraser(p1, p2, p3) {
 
     switch (eraserType) {
-
-        case 'swapClear':
-            screen.getContext('2d').drawImage(canvas, 0, 0);
-            swapCanvas();
 
         case 'boxClear':
             let boundaries = getTriangleBoxBoundaries(p1, p2, p3);
@@ -146,15 +132,7 @@ function drawPixel(p, color) {
 }
 
 function drawColoredPixel(p) {
-    if (canvas === screen) {
-        drawPixel(p, color1);
-    }
-    else if(canvas === page1) {
-        drawPixel(p, color2);
-    }
-    else if(canvas === page2) {
-        drawPixel(p, color3);
-    }
+    drawPixel(p, color1);
 }
 
 function drawClearPixel(p) {
