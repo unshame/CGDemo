@@ -193,3 +193,6 @@ body.append(
         </svg>
     </a>`
 );
+
+// Hack to force Firefox to reload on back button
+window.onunload = function () { };
