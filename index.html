@@ -3,14 +3,37 @@
 
 <head>
     <meta charset="UTF-8">
-    <script>
-        location.href = './Lab1-Erasers' + (location.host ? '' : '/index.html');
-    </script>
-    <title>Test</title>
+    <title>Javascript Canvas Shenanigans</title>
+    <link href="./shared/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="./shared/css/home.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-    <a href="./Lab1-Erasers">GO</a>
+    <main>
+        <a class="card card1" href="./Lab1-Erasers">
+            <div class="card_title">Erasing Methods</div>
+            <div class="card_image" style="background-image:url('./shared/images/preview_lab1.png')"></div>
+        </a>
+        <a class="card card2" href="./Lab2-Bresenham">
+            <div class="card_title">Bresenham's Line Algorithm</div>
+            <div class="card_image" style="background-image:url('./shared/images/preview_lab2.png')"></div>
+        </a>
+        <a class="card card3 soon" href="./Lab3-FloodFill">
+            <div class="card_title">Flood Fill Algorithms</div>
+            <div class="card_image" style="background-image:url('./shared/images/preview_lab3.png')"></div>
+        </a>
+        <a class="card card4" href="./Lab4-Cohen-Sutherland">
+            <div class="card_title">Cohen-Sutherland's Outcode Algorithm</div>
+            <div class="card_image" style="background-image:url('./shared/images/preview_lab4.png')"></div>
+        </a>
+        <a class="card card5 soon" href="./Lab5-Sutherland-Hodgman">
+            <div class="card_title">Sutherland-Hodgman's Clipping Algorithm</div>
+            <div class="card_image" style="background-image:url('./shared/images/preview_lab5.png')"></div>
+        </a>
+        </main>
+
+        <script src="./shared/lib/jquery.min.js"></script>
+        <script src="./shared/scripts/transition.js"></script>
 </body>
 
 </html>

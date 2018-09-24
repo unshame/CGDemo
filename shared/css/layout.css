@@ -35,10 +35,16 @@ main.back {
     margin-right: -150%;
 }
 
+main.middle {
+    transform: scale(0.4);
+    opacity: 1;
+}
+
 main.ready {
-    transition: margin 0.5s ease-out;
+    transition: margin 0.5s ease-out, transform 0.5s ease-out;
     opacity: 1;
     margin: 0;
+    transform: none;
 }
 
 main.transition {

@@ -1,0 +1,108 @@
+html {
+    width: auto;
+    height: 100%;
+    position: relative;
+}
+
+body {
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 100%;
+    min-width: 964px;
+    padding: 16px;
+
+    background: #EEEEEE;
+    font-family: sans-serif;
+}
+
+main {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+.card {
+    cursor: pointer;
+    border-radius: 2px;
+    display: inline-block;
+    height: 248px;
+    margin: 32px;
+    position: relative;
+    width: 300px;
+    text-decoration: none;
+
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.card_copy {
+    position: absolute;
+}
+
+.card:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.card_image {
+    background-color: #FFFFFF;
+    height: 200px;
+}
+
+.card_title {
+    height: 48px;
+    padding: 16px;
+    padding: 16px;
+    font-size: 18px;
+    color: #fafafa;
+}
+
+.card1 {
+    background-color: #D81B60;
+}
+
+.card2 {
+    background-color: #7E57C2;
+}
+
+.card3 {
+    background-color: #2196F3;
+}
+
+.card4 {
+    background-color: #009688;
+}
+
+.card5 {
+    background-color: #689F38;
+}
+
+.card3.soon {
+    color: #2196F3;
+}
+
+.card5.soon .card_image {
+    color: #689F38;
+}
+
+.card4 .card_title, .card5 .card_title {
+    font-size: 14px;
+    padding-top: 18px;
+    padding-bottom: 14px;
+}
+
+.soon .card_image::before {
+    content: 'Soon™';
+    display: block;
+    font-size: 30px;
+    line-height: 200px;
+    text-align: center;
+}
