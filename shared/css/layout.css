@@ -99,7 +99,7 @@ header .title {
 }
 
 .button_toolbar.clear::before {
-    background-image: url('../../shared/images/clear.png');
+    background-image: url('../images/clear.png');
 
     transition: transform 0.3s;
     transform: rotate(-360deg);
@@ -111,7 +111,7 @@ header .title {
 }
 
 .button_toolbar.close::before {
-    background-image: url('../../shared/images/close.png');
+    background-image: url('../images/close.png');
 }
 
 canvas {

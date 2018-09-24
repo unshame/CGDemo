@@ -18,11 +18,11 @@ button.mode.button_line, button.mode.button_line::before {
 button.mode.button_line::after {
     top: 0;
     left: 8px;
-    background: url('../../shared/images/line_cyan.png');
+    background: url('../shared/images/line_cyan.png');
 }
 
 button.mode.active.button_line::after {
-    background: url('../../shared/images/line.png');
+    background: url('../shared/images/line.png');
 }
 
 button.mode.button_rectangle, button.mode.button_rectangle::before {
@@ -33,11 +33,11 @@ button.mode.button_rectangle, button.mode.button_rectangle::before {
 button.mode.button_rectangle::after {
     top: 0;
     right: 8px;
-    background: url('../../shared/images/rectangle_cyan.png');
+    background: url('../shared/images/rectangle_cyan.png');
 }
 
 button.mode.active.button_rectangle::after {
-    background: url('../../shared/images/rectangle.png');
+    background: url('../shared/images/rectangle.png');
 }
 
 button.mode.button_clip, button.mode.button_clip::before {
@@ -48,11 +48,11 @@ button.mode.button_clip, button.mode.button_clip::before {
 button.mode.button_clip::after {
     top: 0;
     left: 8px;
-    background: url('../../shared/images/clip_cyan.png');
+    background: url('../shared/images/clip_cyan.png');
 }
 
 button.mode.active.button_clip::after {
-    background: url('../../shared/images/clip.png');
+    background: url('../shared/images/clip.png');
 }
 
 button.mode.button_unclip, button.mode.button_unclip::before {
@@ -63,11 +63,11 @@ button.mode.button_unclip, button.mode.button_unclip::before {
 button.mode.button_unclip::after {
     top: 0;
     right: 8px;
-    background: url('../../shared/images/unclip_cyan.png');
+    background: url('../shared/images/unclip_cyan.png');
 }
 
 button.mode.active.button_unclip::after {
-    background: url('../../shared/images/unclip.png');
+    background: url('../shared/images/unclip.png');
 }
 
 .button_floating:active {
@@ -75,11 +75,11 @@ button.mode.active.button_unclip::after {
 }
 
 .button_floating.back::after {
-    background: url('../../shared/images/back_cyan.png');
+    background: url('../shared/images/back_cyan.png');
 }
 
 .button_floating.forward::after {
-    background: url('../../shared/images/forward_cyan.png');
+    background: url('../shared/images/forward_cyan.png');
 }
 
 .github-corner svg {

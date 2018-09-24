@@ -1,13 +1,13 @@
 header {
-	background-color: #2196F3;
+	background-color: #7E57C2;
 }
 
 button.mode {
-    color: #2196F3;
+    color: #7E57C2;
 }
 
 button.mode.active {
-    background: #2196F3;
+    background: #7e57c2;
 }
 
 
@@ -19,11 +19,11 @@ button.mode.button_line, button.mode.button_line::before {
 button.mode.button_line::after {
     top: 0;
     left: 8px;
-    background: url('../../shared/images/line_blue.png');
+    background: url('../shared/images/line_purple.png');
 }
 
 button.mode.active.button_line::after {
-    background: url('../../shared/images/line.png');
+    background: url('../shared/images/line.png');
 }
 
 button.mode.button_circle, button.mode.button_circle::before {
@@ -34,26 +34,26 @@ button.mode.button_circle, button.mode.button_circle::before {
 button.mode.button_circle::after {
     top: 0;
     right: 8px;
-    background: url('../../shared/images/circle_blue.png');
+    background: url('../shared/images/circle_purple.png');
 }
 
 
 button.mode.active.button_circle::after {
-    background: url('../../shared/images/circle.png');
+    background: url('../shared/images/circle.png');
 }
 
 .button_floating:active {
-    background: #2196F3;
+    background: #7E57C2;
 }
 
 .button_floating.back::after {
-    background: url('../../shared/images/back_blue.png');
+    background: url('../shared/images/back_purple.png');
 }
 
 .button_floating.forward::after {
-    background: url('../../shared/images/forward_blue.png');
+    background: url('../shared/images/forward_purple.png');
 }
 
 .github-corner svg {
-    fill: #2196F3;
+    fill: #7e57c2;
 }
