@@ -17,4 +17,9 @@
 
 .github-corner svg {
     fill: #757575;
+    color:#EEEEEE; 
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
 }
