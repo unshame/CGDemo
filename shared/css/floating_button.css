@@ -4,7 +4,7 @@
     top: 50%;
     margin-top: -24px;
     cursor: pointer;
-    opacity: 0.3;
+    opacity: 0.4;
 
     width: 48px;
     height: 48px;
@@ -25,7 +25,11 @@
     z-index: -1;
     background: transparent;
     border-radius: 24px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.23);
+}
+
+.button_floating:active::before {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
 }
 
 .button_floating::after {

@@ -141,7 +141,7 @@ button.mode {
     background:#FAFAFA;
     
     outline: none;
-    transition: all 0.3s;
+    transition: background-color 0.3s;
 }
 
 button.mode.active {
@@ -157,7 +157,13 @@ button.mode::before {
     right: 0;
     z-index: -1;
     background: transparent;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.23);
+    transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+button.mode:active::before {
+    z-index: 3;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
 }
 
 button.mode::after {
