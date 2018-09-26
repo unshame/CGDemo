@@ -44,7 +44,7 @@ function setGradual(_gradual) {
 
 function canvasClick(event) {
     fillFunc({
-        x: Math.round(event.offsetX / scale),
-        y: Math.round(event.offsetY / scale)
+        x: Math.round((event.offsetX - 1) / scale),
+        y: Math.round((event.offsetY - 1) / scale)
     }, 10);
 }
