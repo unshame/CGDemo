@@ -56,7 +56,6 @@ class AbstractFloodFillCanvas {
             let x = Math.floor(Math.random() * w);
             let y = Math.floor(Math.random() * h);
 
-
             ctx.moveTo(x, y);
 
             for (let k = 1; k < numVerts; k++) {
@@ -69,7 +68,6 @@ class AbstractFloodFillCanvas {
 
                 ctx.lineTo(x, y);
             }
-
             ctx.closePath();
         }
         ctx.fill();

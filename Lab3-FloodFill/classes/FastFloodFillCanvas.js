@@ -13,10 +13,8 @@ class SlowFloodFillCanvas extends AbstractFloodFillCanvas {
 
         while(stack.length != 0) {
             let pp = stack.pop();
-            this.renderer.drawPixel(pp, [255, 0, 0, 255]);
-            yield;
-            this.renderer.drawPixel(pp, curColor);
-            yield;
+            yield this.renderer.drawPixel(pp, [255, 0, 0, 255]);
+            yield this.renderer.drawPixel(pp, curColor);
 
             for(let i = 0; i < this.dirs.length; i++) {
                 let ppp = {

@@ -22,10 +22,8 @@ class FastFloodFillCanvas extends AbstractFloodFillCanvas {
                 };
 
                 if(this.renderer.pixelIsInside(ppp) && this.renderer.pixelHasColor(ppp, prevColor)) {
-                    this.renderer.drawPixel(ppp, [255, 0, 0, 255]);
-                    yield;
-                    this.renderer.drawPixel(ppp, curColor);
-                    yield;
+                    yield this.renderer.drawPixel(ppp, [255, 0, 0, 255]);
+                    yield this.renderer.drawPixel(ppp, curColor);
                     stack.push(ppp);
                 }
             }

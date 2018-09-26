@@ -1,3 +1,4 @@
+/* exported MultiCanvasInterface */
 class MultiCanvasInterface {
 
     constructor(primaryCanvas, secondaryCanvas) {
