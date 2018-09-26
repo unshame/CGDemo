@@ -19,8 +19,8 @@ let angle = 13;
 // Инициализация "холста"
 let ctx, canvasData;
 setCanvasVariables();
-let canvasBoxWidth = canvasWidth + 2;
-let canvasBoxHeight = canvasHeight + 2;
+let canvasBoxWidth = canvasWidth;
+let canvasBoxHeight = canvasHeight;
 canvas.style.width = canvasBoxWidth + 'px';
 canvas.style.height = canvasBoxHeight  + 'px';
 
@@ -136,12 +136,12 @@ function drawColoredPixel(p) {
 }
 
 function drawClearPixel(p) {
-    drawPixel(p, [255, 255, 255, 255]);
+    drawPixel(p, [255, 255, 255, 0]);
 }
 
 function clearScreen() {
-    for(let i = 0; i < canvasData.data.length; i++) {
-        canvasData.data[i] = 255;
+    for (let i = 3; i < canvasData.data.length; i += 4) {
+        canvasData.data[i] = 0;
     }
 }
 
