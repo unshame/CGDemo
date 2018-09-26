@@ -27,8 +27,11 @@
     "globals": {
         "$": true,
         "Renderer": true,
-        "CohenSutherlandCanvas": true,
+        "AbstractFloodFillCanvas": true,
+        "FastFloodFillCanvas": true,
+        "SlowFloodFillCanvas": true,
         "Brush": true,
-        "RenderArray": true
+        "RenderArray": true,
+        "MultiCanvasInterface": true
     }
 }

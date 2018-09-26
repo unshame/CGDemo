@@ -30,13 +30,17 @@ class Renderer {
         * Массив, представляющий пиксели холста.
         * @type {array}
         */
-        this.canvasData = this.ctx.getImageData(0, 0, width, height);
+        this.canvasData = null;
 
         /**
         * Установленный цвет рисования на холсте.
         * @type {array}
         */
         this.color = color;
+
+        this.clearColor = [0, 0, 0, 0];
+
+        this.restore();
     }
 
     /** Ширина холста. */
@@ -55,6 +59,20 @@ class Renderer {
 
     set height(height) {
         this.canvas.height = height;
+    }
+
+    get color() {
+        return this._color;
+    }
+
+    set color(color) {
+        this._color = color.slice();
+        this.ctx.strokeStyle = `rgba(${color.join(',')})`;
+        this.ctx.fillStyle = `rgba(${color.join(',')})`;
+    }
+
+    restore() {
+        this.canvasData = this.ctx.getImageData(0, 0, this.width, this.height);
     }
 
     /** Обновляет изображение на холсте. */
@@ -95,15 +113,26 @@ class Renderer {
     * @param  {point} p      координаты пикселя
     */
     drawClearPixel(p) {
-        this.drawPixel(p, [255, 255, 255, 0]);
+        this.drawPixel(p, this.clearColor);
     }
 
     /** Очищает холст. */
     clearCanvas() {
         let canvasData = this.canvasData;
 
-        for (let i = 3; i < canvasData.data.length; i += 4) {
+        for (let i = 0; i < canvasData.data.length; i ++) {
             canvasData.data[i] = 0;
+        }
+    }
+
+    removeAntiAliasing() {
+        for(let x = 0; x < this.width; x++) {
+            for(let y = 0; y < this.height; y++) {
+                let p = {x, y};
+                if(!this.pixelHasColor(p, this.color) && !this.pixelHasColor(p, this.clearColor)) {
+                    this.drawClearPixel(p);
+                }
+            }
         }
     }
 
@@ -115,6 +144,32 @@ class Renderer {
     */
     pixelIsInside(p) {
         return p.x >= 0 && p.x < this.width && p.y >= 0 && p.y < this.height;
+    }
+
+    getPixelColor(p) {
+        let index = (p.x + p.y * this.width) * 4;
+        let canvasData = this.canvasData;
+
+        let color = [];
+        for (let i = 0; i < 4; i++) {
+            color.push(canvasData.data[index + i]);
+        }
+
+        return color;
+    }
+
+
+    pixelHasColor(p, color) {
+        let index = (p.x + p.y * this.width) * 4;
+        let canvasData = this.canvasData;
+
+        for(let i = 0; i < 4; i++){
+            if(canvasData.data[index + i] !== color[i]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

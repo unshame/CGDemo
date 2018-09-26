@@ -16,22 +16,31 @@
                 <header>
                     <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
                     <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
-                    <div class="title">Flood Fill Algorithms (Not Implemented)</div>
+                    <div class="title">Flood Fill Algorithms</div>
                 </header>
-                <canvas id="canvas"></canvas>
+                <div class="canvas_holder">
+                    <canvas id="canvas_slow"></canvas>
+                    <div class="canvas_divider"></div>
+                    <canvas id="canvas_fast"></canvas>
+                </div>
+                <footer class="title_holder">
+                    <div class="canvas_title">Slower Algorithm</div>
+                    <div class="canvas_title">Faster Algorithm</div>
+                </footer>
             </div>
-            <!-- <div class="buttons">
-                <button id="button_line" class="mode button_line">Line</button>
-                <button id="button_rectangle" class="mode button_rectangle">Rectangle</button>
-                <div class="divider"></div>
-                <button id="button_clip" class="mode button_clip">Clip Lines</button>
-                <button id="button_unclip" class="mode button_unclip">Unclip Lines</button>
-            </div> -->
+            <div class="buttons">
+                <button id="button_gradual" class="mode button_gradual">Gradual Fill</button>
+                <button id="button_instant" class="mode button_instant">Instant Fill</button>
+            </div>
         </main>
         <a class="button_floating back" href="../Lab2-Bresenham" title="Bresenham's Line Algorithm"></a>
         <a class="button_floating forward" href="../Lab4-Cohen-Sutherland" title="Cohen-Sutherland's Outcode Algorithm"></a>
         <script src="../shared/lib/jquery.min.js"></script>
-        <script src="./classes/RenderArray.js"></script>
+        <script src="./classes/Renderer.js"></script>
+        <script src="./classes/AbstractFloodFillCanvas.js"></script>
+        <script src="./classes/FastFloodFillCanvas.js"></script>
+        <script src="./classes/SlowFloodFillCanvas.js"></script>
+        <script src="./classes/MultiCanvasInterface.js"></script>
         <script src="./script.js"></script>
         <script src="../shared/scripts/transition.js"></script>
     </body>
