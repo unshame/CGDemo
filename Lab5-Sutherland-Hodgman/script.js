@@ -24,7 +24,7 @@ let canvasInterface = new SutherlandHodgmanCanvas(
     [
         { x: 170, y: 54  },
         { x: 317, y: 54  },
-        { x: 319, y: 121 },
+        { x: 317, y: 121 },
         { x: 281, y: 121 },
         { x: 332, y: 312 },
         { x: 405, y: 169 },
