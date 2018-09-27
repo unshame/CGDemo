@@ -18,19 +18,25 @@ class FastFloodFillCanvas extends AbstractFloodFillCanvas {
         let maxDepth = 0;
         let curColor = this.fillColor;
 
+        // Проверяем что затравочный пиксель уже не закрашен
         if (this.renderer.pixelHasColor(p, curColor)) {
             return;
         }
 
+        // Закрашиваем и добавляем затравочный пиксель в стек
         let prevColor = this.renderer.getPixelColor(p);
         this.renderer.drawPixel(p, curColor);
         stack.push(p);
         numPushes++;
         maxDepth = 1;
 
+        // Пока стек не пуст
         while(stack.length != 0) {
+
+            // Снимает пиксель со стека
             let pp = stack.pop();
 
+            // Все пиксели рядом
             for(let i = 0; i < this.dirs.length; i++) {
 
                 let ppp = {
@@ -38,17 +44,22 @@ class FastFloodFillCanvas extends AbstractFloodFillCanvas {
                     y: pp.y + this.dirs[i].y
                 };
 
+                // которые находятся внутри холста
                 if(!this.renderer.pixelIsInside(ppp)) {
                     continue;
                 }
 
+                // и еще не закрашены
                 if (!this.renderer.pixelHasColor(ppp, prevColor)) {
                     numRepeats++;
                     continue;
                 }
 
+                // закрашиваем их
                 yield this.renderer.drawPixel(ppp, [255, 0, 0, 255]);
                 yield this.renderer.drawPixel(ppp, curColor);
+
+                // и добавляем в стек
                 stack.push(ppp);
 
                 numPushes++;
