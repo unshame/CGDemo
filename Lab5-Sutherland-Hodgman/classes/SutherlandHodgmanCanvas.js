@@ -2,14 +2,17 @@
 class SutherlandHodgmanCanvas {
 
     /**
-    * Холст для рисования линий и их отсекания по алгоритму Коэна-Сазерленда.
-    * Конструктор создает массив для хранения фигур для рисования.
+    * Холст для отсечения многоугольника многоугольником по алгоритму Сазерленда-Ходжмена.
     * @class
-    * @param {HTMLCanvasElement} canvas  HTML-элемент холст
-    * @param {number}            width   ширина холста
-    * @param {number}            height  высота холста
-    * @param {array}             color   цвет рисования по холсту [r, g, b, a]
-    * @param {bool}              enabled включен ли режим отсечения по умолчанию
+    * @param {HTMLCanvasElement} canvas          HTML-элемент холст
+    * @param {number}            width           ширина холста
+    * @param {number}            height          высота холста
+    * @param {string}            subjectColor    цвет отсекаемого многоугольника
+    * @param {string}            clippingColor   цвет отсекающего многоугольника
+    * @param {string}            clippedColor    цвет отсеченного многоугольника
+    * @param {point[]}           subjectPolygon  отсекаемый многоугольник
+    * @param {boolean}           clippingEnabled будет ли скрыт отсекаемый прямоугольник
+    * @param {number}            interval        интервал отсечения сторон
     */
     constructor(canvas, width, height, subjectColor, clippingColor, clippedColor, subjectPolygon, clippingEnabled, interval) {
 
@@ -28,19 +31,48 @@ class SutherlandHodgmanCanvas {
         this.width = width;
         this.height = height;
 
+        /**
+        * Отсекаемый многоугольник.
+        * @type {point[]}
+        */
         this.subjectPolygon = subjectPolygon.slice();
+
+        /**
+        * Отсекающий многоугольник.
+        * @type {point[]}
+        */
         this.clippingPolygon = [];
+
+        /**
+        * Будет ли скрыт отсекаемый прямоугольник.
+        * @type {boolean}
+        */
         this.clippingEnabled = clippingEnabled;
 
-        this.clippingColor = clippingColor;
+        /**
+        * Цвет отсекаемого многоугольника.
+        * @type {string}
+        */
         this.subjectColor = subjectColor;
+        /**
+        * Цвет отсекающего многоугольника.
+        * @type {string}
+        */
+        this.clippingColor = clippingColor;
+        /**
+        * Цвет отсеченного многоугольника.
+        * @type {string}
+        */
         this.clippedColor = clippedColor;
 
+        /**
+        * Интервал отсечения сторон.
+        * @type {number}
+        */
         this.interval = interval;
         this.int = null;
 
         this.resetClippingPolygon();
-        this.update();
     }
 
     /**
@@ -67,6 +99,7 @@ class SutherlandHodgmanCanvas {
         this.canvas.height = height;
     }
 
+    /** Восстанавливает позицию отсекающего многоугольника. */
     resetClippingPolygon() {
         let w = this.width - 500;
         let h = this.height - 400;
@@ -76,6 +109,11 @@ class SutherlandHodgmanCanvas {
         );
     }
 
+    /**
+     * Устанавливает вершины отсекающего многоугольника по двум точкам.
+     * @param {point} p1 первая точка
+     * @param {point} p2 вторая точка
+     */
     updateClippingPolygon(p1, p2) {
         this.clippingPolygon.length = 0;
         this.clippingPolygon.push({x: p1.x, y: p1.y});
@@ -84,6 +122,7 @@ class SutherlandHodgmanCanvas {
         this.clippingPolygon.push({x: p2.x, y: p1.y});
     }
 
+    /** Отсекает многоугольник с текущими настройками. */
     update() {
         clearInterval(this.int);
         this.ctx.clearRect(0, 0, this.width, this.height);
@@ -98,6 +137,10 @@ class SutherlandHodgmanCanvas {
         this.drawPolygons(clippedPolygon);
     }
 
+    /**
+    * Пошагово отсекает многоугольник с текущими настройками.
+    * @param {number} interval интервал отсечения
+    */
     updateStep(interval) {
         clearInterval(this.int);
         let clipper = this.clipPolygon(this.subjectPolygon, this.clippingPolygon);
@@ -115,6 +158,10 @@ class SutherlandHodgmanCanvas {
         }, this.interval);
     }
 
+    /**
+    * Рисует отсекаемый, отсекающий и отсеченный многоугольники.
+    * @param {point[]} clippedPolygon отсеченный многоугольник
+    */
     drawPolygons(clippedPolygon) {
         this.drawPolygon(this.clippingPolygon, this.clippingColor);
 
@@ -125,12 +172,20 @@ class SutherlandHodgmanCanvas {
         this.drawPolygon(clippedPolygon, this.clippedColor);
     }
 
-    /** Очищает массив и холст. */
+    /** Устанавливает многугольники в положение по умолчанию. */
     clear() {
         this.resetClippingPolygon();
         this.update();
     }
 
+    /**
+    * Отсекает многоугольник, генерируя промежуточные стадии отсечения.
+    * @see {@link https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm}
+    * @param {point[]} subjectPolygon отсекаемый многоугольник
+    * @param {point[]} clippingPolygon отсекающий многоугольник
+    *
+    * @return {point[]} отсеченный многоугольник.
+    */
     *clipPolygon(subjectPolygon, clippingPolygon) {
 
         let cp1, e;
@@ -171,32 +226,48 @@ class SutherlandHodgmanCanvas {
         return outputList;
     }
 
+    /**
+    * Проверяет, что точка находится с правильной стороны линии.
+    * @param {point}   p           точка, положение которой ищется
+    * @param {point}   cp1         первая точка прямой
+    * @param {point}   cp2         вторая точка прямой
+    * @param {boolean} isClockwise указывает, какая сторона является правильной
+    *
+    * @return {boolean}
+    */
     pointIsInside(p, cp1, cp2, isClockwise) {
         let d = (cp2.y - cp1.y) * (p.x - cp1.x) - (cp2.x - cp1.x) * (p.y - cp1.y);
         return isClockwise ? d < 0 : d > 0;
     };
 
+    /**
+    * Находит пересечение двух отрезков.
+    * @see {@link http://paulbourke.net/geometry/pointlineplane/}.
+    * @param {point} cp1 первая точка первого отрезка
+    * @param {point} cp2 вторая точка первого отрезка
+    * @param {point} s   первая точка второго отрезка
+    * @param {point} e   вторая точка второго отрезка
+    *
+    * @return {point}
+    */
     getIntersection(cp1, cp2, s, e) {
 
-        let dc = {
-            x: cp1.x - cp2.x,
-            y: cp1.y - cp2.y
-        };
+        let denominator = ((e.y - s.y) * (cp2.x - cp1.x) - (e.x - s.x) * (cp2.y - cp1.y));
 
-        let dp = {
-            x: s.x - e.x,
-            y: s.y - e.y
-        };
-        let n1 = cp1.x * cp2.y - cp1.y * cp2.x;
-        let n2 = s.x * e.y - s.y * e.x;
-        let n3 = 1.0 / (dc.x * dp.y - dc.y * dp.x);
+        let ua = ((e.x - s.x) * (cp1.y - s.y) - (e.y - s.y) * (cp1.x - s.x)) / denominator;
 
-        return {
-            x: (n1 * dp.x - n2 * dc.x) * n3,
-            y: (n1 * dp.y - n2 * dc.y) * n3
-        };
+        let x = cp1.x + ua * (cp2.x - cp1.x);
+        let y = cp1.y + ua * (cp2.y - cp1.y);
+
+        return { x, y };
     };
 
+    /**
+    * Проверяет, задан ли многоугольник по часовой стрелке или против по формуле площади Гаусса.
+    * @param {point[]} polygon многоугольник
+    *
+    * @return {boolean}
+    */
     polygonIsClockwise(polygon) {
 
         let product = 0;
@@ -211,10 +282,9 @@ class SutherlandHodgmanCanvas {
     }
 
     /**
-    * Рисует линию, отсекая ее, если флаг `this.clippingEnabled` установлен.
-    * @param {point}  p1      первая точка
-    * @param {point}  p2      вторая точка
-    * @param {string} special указывает специальный тип линии ('moving' или 'dashed')
+    * Рисует многоугольник.
+    * @param {point[]} polygon   многоугольник
+    * @param {string}  fillStyle цвет заливки
     */
     drawPolygon(polygon, fillStyle) {
         if (polygon.length === 0) {

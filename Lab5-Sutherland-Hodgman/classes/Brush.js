@@ -4,7 +4,6 @@ class Brush {
     /**
     * Кисть для рисования при помощи мыши.
     * @param {CohenSutherlandCanvas}
-    * @param {string}            type   изначальный тип фигуры для рисования
     */
     constructor(canvasInterface) {
 

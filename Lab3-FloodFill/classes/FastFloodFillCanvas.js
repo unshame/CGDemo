@@ -1,6 +1,16 @@
 /* exported FastFloodFillCanvas */
+
+/**
+* Класс интерфейса быстрой заливки холста.
+* @extends AbstractFloodFillCanvas
+*/
 class FastFloodFillCanvas extends AbstractFloodFillCanvas {
 
+    /**
+    * Заливает холст быстрым алгоритмом. 
+    * Генерирует остановку после каждого залитого пикселя. 
+    * @param {point} p точка начала заливки
+    */
     *fillGenerator(p) {
         let stack = [];
         let numPushes = 0;

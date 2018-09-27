@@ -7,7 +7,7 @@ class Renderer {
     * @param {HTMLCanvasElement} canvas  HTML-элемент холст
     * @param {number}            width   ширина холста
     * @param {number}            height  высота холста
-    * @param {array}             color   цвет рисования по холсту [r, g, b, a]
+    * @param {number[]}          color   цвет рисования по холсту [r, g, b, a]
     */
     constructor(canvas, width, height, color) {
 
@@ -32,12 +32,12 @@ class Renderer {
         */
         this.canvasData = null;
 
-        /**
-        * Установленный цвет рисования на холсте.
-        * @type {array}
-        */
         this.color = color;
 
+        /**
+        * Цвет неокрашенного пикселя.
+        * @type {number[]}
+        */
         this.clearColor = [0, 0, 0, 0];
 
         this.restore();
@@ -61,6 +61,10 @@ class Renderer {
         this.canvas.height = height;
     }
 
+    /**
+    * Цвет рисования на холсте.
+    * @type {number[]}
+    */
     get color() {
         return this._color;
     }
@@ -71,6 +75,7 @@ class Renderer {
         this.ctx.fillStyle = `rgba(${color.join(',')})`;
     }
 
+    /** Откатывает все изменения с предыдущего обновления холста. */
     restore() {
         this.canvasData = this.ctx.getImageData(0, 0, this.width, this.height);
     }
@@ -82,8 +87,8 @@ class Renderer {
 
     /**
     * Рисует пиксель на холсте.
-    * @param  {point} p      координаты пикселя
-    * @param  {array} color  цвет пикселя
+    * @param {point}    p     координаты пикселя
+    * @param {number[]} color цвет пикселя
     */
     drawPixel(p, color) {
 
@@ -102,7 +107,7 @@ class Renderer {
 
     /**
     * Рисует пиксель установленного цвета на холсте.
-    * @param  {point} p      координаты пикселя
+    * @param {point} p координаты пикселя
     */
     drawColoredPixel(p) {
         this.drawPixel(p, this.color);
@@ -110,7 +115,7 @@ class Renderer {
 
     /**
     * Рисует прозрачный пиксель на холсте.
-    * @param  {point} p      координаты пикселя
+    * @param {point} p координаты пикселя
     */
     drawClearPixel(p) {
         this.drawPixel(p, this.clearColor);
@@ -125,6 +130,7 @@ class Renderer {
         }
     }
 
+    /** Очищает все пиксели, не окрашенные `this.color` или `this.clearColor` */
     removeAntiAliasing() {
         for(let x = 0; x < this.width; x++) {
             for(let y = 0; y < this.height; y++) {
@@ -138,7 +144,7 @@ class Renderer {
 
     /**
     * Проверяет, находится ли пиксель внутри холста.
-    * @param  {point} p      координаты пикселя
+    * @param {point} p координаты пикселя
     *
     * @return {bool}
     */
@@ -146,6 +152,12 @@ class Renderer {
         return p.x >= 0 && p.x < this.width && p.y >= 0 && p.y < this.height;
     }
 
+    /**
+    * Возвращает цвет пикселя.
+    * @param {point} p координаты пикселя
+    *
+    * @return {number[]}
+    */
     getPixelColor(p) {
         let index = (p.x + p.y * this.width) * 4;
         let canvasData = this.canvasData;
@@ -158,7 +170,13 @@ class Renderer {
         return color;
     }
 
-
+    /**
+    * Проверяет совпадение цвета пикселя с заданным цветом.
+    * @param {point}    p     координаты пикселя
+    * @param {number[]} color проверяемый цвет
+    *
+    * @return {boolean} сопадает ли цвет пикселя
+    */
     pixelHasColor(p, color) {
         let index = (p.x + p.y * this.width) * 4;
         let canvasData = this.canvasData;

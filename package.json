@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "doc3": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab2-Bresenham/doc -r ./Lab2-Bresenham/README.md ./Lab2-Bresenham/scripts",
-    "doc4": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab4-Cohen-Sutherland/doc  -r ./Lab4-Cohen-Sutherland/README.md ./Lab4-Cohen-Sutherland/scripts"
+    "doc2": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab2-Bresenham/doc -r ./Lab2-Bresenham/README.md ./Lab2-Bresenham/classes",
+    "doc3": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab3-FloodFill/doc  -r ./Lab3-FloodFill/README.md ./Lab3-FloodFill/classes",
+    "doc4": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab4-Cohen-Sutherland/doc  -r ./Lab4-Cohen-Sutherland/README.md ./Lab4-Cohen-Sutherland/classes",
+    "doc5": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab5-Sutherland-Hodgman/doc  -r ./Lab5-Sutherland-Hodgman/README.md ./Lab5-Sutherland-Hodgman/classes"
   },
   "repository": {
     "type": "git",

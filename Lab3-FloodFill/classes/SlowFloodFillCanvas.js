@@ -1,6 +1,16 @@
 /* exported SlowFloodFillCanvas */
+
+/**
+* Класс интерфейса медленной заливки холста.
+* @extends AbstractFloodFillCanvas
+*/
 class SlowFloodFillCanvas extends AbstractFloodFillCanvas {
 
+    /**
+    * Заливает холст медленным алгоритмом. 
+    * Генерирует остановку после каждого залитого пикселя. 
+    * @param {point} p точка начала заливки
+    */
     *fillGenerator(p) {
         let stack = [];
         let numPushes = 0;
