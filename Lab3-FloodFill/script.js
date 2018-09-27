@@ -3,7 +3,7 @@ window.pageNum = 3;
 let gradual = true; // Включена ли постепенная заливка
 
 // Кнопки
-let buttonGradual = $('#button_gradual'); 
+let buttonGradual = $('#button_gradual');
 let buttonInstant = $('#button_instant');
 let buttonClear = $('#button_clear');
 

@@ -5,7 +5,6 @@ let buttonUnclip = $('#button_unclip'); // Кнопка выключения о�
 let buttonClear = $('#button_clear'); // Кнопка очистки холста
 let canvas = $('#canvas'); // Холст для рисования
 let clip = false;
-//let canvasInterface = new CohenSutherlandCanvas(canvas[0], canvas.width(), canvas.height(), color, true); // Интерфейс для холста
 
 // Очистка по нажатию на крестик
 buttonClear.click(() => canvasInterface.clear());
