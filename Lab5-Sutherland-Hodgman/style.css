@@ -11,35 +11,35 @@ button.mode.active {
 }
 
 
-button.mode.button_line, button.mode.button_line::before {
+button.mode.button_unclip, button.mode.button_unclip::before {
     border-radius: 24px 0 0 24px;
     padding-left: 56px;
 }
 
-button.mode.button_line::after {
+button.mode.button_unclip::after {
     top: 0;
     left: 8px;
-    background: url('../shared/images/line_green.png');
+    background: url('../shared/images/unclip_poly_green.png');
 }
 
-button.mode.active.button_line::after {
-    background: url('../shared/images/line.png');
+button.mode.active.button_unclip::after {
+    background: url('../shared/images/unclip_poly.png');
 }
 
-button.mode.button_circle, button.mode.button_circle::before {
+button.mode.button_clip, button.mode.button_clip::before {
     border-radius: 0 24px 24px 0;
     padding-right: 56px;
 }
 
-button.mode.button_circle::after {
+button.mode.button_clip::after {
     top: 0;
     right: 8px;
-    background: url('../shared/images/circle_green.png');
+    background: url('../shared/images/clip_poly_green.png');
 }
 
 
-button.mode.active.button_circle::after {
-    background: url('../shared/images/circle.png');
+button.mode.active.button_clip::after {
+    background: url('../shared/images/clip_poly.png');
 }
 
 .button_floating:active {

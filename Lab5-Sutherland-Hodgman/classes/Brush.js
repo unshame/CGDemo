@@ -3,16 +3,16 @@ class Brush {
 
     /**
     * Кисть для рисования при помощи мыши.
-    * @param {HTMLCanvasElement} canvas элемент холст
+    * @param {CohenSutherlandCanvas}
     * @param {string}            type   изначальный тип фигуры для рисования
     */
-    constructor(canvas, type) {
+    constructor(canvasInterface) {
 
         /**
         * Холст.
-        * @type {HTMLCanvasElement}
+        * @type {CohenSutherlandCanvas}
         */
-        this.canvas = canvas;
+        this.canvasInterface = canvasInterface;
 
         /**
         * Рисует ли кисть в данный момент.
@@ -33,18 +33,6 @@ class Brush {
         this.p2 = null;
 
         /**
-        * Обект рисуемой фигуры.
-        * @type {object}
-        */
-        this.shape = null;
-
-        /**
-        * Тип рисуемой фигуры.
-        * @type {string}
-        */
-        this.type = type;
-
-        /**
         * Последнее обновление позиции кисти.
         * @type {Number}
         */
@@ -58,30 +46,18 @@ class Brush {
     }
 
     /**
-    * Устанавливает тип фигуры для рисования.
-    * @param {string} type тип фигуры
-    */
-    setType(type) {
-
-        if(this.isDown) {
-            this.reset();
-        }
-
-        this.type = type;
-        this.canvas.update();
-    }
-
-    /**
     * Начинает рисование, устанавливая начальную точку.
     * @param  {MouseEvent} event объект с информацией о событии
     */
     start(event) {
         this.p1 = { x: event.offsetX, y: event.offsetY };
         this.p2 = Object.assign({}, this.p1);
-        this.shape = this.canvas.add(this.type, this.p1, this.p2, 'moving');
+        this.canvasInterface.updateClippingPolygon(this.p1, this.p2);
         this.isDown = true;
         this.lastUpdate = Date.now();
-        this.canvas.update();
+        this.savedClippingEnabled = this.canvasInterface.clippingEnabled;
+        this.canvasInterface.clippingEnabled = false;
+        this.canvasInterface.update();
     }
 
     /**
@@ -102,9 +78,11 @@ class Brush {
 
         this.lastUpdate = now;
 
-        this.shape.p2.x = event.offsetX;
-        this.shape.p2.y = event.offsetY;
-        this.canvas.update();
+        this.p2.x = event.offsetX;
+        this.p2.y = event.offsetY;
+        this.canvasInterface.clippingEnabled = false;
+        this.canvasInterface.updateClippingPolygon(this.p1, this.p2);
+        this.canvasInterface.update();
     }
 
     /**
@@ -117,10 +95,12 @@ class Brush {
             return;
         }
 
-        this.shape.p2.x = event.offsetX;
-        this.shape.p2.y = event.offsetY;
+        this.p2.x = event.offsetX;
+        this.p2.y = event.offsetY;
+        this.canvasInterface.clippingEnabled = this.savedClippingEnabled;
+        this.canvasInterface.updateClippingPolygon(this.p1, this.p2);
         this.reset();
-        this.canvas.update();
+        this.canvasInterface.updateStep();
     }
 
     /**
@@ -128,14 +108,9 @@ class Brush {
     */
     reset() {
         this.isDown = false;
-
-        if(this.shape) {
-            this.shape.special = '';
-        }
-
-        this.shape = null;
         this.p1 = null;
         this.p2 = null;
         this.lastUpdate = 0;
+        this.savedClippingEnabled = undefined;
     }
 }

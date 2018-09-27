@@ -16,22 +16,19 @@
                 <header>
                     <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
                     <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
-                    <div class="title">Sutherland-Hodgman's Polygon Clipping Algorithm (Not Implemented)</div>
+                    <div class="title">Sutherland-Hodgman's Polygon Clipping Algorithm</div>
                 </header>
                 <canvas id="canvas"></canvas>
             </div>
-            <!-- <div class="buttons">
-                <button id="button_line" class="mode button_line">Line</button>
-                <button id="button_rectangle" class="mode button_rectangle">Rectangle</button>
-                <div class="divider"></div>
-                <button id="button_clip" class="mode button_clip">Clip Lines</button>
-                <button id="button_unclip" class="mode button_unclip">Unclip Lines</button>
-            </div> -->
+            <div class="buttons">
+                <button id="button_unclip" class="mode button_unclip">Unclip Polygon</button>
+                <button id="button_clip" class="mode button_clip">Clip Polygon</button>
+            </div>
         </main>
         <a class="button_floating back" href="../Lab4-Cohen-Sutherland" title="Cohen-Sutherland's Outcode Algorithm"></a>
         <a class="button_floating home right" href=".." title="Back to previews"></a>
         <script src="../shared/lib/jquery.min.js"></script>
-        <script src="./classes/RenderArray.js"></script>
+        <script src="./classes/SutherlandHodgmanCanvas.js"></script>
         <script src="./classes/Brush.js"></script>
         <script src="./script.js"></script>
         <script src="../shared/scripts/transition.js"></script>

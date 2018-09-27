@@ -27,7 +27,7 @@
     "globals": {
         "$": true,
         "Renderer": true,
-        "CohenSutherlandCanvas": true,
+        "SutherlandHodgmanCanvas": true,
         "Brush": true,
         "RenderArray": true
     }
