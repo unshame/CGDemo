@@ -234,17 +234,4 @@ class SutherlandHodgmanCanvas {
         ctx.fill();
         ctx.closePath();
     }
-
-    /**
-    * Конвертирует screen-space координаты в декартовые.
-    * @param {point} p точка
-    *
-    * @return {point} Конвертированная точка.
-    */
-    convertToCartesianCoord(p) {
-        return p && {
-            x: Math.round(p.x),
-            y: Math.round(this.height - p.y)
-        };
-    }
 }
