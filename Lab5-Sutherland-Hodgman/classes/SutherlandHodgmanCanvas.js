@@ -188,41 +188,69 @@ class SutherlandHodgmanCanvas {
     */
     *clipPolygon(subjectPolygon, clippingPolygon) {
 
-        let cp1, e;
-        let outputList = subjectPolygon;
-        yield outputList;
-        cp1 = clippingPolygon[clippingPolygon.length - 1];
+        // Проверяем, что многоугольник задан по часовой стрелке
         let isClockwise = this.polygonIsClockwise(clippingPolygon);
 
+        // Выходной массив - инициализируется отсекаемым многоугольником
+        let outputList = subjectPolygon;
+
+        yield outputList;
+
+        // Первая точка отсекающей линии - инициализируется последней точкой отсекающего многоугольника
+        let cp1 = clippingPolygon[clippingPolygon.length - 1];
+
+        // Проходим по всем вершинам отсекающего многоугольника
         for (let j in clippingPolygon) {
+
+            // Вторая точка отсекающей линии
             let cp2 = clippingPolygon[j];
+
+            // Входной массив является выходным массивом предыдущей итерации
             let inputList = outputList;
+
+            // Предыдущая точка стороны отсекаемого многоугольника
+            // Инициализируется последней вершиной
             let s = inputList[inputList.length - 1];
+
+            // Очищаем выходной массив
             outputList = [];
 
+            // Проходим по всем точкам отсекаемого многоугольника
             for (let i in inputList) {
-                e = inputList[i];
 
+                // Текущая точка стороны отсекаемого многоугольника
+                let e = inputList[i];
+
+                // Если текущая точка внутри отсекающего многоугольника
                 if (this.pointIsInside(e, cp1, cp2, isClockwise)) {
 
+                    // а предыдущая снаружи
                     if (!this.pointIsInside(s, cp1, cp2, isClockwise)) {
+
+                        // то находим точку пересечения стороны с прямой и кладем ее в выходной массив
                         outputList.push(this.getIntersection(cp1, cp2, s, e));
                     }
 
+                    // Добавляем текущую точку в массив
                     outputList.push(e);
                 }
                 else if (this.pointIsInside(s, cp1, cp2, isClockwise)) {
+
+                    // иначе, если предыдущая точка находится внутри, находим пересечение и добавляем в массив
                     outputList.push(this.getIntersection(cp1, cp2, s, e));
                 }
 
+                // Переходим к следующей точке входного массива
                 s = e;
             }
 
-            yield outputList;
-
+            // Переходим к следующей вершине отсекающего многоугольника
             cp1 = cp2;
+
+            yield outputList;
         }
 
+        // Возвращаем отсеченный многоугольник
         return outputList;
     }
 
