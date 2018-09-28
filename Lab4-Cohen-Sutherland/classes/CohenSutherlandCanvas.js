@@ -183,6 +183,16 @@ class CohenSutherlandCanvas {
         return shape;
     }
 
+
+    remove(shape) {
+
+        if(shape.type == 'rectangle') {
+            return;
+        }
+
+        this.shapes.remove(shape);
+    }
+
     /* Очищает холст и выводит все фигуры из массива, кроме прямоугольника и направляющих линий. */
     update() {
         this.updateRectangleProperties();

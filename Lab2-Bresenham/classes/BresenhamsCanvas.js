@@ -44,6 +44,10 @@ class BresenhamsCanvas {
         return shape;
     }
 
+    remove(shape) {
+        this.shapes.remove(shape);
+    }
+
     /* Очищает холст и выводит все фигуры из массива. */
     update() {
         this.renderer.clearCanvas();

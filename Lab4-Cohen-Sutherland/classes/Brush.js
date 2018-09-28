@@ -76,6 +76,11 @@ class Brush {
     * @param  {MouseEvent} event объект с информацией о событии
     */
     start(event) {
+
+        if (this.isDown) {
+            this.canvas.remove(this.shape);
+        }
+
         this.p1 = { x: event.offsetX, y: event.offsetY };
         this.p2 = Object.assign({}, this.p1);
         this.shape = this.canvas.add(this.type, this.p1, this.p2, 'moving');
