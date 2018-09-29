@@ -389,15 +389,51 @@ class CohenSutherlandCanvas {
 
         let pr = this.rectangle.properties;
 
+        // Пересечение
+        let intersection = null;
+        let clipArea = null;
+
+        let dx = x2 - x1;
+
+        // Обработка исключения при вертикальной линии
+        if(dx === 0) {
+
+            if (shouldPrintInfo) {
+                console.log(`Vertical line detected`);
+            }
+
+            if(outcode & CODES.BOTTOM) {
+
+                clipArea = CODES.BOTTOM;
+
+                intersection = {
+                    x: x1,
+                    y: pr.ymax
+                };
+            }
+            else if(outcode & CODES.TOP) {
+
+                clipArea = CODES.TOP;
+
+                intersection = {
+                    x: x1,
+                    y: pr.ymin
+                };
+            }
+
+            if (shouldPrintInfo) {
+                console.log(`Clipped ${CODES.toString[clipArea]} area`);
+            }
+
+            return intersection;
+        }
+
         // Находим m
-        let m = (y2 - y1) / (x2 - x1);
+        let m = (y2 - y1) / dx;
 
         // Находим c, подставив одну из точек
         let c = y1 - m * x1;
 
-        // Пересечение
-        let intersection = null;
-        let clipArea = null;
 
         if (outcode & CODES.BOTTOM) {
 
