@@ -67,7 +67,6 @@ class CanvasInterface {
 
         ctx.lineTo(ps[0].x, ps[0].y);
         ctx.stroke();
-        ctx.closePath();
     }
 
     setInterval(interval) {
@@ -108,7 +107,6 @@ class CanvasInterface {
         if(collision.collided) {
             polygon.move({x: collision.dx, y: collision.dy});
             polygon.changeDirection(collision);
-            //polygon.move({ x: polygon.dx * dtt, y: polygon.dy * dtt});
         }
 
         this.drawPolygon(polygon.ps);
