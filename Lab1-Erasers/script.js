@@ -40,16 +40,10 @@ canvasInterface.addPolygon([
     { x: 15, y: -80 },
     { x: 120, y: 20 }
 ], angle, 1);
-setMode('boxClear');
+setMode('fullClear');
 canvasInterface.setInterval(interval);
 
-canvas.click((event) => {
-    canvasInterface.addPolygon([
-        { x: event.offsetX, y: event.offsetY },
-        { x: 15, y: -80 },
-        { x: 120, y: 20 }
-    ], Math.random() * 360 - 180, Math.random() * 3);
-});
+canvas.click((event) => addRandomPolygon({ x: event.offsetX, y: event.offsetY }));
 
 let buttonClear = $('#button_clear'); // Кнопка очистки холста
 buttonClear.click(() => canvasInterface.reset());
@@ -67,4 +61,27 @@ function setMode(_mode) {
             buttons[m].removeClass('active');
         }
     }
+}
+
+function addRandomPolygon(p) {
+    let ps = [];
+    let numPoints = Math.ceil(Math.random() * 4 + 2);
+    let minLength = 10;
+    let maxLength = 120;
+
+    ps[0] = p;
+
+    for(let i = 1; i < numPoints; i++) {
+        ps.push({
+            x: getRandomLength(minLength, maxLength),
+            y: getRandomLength(minLength, maxLength),
+        });
+    }
+
+    canvasInterface.addPolygon(ps, Math.random() * 360 - 180, Math.random() * 2 + 1);
+}
+
+function getRandomLength(min, max) {
+    max = max - min;
+    return (Math.random() * max + min) * (Math.random() > 0.5 ? -1 : 1);
 }

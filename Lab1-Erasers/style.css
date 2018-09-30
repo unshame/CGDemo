@@ -11,10 +11,6 @@ header {
 	background-color: #D81B60;
 }
 
-canvas {
-    cursor: default;
-}
-
 button.mode {
     color:#D81B60;
 }

@@ -41,9 +41,9 @@ class Polygon {
     }
 
     getDeltaCoords(angle, speed) {
-        let doDegrees = (Math.PI / 180);
-        let dx = speed * Math.cos(angle * doDegrees);
-        let dy = speed * Math.sin(angle * doDegrees);
+        let toDegrees = (Math.PI / 180);
+        let dx = speed * Math.cos(angle * toDegrees);
+        let dy = speed * Math.sin(angle * toDegrees);
         return [dx, dy];
     }
 
