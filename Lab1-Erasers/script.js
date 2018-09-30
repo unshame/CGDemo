@@ -2,27 +2,9 @@ window.pageNum = 1;
 
 let canvas = $('#screen');
 
-
-/* ОЦПИИ */
-
 let color = [216, 27, 96, 255];
 let angle = 13;
-
-
-/* ИНИЦИАЛИЗАЦИЯ */
-
-// Инициализация интервала
 let interval = 10;
-
-//document.getElementById('button_clear').addEventListener('click', () => clearScreen());
-
-// Инициализация треугольника в центре экрана
-// let hw = canvasWidth / 2;
-// let hh = canvasHeight / 2;
-// let boundaries = getTriangleBoxBoundaries({ x: 0, y: 0 }, p2, p3);
-// let triangleWidth = boundaries[1].x - boundaries[0].x;
-// let triangleHeight = boundaries[1].y - boundaries[0].y;
-// let offset = { x: hw - triangleWidth / 2, y: hh - triangleHeight / 2 };
 
 let buttons = {
     'fullClear': $('#button_clear_full'),
@@ -35,20 +17,20 @@ for (let m of Object.keys(buttons)) {
 }
 
 let canvasInterface = new CanvasInterface(canvas[0], canvas.width(), canvas.height(), color);
-canvasInterface.addPolygon([
+let polygon = canvasInterface.addPolygon([
     { x: 200, y: 200 },
     { x: 15, y: -80 },
     { x: 120, y: 20 }
-], angle, 1);
+], angle, 600);
+polygon.setResizeProperties(true, 1, 2, 0.5, 1);
 setMode('fullClear');
 canvasInterface.setInterval(interval);
 
 canvas.click((event) => addRandomPolygon({ x: event.offsetX, y: event.offsetY }));
 
-let buttonClear = $('#button_clear'); // Кнопка очистки холста
+let buttonClear = $('#button_clear');
 buttonClear.click(() => canvasInterface.reset());
 
-// Устанавливает режим рисования
 function setMode(_mode) {
     canvasInterface.eraserType = _mode;
 
@@ -78,7 +60,8 @@ function addRandomPolygon(p) {
         });
     }
 
-    canvasInterface.addPolygon(ps, Math.random() * 360 - 180, Math.random() * 2 + 1);
+    let polygon = canvasInterface.addPolygon(ps, Math.random() * 360 - 180, Math.random() * 500 + 100);
+    polygon.setResizeProperties(true, 0.5, 1.5, Math.random() * 0.9 + 0.1, Math.random() > 0.5 ? -1 : 1);
 }
 
 function getRandomLength(min, max) {

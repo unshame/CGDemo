@@ -10,6 +10,7 @@ class CanvasInterface {
 
         this.polygons = [];
         this.eraserType = eraserType;
+        this.isRunning = false;
     }
 
     /** Ширина холста. */
@@ -51,6 +52,7 @@ class CanvasInterface {
     }
 
     drawPolygon(ps) {
+
         if (ps.length === 0) {
             return;
         }
@@ -75,7 +77,12 @@ class CanvasInterface {
             this.isRunning = false;
         }
 
+        if(typeof interval != 'number' || isNaN(interval) || interval < 0) {
+            return;
+        }
+
         let lastUpdate = Date.now();
+
         this.isRunning = setInterval(() => {
             let now = Date.now();
             this.update(now - lastUpdate);
@@ -92,13 +99,18 @@ class CanvasInterface {
     }
 
     updatePolygon(polygon, dt) {
-        polygon.move({x: polygon.dx, y: polygon.dy});
+        let dtt = dt / 1000;
+
+        polygon.updateSize(dt);
+        polygon.move({ x: polygon.dx * dtt, y: polygon.dy * dtt});
         let collision = this.getCollision(polygon.boundingBox);
+
         if(collision.collided) {
             polygon.move({x: collision.dx, y: collision.dy});
             polygon.changeDirection(collision);
-            polygon.move({ x: polygon.dx, y: polygon.dy });
+            //polygon.move({ x: polygon.dx * dtt, y: polygon.dy * dtt});
         }
+
         this.drawPolygon(polygon.ps);
     }
 
@@ -111,18 +123,31 @@ class CanvasInterface {
         let dx = left < 0 ? -left : (right < 0 ? right : 0);
         let dy = top < 0 ? -top : (bottom < 0 ? bottom : 0);
 
+        let collided = 0;
+
+        if(top) {
+            collided |= COLLISION.TOP;
+        }
+
+        if (right) {
+            collided |= COLLISION.RIGHT;
+        }
+
+        if (bottom) {
+            collided |= COLLISION.BOTTOM;
+        }
+
+        if (left) {
+            collided |= COLLISION.LEFT;
+        }
+
         return {
-            collided: top || right || bottom || left,
-            top: top < 0,
-            right: right < 0,
-            bottom: bottom < 0,
-            left: left < 0,
+            collided,
             dx, dy
         };
     }
 
     clear() {
-
         switch (this.eraserType) {
 
             case 'boxClear':
@@ -140,6 +165,7 @@ class CanvasInterface {
     }
 
     clearBox() {
+
         for(let polygon of this.polygons) {
             let boundingBox = polygon.boundingBox;
             let x = Math.floor(boundingBox[0].x) - 1;
@@ -155,3 +181,12 @@ class CanvasInterface {
         this.polygons.length = 0;
     }
 }
+
+let COLLISION = {
+    TOP: 0b0001,
+    RIGHT: 0b0010,
+    BOTTOM: 0b0100,
+    LEFT: 0b1000,
+    TOPBOTTOM: 0b0101,
+    LEFTRIGHT: 0b1010
+};

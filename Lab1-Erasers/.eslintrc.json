@@ -29,6 +29,7 @@
         "Renderer": true,
         "Polygon": true,
         "Brush": true,
-        "CanvasInterface": true
+        "CanvasInterface": true,
+        "COLLISION": true
     }
 }
