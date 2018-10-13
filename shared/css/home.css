@@ -91,12 +91,8 @@ main.ready .card {
     background-color: #689F38;
 }
 
-.card3.soon {
-    color: #2196F3;
-}
-
-.card5.soon .card_image {
-    color: #689F38;
+.card6 {
+    background-color: #AFB42B;
 }
 
 .card4 .card_title, .card5 .card_title {
