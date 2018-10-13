@@ -78,3 +78,4 @@ function setClip(_clip, fast) {
     }
 }
 
+addSaveButton();

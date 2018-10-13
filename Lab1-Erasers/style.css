@@ -11,45 +11,45 @@ header {
 	background-color: #D81B60;
 }
 
-button.mode {
+.button_control {
     color:#D81B60;
 }
 
-button.mode.active {
+.button_control.active {
     background: #D81B60;
 }
 
-button.mode.button_clear_full, button.mode.button_clear_full::before {
+.button_control.button_clear_full, .button_control.button_clear_full::before {
     border-radius: 24px 0 0 24px;
     padding-left: 56px;
 }
 
-button.mode.button_clear_full::after {
+.button_control.button_clear_full::after {
     top: 0;
     left: 8px;
     background: url('../shared/images/clear_full_red.png');
 }
 
-button.mode.active.button_clear_full::after {
+.button_control.active.button_clear_full::after {
     background: url('../shared/images/clear_full.png');
 }
 
-button.mode.button_clear_box, button.mode.button_clear_box::before {
+.button_control.button_clear_box, .button_control.button_clear_box::before {
     border-radius: 0 24px 24px 0;
     padding-right: 56px;
 }
 
-button.mode.button_clear_box::after {
+.button_control.button_clear_box::after {
     top: 0;
     right: 8px;
     background: url('../shared/images/clear_box_red.png');
 }
 
-button.mode.active.button_clear_box::after {
+.button_control.active.button_clear_box::after {
     background: url('../shared/images/clear_box.png');
 }
 
-button.mode.button_clear_disabled, button.mode.button_clear_disabled::before {
+.button_control.button_clear_disabled, .button_control.button_clear_disabled::before {
     text-align: center;
 }
 

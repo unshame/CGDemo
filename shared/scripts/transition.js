@@ -98,7 +98,7 @@ function processTransition(hash) {
 
 }
 
-function addArrowClickEvent(button, direction, time, timeLocal, pageNum) {
+function addArrowClickEvent(button, direction, time, timeLocal, pageNum = '') {
     button.click((event) => {
         main.removeClass('ready');
         main.addClass('transition');
@@ -106,7 +106,7 @@ function addArrowClickEvent(button, direction, time, timeLocal, pageNum) {
         body.addClass('transition');
 
         setTimeout(() => {
-            location.href = button.attr('href') + '#' + direction + (pageNum !== undefined ? pageNum : '');
+            location.href = button.attr('href') + '#' + direction + pageNum;
         }, location.host ? time : timeLocal);
 
         return false;

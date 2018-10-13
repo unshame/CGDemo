@@ -2,43 +2,43 @@ header {
 	background-color: #7E57C2;
 }
 
-button.mode {
+.button_control {
     color: #7E57C2;
 }
 
-button.mode.active {
+.button_control.active {
     background: #7e57c2;
 }
 
 
-button.mode.button_line, button.mode.button_line::before {
+.button_control.button_line, .button_control.button_line::before {
     border-radius: 24px 0 0 24px;
     padding-left: 56px;
 }
 
-button.mode.button_line::after {
+.button_control.button_line::after {
     top: 0;
     left: 8px;
     background: url('../shared/images/line_purple.png');
 }
 
-button.mode.active.button_line::after {
+.button_control.active.button_line::after {
     background: url('../shared/images/line.png');
 }
 
-button.mode.button_circle, button.mode.button_circle::before {
+.button_control.button_circle, .button_control.button_circle::before {
     border-radius: 0 24px 24px 0;
     padding-right: 56px;
 }
 
-button.mode.button_circle::after {
+.button_control.button_circle::after {
     top: 0;
     right: 8px;
     background: url('../shared/images/circle_purple.png');
 }
 
 
-button.mode.active.button_circle::after {
+.button_control.active.button_circle::after {
     background: url('../shared/images/circle.png');
 }
 

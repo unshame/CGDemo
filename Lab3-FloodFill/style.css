@@ -44,43 +44,43 @@ canvas {
     background: #2196F3;
 }
 
-button.mode {
+.button_control {
     color: #2196F3;
 }
 
-button.mode.active {
+.button_control.active {
     background: #2196F3;
 }
 
 
-button.mode.button_gradual, button.mode.button_gradual::before {
+.button_control.button_gradual, .button_control.button_gradual::before {
     border-radius: 24px 0 0 24px;
     padding-left: 56px;
 }
 
-button.mode.button_gradual::after {
+.button_control.button_gradual::after {
     top: 0;
     left: 8px;
     background: url('../shared/images/fill_gradual_blue.png');
 }
 
-button.mode.active.button_gradual::after {
+.button_control.active.button_gradual::after {
     background: url('../shared/images/fill_gradual.png');
 }
 
-button.mode.button_instant, button.mode.button_instant::before {
+.button_control.button_instant, .button_control.button_instant::before {
     border-radius: 0 24px 24px 0;
     padding-right: 56px;
 }
 
-button.mode.button_instant::after {
+.button_control.button_instant::after {
     top: 0;
     right: 8px;
     background: url('../shared/images/fill_instant_blue.png');
 }
 
 
-button.mode.active.button_instant::after {
+.button_control.active.button_instant::after {
     background: url('../shared/images/fill_instant.png');
 }
 
