@@ -114,8 +114,6 @@ class Renderer {
         let output = this.ctx.createImageData(w, h);
         let dst = output.data;
 
-        let defaultValue = 255;
-
         // Проходим по всему изображению
         for (let y = 0; y < h; y++) {
 
@@ -126,6 +124,7 @@ class Renderer {
                 let r = 0, g = 0, b = 0;
 
                 // Складываем умноженное на значения матрицы свертки значение текущего пикселя и всех пикселей в округе
+                kernel_loop:
                 for (let cy = 0; cy < side; cy++) {
 
                     for (let cx = 0; cx < side; cx++) {
@@ -133,14 +132,21 @@ class Renderer {
                         let scy = y + cy - kernelOffset;
                         let scx = x + cx - kernelOffset;
 
+                        // Не трогаем пиксели по краям
+                        if(scx < 0 || scx >= w || scy < 0 || scy >= h) {
+                            r = src[dstOffset + 0];
+                            g = src[dstOffset + 1];
+                            b = src[dstOffset + 2];
+                            break kernel_loop;
+                        }
+
                         let srcOffset = (scy * w + scx) * 4; // src[scx][scy][0]
                         let wt = kernel[cy * side + cx];     // kernel[cx][cy]
 
-                        // Добавляем значение каждого канала цвета, умноженное на вес,
-                        // если пиксель существует, иначе не добавляем ничего
-                        r += (src[srcOffset + 0] || defaultValue) * wt;
-                        g += (src[srcOffset + 1] || defaultValue) * wt;
-                        b += (src[srcOffset + 2] || defaultValue) * wt;
+                        // Добавляем значение каждого канала цвета, умноженное на вес
+                        r += src[srcOffset + 0] * wt;
+                        g += src[srcOffset + 1] * wt;
+                        b += src[srcOffset + 2] * wt;
                     }
                 }
 
