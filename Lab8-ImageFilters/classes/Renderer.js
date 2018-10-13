@@ -99,8 +99,6 @@ class Renderer {
         this.restore();
     }
 
-
-
     convoluteCanvasData(canvasData, kernel) {
 
         let side = Math.round(Math.sqrt(kernel.length));
@@ -115,6 +113,8 @@ class Renderer {
         // Полученное изображение
         let output = this.ctx.createImageData(w, h);
         let dst = output.data;
+
+        let defaultValue = 255;
 
         // Проходим по всему изображению
         for (let y = 0; y < h; y++) {
@@ -138,9 +138,9 @@ class Renderer {
 
                         // Добавляем значение каждого канала цвета, умноженное на вес,
                         // если пиксель существует, иначе не добавляем ничего
-                        r += src[srcOffset + 0] * wt || 0;
-                        g += src[srcOffset + 1] * wt || 0;
-                        b += src[srcOffset + 2] * wt || 0;
+                        r += (src[srcOffset + 0] || defaultValue) * wt;
+                        g += (src[srcOffset + 1] || defaultValue) * wt;
+                        b += (src[srcOffset + 2] || defaultValue) * wt;
                     }
                 }
 
