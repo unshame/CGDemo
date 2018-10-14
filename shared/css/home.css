@@ -108,3 +108,13 @@ main.ready .card {
     line-height: 200px;
     text-align: center;
 }
+
+.card.visible, main.ready .card.visible {
+    transition: opacity 0.3s ease-in;
+    opacity: 1;
+}
+
+.card.invisible, main.ready .card.invisible {
+    transition: opacity 0.2s ease-out;
+    opacity: 0;
+}

@@ -86,13 +86,14 @@ function processTransition(hash) {
         moveCardToCard(cardCopy, card);
         card.css('opacity', 0);
         card.addClass('card_force_hover');
-        animateAllCardsExcept(card[0], { opacity: 1 }, 300);
+        animateAllCardsExcept(card[0], 'visible');
 
         setTimeout(() => {
             main.addClass('ready');
             cardCopy.detach();
-            card.css('opacity', 1);
+            card.css('opacity', '');
             card.removeClass('card_force_hover');
+            cards.removeClass('visible');
         }, 300);
     }
 
@@ -138,7 +139,7 @@ function addCardTransition(card, index) {
             location.href = card.attr('href') + '#middle';
         }, 200);
 
-        animateAllCardsExcept(card[0], {opacity: 0 }, 150);
+        animateAllCardsExcept(card[0], 'invisible');
         return false;
     });
 
@@ -170,13 +171,13 @@ function moveCardToCard(cardCopy, card) {
     });
 }
 
-function animateAllCardsExcept(card, animation, time) {
+function animateAllCardsExcept(card, className) {
 
     cards.each((i, otherCard) => {
         otherCard = otherCard;
 
         if (otherCard != card) {
-            $(otherCard).animate(animation, time);
+            $(otherCard).addClass(className);
         }
     });
 }
