@@ -63,5 +63,3 @@ function canvasClick(event) {
         y: Math.round((event.offsetY - 1) / scale)
     }, 10);
 }
-
-addSaveButton();

@@ -68,5 +68,3 @@ function getRandomLength(min, max) {
     max = max - min;
     return (Math.random() * max + min) * (Math.random() > 0.5 ? -1 : 1);
 }
-
-addSaveButton();
