@@ -46,8 +46,7 @@ class FilterCanvasInterface {
         this.update();
     }
 
-    loadImageFromInput(input) {
-        let file = input.files[0];
+    loadImageFromFile(file) {
 
         if(!file) {
             this.clear();

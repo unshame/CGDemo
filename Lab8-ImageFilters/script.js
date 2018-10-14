@@ -6,6 +6,7 @@ let buttonBlurOn = $('#button_blur_on'); // Кнопка переключени�
 let buttonClear = $('#button_clear'); // Кнопка очистки холста
 let buttonSave = $('#button_save');
 let fileInput = $('#input_file');
+let fileInputLabel = $('#input_file_label span');
 let canvas = $('#canvas'); // Холст для рисования
 
 let color = [255, 255, 255, 255]; // Цвет кисти
@@ -20,17 +21,19 @@ let canvasInterface = new FilterCanvasInterface(canvas[0], canvas.width(), canva
 buttonClear.click(() => {
     canvasInterface.clear();
     fileInput.val('');
+    fileInputLabel.html('No file selected');
 });
 
 // Смена режима рисования по нажатию на кнопки внизу
 buttonBlurOff.click(() => setConvolution(false));
 buttonBlurOn.click(() => setConvolution(true));
 
-fileInput.change(() => canvasInterface.loadImageFromInput(fileInput[0]));
+fileInput.change(() => onFileChanged());
 
 setConvolution(convolutionEnabled);
 
 canvasInterface.loadImage('./default_image.png');
+fileInputLabel.html('default_image.png');
 
 function setConvolution(enabled) {
     convolutionEnabled = enabled;
@@ -38,4 +41,10 @@ function setConvolution(enabled) {
     on.addClass('active');
     off.removeClass('active');
     canvasInterface.setConvolution(enabled);
+}
+
+function onFileChanged() {
+    let file = fileInput[0].files[0];
+    fileInputLabel.html(file ? file.name : 'No file selected');
+    canvasInterface.loadImageFromFile(file);
 }
