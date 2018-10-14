@@ -4,6 +4,7 @@ let convolutionEnabled = false;
 let buttonBlurOff = $('#button_blur_off'); // Кнопка переключения в режим линии
 let buttonBlurOn = $('#button_blur_on'); // Кнопка переключения в режим окружности
 let buttonClear = $('#button_clear'); // Кнопка очистки холста
+let buttonSave = $('#button_save');
 let fileInput = $('#input_file');
 let canvas = $('#canvas'); // Холст для рисования
 
@@ -13,7 +14,7 @@ let kernel = [
     0.1, 0.2, 0.1,
     0.1, 0.1, 0.1
 ];
-let canvasInterface = new FilterCanvasInterface(canvas[0], canvas.width(), canvas.height(), color, kernel, convolutionEnabled); // Рисующий объект
+let canvasInterface = new FilterCanvasInterface(canvas[0], canvas.width(), canvas.height(), color, kernel, convolutionEnabled, buttonSave[0]); // Рисующий объект
 
 // Очистка по нажатию на крестик
 buttonClear.click(() => {
@@ -28,8 +29,6 @@ buttonBlurOn.click(() => setConvolution(true));
 fileInput.change(() => canvasInterface.loadImageFromInput(fileInput[0]));
 
 setConvolution(convolutionEnabled);
-
-addSaveButton();
 
 canvasInterface.loadImage('./default_image.png');
 

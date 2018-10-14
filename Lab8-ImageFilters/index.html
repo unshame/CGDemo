@@ -16,6 +16,7 @@
                 <header>
                     <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
                     <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
+                    <a title="Save Image" class="button_toolbar save" id="button_save" download="image.png"></a>
                     <div class="title">Image Convolution</div>
                 </header>
                 <canvas id="canvas"></canvas>
@@ -30,12 +31,10 @@
         <a class="button_floating back" href="../Lab5-Sutherland-Hodgman" title="Sutherland-Hodgman's Polygon Clipping Algorithm"></a>
         <a class="button_floating home right" href=".." title="Back to previews"></a>
         <!--<a class="button_floating forward" href="../Lab9-ImageStats" title="Flood Fill Algorithms"></a>-->
+        <script src="../shared/scripts/polyfills.js"></script>
         <script src="../shared/lib/jquery.min.js"></script>
         <script src="./classes/Renderer.js"></script>
-        <script src="./classes/RenderArray.js"></script>
         <script src="./classes/FilterCanvasInterface.js"></script>
-        <script src="./classes/Brush.js"></script>
-        <script src="../shared/scripts/saveImage.js"></script>
         <script src="./script.js"></script>
         <script src="../shared/scripts/transition.js"></script>
     </body>

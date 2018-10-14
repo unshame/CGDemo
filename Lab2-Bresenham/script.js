@@ -43,5 +43,3 @@ function setMode(_mode) {
     off.removeClass('active');
     brush.setType(mode);
 }
-
-addSaveButton();

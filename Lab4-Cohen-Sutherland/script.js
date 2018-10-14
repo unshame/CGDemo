@@ -58,5 +58,3 @@ function setClip(_clip) {
     canvasInterface.clippingEnabled = clip;
     canvasInterface.update();
 }
-
-addSaveButton();

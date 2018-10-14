@@ -10,7 +10,7 @@ class FilterCanvasInterface {
     * @param {number}            height  высота холста
     * @param {array}             clearColor   цвет рисования по холсту [r, g, b, a]
     */
-    constructor(canvas, width, height, clearColor, kernel, shouldConvolute) {
+    constructor(canvas, width, height, clearColor, kernel, shouldConvolute, saveAnchor) {
 
         /**
         * Объект, рисующий пиксели на холсте.
@@ -22,6 +22,8 @@ class FilterCanvasInterface {
 
         this.shouldConvolute = false;
 
+        this.saveAnchor = saveAnchor;
+
         this.renderer.clearCanvas();
     }
 
@@ -29,12 +31,14 @@ class FilterCanvasInterface {
     update() {
         let convolutedCanvasData = this.shouldConvolute && this.renderer.convoluteCanvasData(this.renderer.canvasData, this.kernel);
         this.renderer.update(convolutedCanvasData);
+        this.updateSaveAnchor();
     }
 
     /** Очищает массив и холст. */
     clear() {
         this.renderer.clearCanvas();
         this.renderer.update();
+        this.updateSaveAnchor();
     }
 
     setConvolution(enabled) {
@@ -67,7 +71,10 @@ class FilterCanvasInterface {
         img.setAttribute('crossOrigin', '');
     }
 
-    getImageDataURL() {
-        return this.canvas.toDataURL('image/png');
+    updateSaveAnchor() {
+        this.renderer.canvas.toBlob((blob) => {
+            console.log('Generated image blob');
+            this.saveAnchor.setAttribute('href', window.URL.createObjectURL(blob));
+        });
     }
 }

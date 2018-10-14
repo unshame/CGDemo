@@ -77,5 +77,3 @@ function setClip(_clip, fast) {
         canvasInterface.updateStep();
     }
 }
-
-addSaveButton();
