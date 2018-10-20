@@ -82,16 +82,6 @@ class Renderer {
         }
     }
 
-    /**
-    * Проверяет, находится ли пиксель внутри холста.
-    * @param  {point} p      координаты пикселя
-    *
-    * @return {bool}
-    */
-    pixelIsInside(p) {
-        return p.x >= 0 && p.x < this.width && p.y >= 0 && p.y < this.height;
-    }
-
     drawImage(image) {
         this.width = image.width;
         this.height = image.height;
@@ -151,7 +141,7 @@ class Renderer {
                 }
 
                 // Ставим полученный цвет в выходной массив
-                dst[dstOffset] = r;
+                dst[dstOffset + 0] = r;
                 dst[dstOffset + 1] = g;
                 dst[dstOffset + 2] = b;
 

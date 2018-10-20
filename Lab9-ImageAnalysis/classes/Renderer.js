@@ -82,16 +82,6 @@ class Renderer {
         }
     }
 
-    /**
-    * Проверяет, находится ли пиксель внутри холста.
-    * @param  {point} p      координаты пикселя
-    *
-    * @return {bool}
-    */
-    pixelIsInside(p) {
-        return p.x >= 0 && p.x < this.width && p.y >= 0 && p.y < this.height;
-    }
-
     drawImage(image) {
         this.width = image.width;
         this.height = image.height;
