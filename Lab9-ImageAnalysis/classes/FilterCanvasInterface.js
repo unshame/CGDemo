@@ -1,5 +1,5 @@
-/* exported FilterCanvasInterface */
-class FilterCanvasInterface {
+/* exported CanvasAnalysisInterface */
+class CanvasAnalysisInterface {
 
     /**
     * Холст для рисования линий и окружностей по алгоритму Брезенхема.

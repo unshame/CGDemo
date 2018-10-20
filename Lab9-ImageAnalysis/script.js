@@ -12,7 +12,7 @@ let graph = $('#histogram');
 let stats = $('#stats');
 
 let color = [255, 255, 255, 255];
-let canvasInterface = new FilterCanvasInterface(canvas[0], canvas.width(), canvas.height(), color, graph[0], stats[0]); // Рисующий объект
+let canvasInterface = new CanvasAnalysisInterface(canvas[0], canvas.width(), canvas.height(), color, graph[0], stats[0]); // Рисующий объект
 
 // Очистка по нажатию на крестик
 buttonClear.click(() => {

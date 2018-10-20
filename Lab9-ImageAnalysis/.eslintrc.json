@@ -27,7 +27,7 @@
     "globals": {
         "$": true,
         "Renderer": true,
-        "FilterCanvasInterface": true,
+        "CanvasAnalysisInterface": true,
         "Plotly": true
     }
 }
