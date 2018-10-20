@@ -105,7 +105,7 @@ class CanvasAnalysisInterface {
         for(let i = 0; i < stats.length; i++) {
             let stat = stats[i];
             let color = colors[i];
-            fmt += `<span style="color: ${color}"><b>m<sub>2${i + 1};</sub></b> = ${stat.toFixed(2)}</span>; `;
+            fmt += `<span style="color: ${color}"><b>m<sub>2${color[0].toLowerCase()};</sub></b> = ${stat.toFixed(2)}</span>; `;
         }
 
         return fmt;
