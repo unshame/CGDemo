@@ -78,3 +78,12 @@ input[type="text"],input[type="password"], select{
     font: inherit;
     padding: 0;
 }
+
+sub {
+    vertical-align: sub;
+    font-size: smaller;
+}
+
+b {
+    font-weight: bold;
+}

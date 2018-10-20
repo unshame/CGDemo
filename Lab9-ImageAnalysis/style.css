@@ -1,50 +1,63 @@
 header {
-	background-color: #AFB42B;
+	background-color: #E65100;
 }
 
 canvas {
     cursor: default;
 }
 
+#histogram {
+    width: 800px;
+    height: 500px;
+    background: white;
+    display: none;
+}
+
+#stats {
+    height: 40px;
+    background: white;
+    text-align: center;
+}
+
 .button_control {
-    color: #AFB42B;
+    color: #E65100;
     cursor: pointer;
 }
 
 .button_control.active {
-    background: #AFB42B;
+    background: #E65100;
 }
 
 
-.button_control.button_blur_off, .button_control.button_blur_off::before {
+.button_control.button_canvas, .button_control.button_canvas::before {
     border-radius: 24px 0 0 24px;
     padding-left: 56px;
 }
 
-.button_control.button_blur_off::after {
+.button_control.button_canvas::after {
     top: 0;
     left: 8px;
-    background: url('../shared/images/blur_off_lime.png');
+    background: url('../shared/images/image_orange.png');
 }
 
-.button_control.active.button_blur_off::after {
-    background: url('../shared/images/blur_off.png');
+.button_control.active.button_canvas::after {
+    background: url('../shared/images/image.png');
 }
 
-.button_control.button_blur_on, .button_control.button_blur_on::before {
+.button_control.button_graph, .button_control.button_graph::before {
     border-radius: 0 24px 24px 0;
     padding-right: 56px;
 }
 
-.button_control.button_blur_on::after {
+.button_control.button_graph::after {
     top: 0;
     right: 8px;
-    background: url('../shared/images/blur_on_lime.png');
+    background: url('../shared/images/poll_orange.png');
 }
 
 
-.button_control.active.button_blur_on::after {
-    background: url('../shared/images/blur_on.png');
+.button_control.active.button_graph::after {
+    background: url('../shared/images/poll.png');
 }
 
 .button_control.button_upload, .button_control.button_upload::before {
@@ -62,13 +75,13 @@ canvas {
 
 .button_control.button_upload>span {
     display: block;
-    overflow-x: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .button_control.button_upload:active {
-    background: #AFB42B;
+    background: #E65100;
     color: #fafafa;
 }
 
@@ -76,7 +89,7 @@ canvas {
     top: 0;
     left: 7px;
     z-index: 3;
-    background: url('../shared/images/image_lime.png');
+    background: url('../shared/images/image_orange.png');
 }
 
 .button_control.button_upload:active::after {
@@ -98,17 +111,17 @@ canvas {
 }
 
 .button_floating.back::after {
-    background: url('../shared/images/back_lime.png');
+    background: url('../shared/images/back_orange.png');
 }
 
 .button_floating.forward::after {
-    background: url('../shared/images/forward_lime.png');
+    background: url('../shared/images/forward_orange.png');
 }
 
 .button_floating.home::after {
-    background: url('../shared/images/home_lime.png');
+    background: url('../shared/images/home_orange.png');
 }
 
 .github-corner svg {
-    fill: #AFB42B;
+    fill: #E65100;
 }

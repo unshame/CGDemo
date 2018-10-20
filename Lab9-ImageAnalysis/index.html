@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Image Convolution</title>
+        <title>Image Analysis</title>
         <link rel="shortcut icon" href="../shared/icons/lime.ico">
         <link href="../shared/css/reset.css" rel="stylesheet" type="text/css">
         <link href="../shared/css/floating_button.css" rel="stylesheet" type="text/css">
@@ -16,21 +16,23 @@
                 <header>
                     <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
                     <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
-                    <a title="Save Image" class="button_toolbar save" id="button_save" download="image.png"></a>
-                    <div class="title">Image Convolution</div>
+                    <div class="title">Image Analysis</div>
                 </header>
                 <canvas id="canvas"></canvas>
+                <div id="histogram" class="analysis"></div>
+                <div id="stats"  class="analysis"></div>
             </div>
             <div class="buttons">
                 <label class="button_control button_upload" for="input_file" id="input_file_label"><span></span></label>
                 <input type="file" id="input_file" name="input_file">
                 <div class="divider"></div>
-                <button id="button_blur_off" class="button_control button_blur_off">Original</button>
-                <button id="button_blur_on" class="button_control button_blur_on">Convoluted</button>
+                <button id="button_canvas" class="button_control button_canvas">Image</button>
+                <button id="button_graph" class="button_control button_graph">Analysis</button>
             </div>
         </main>
-        <a class="button_floating back" href="../Lab5-Sutherland-Hodgman" title="Sutherland-Hodgman's Polygon Clipping Algorithm"></a>
-        <a class="button_floating forward" href="../Lab9-ImageAnalysis" title="Image Analysis"></a>
+        <a class="button_floating back" href="../Lab8-ImageFilters" title="Image Convolution"></a>
+        <a class="button_floating home right" href=".." title="Back to previews"></a>
+        <!--<a class="button_floating forward" href="../Lab9-ImageStats" title="Flood Fill Algorithms"></a>-->
         <script src="../shared/scripts/polyfills.js"></script>
         <script src="../shared/lib/jquery.min.js"></script>
         <script src="./classes/Renderer.js"></script>
@@ -38,4 +40,5 @@
         <script src="./script.js"></script>
         <script src="../shared/scripts/transition.js"></script>
     </body>
+    <script src="../shared/lib/plotly.min.js"></script>
 </html>
