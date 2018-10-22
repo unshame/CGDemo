@@ -22,18 +22,13 @@ class Renderer {
         // lookup uniforms
         this.matrixLocation = gl.getUniformLocation(program, 'u_matrix');
 
-
         // Create a buffer to put positions in
         this.positionBuffer = gl.createBuffer();
-
-        // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 
         // Put geometry data into buffer
         this.setGeometry(geometry);
 
         this.colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
         this.setColors(colors);
 
         // Transformations
@@ -68,6 +63,8 @@ class Renderer {
 
     setGeometry(geometry) {
         this.geometry = geometry;
+        // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(geometry), this.gl.STATIC_DRAW);
     }
 
@@ -84,6 +81,7 @@ class Renderer {
         }
 
         this.colors = new Float32Array(extrapolatedColors);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.colors), this.gl.STATIC_DRAW);
     }
 
