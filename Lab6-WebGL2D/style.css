@@ -10,6 +10,7 @@ canvas {
 .button_control {
     color: #795548;
     cursor: pointer;
+    width: 64px;
 }
 
 .button_control.active {
@@ -22,15 +23,12 @@ canvas {
     position: relative;
     margin-top: 8px;
     padding: 6px 8px;
-
-    width: 160px;
+    width: 129px;
     height: 48px;
-
     font-weight: bold;
     background: #FAFAFA;
     color: #795548;
     text-align: center;
-
     outline: none;
     transition: background-color 0.3s;
 }
@@ -40,13 +38,13 @@ canvas {
     color: #FAFAFA;
 }
 
-.slider_holder:first-child,
-.slider_holder:first-child::before {
+.first,
+.first::before {
     border-radius: 24px 0 0 24px;
 }
 
-.slider_holder:last-child,
-.slider_holder:last-child::before {
+.last,
+.last::before {
     border-radius: 0 24px 24px 0;
 }
 
@@ -71,6 +69,32 @@ canvas {
 
 .slider_holder input {
     width: 90%;
+}
+
+.button_control.button_triangles::after {
+    top: 0;
+    left: 8px;
+    background: url('../shared/images/clip_poly_brown.png');
+}
+
+
+.button_control.active.button_triangles::after {
+    background: url('../shared/images/clip_poly.png');
+}
+
+.button_control.button_lines::after {
+    top: 0;
+    left: 8px;
+    background: url('../shared/images/clip_brown.png');
+}
+
+.divider {
+    width: 24px;
+}
+
+
+.button_control.active.button_lines::after {
+    background: url('../shared/images/clip.png');
 }
 
 .button_floating:active {

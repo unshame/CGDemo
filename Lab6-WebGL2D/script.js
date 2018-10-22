@@ -2,6 +2,8 @@ window.pageNum = 8;
 
 let canvas = $('#canvas');
 let buttonClear = $('#button_clear');
+let buttonTriangles = $('#button_triangles');
+let buttonLines = $('#button_lines');
 let geometry = new Float32Array([
     // top left rect
     170, 54,
@@ -81,11 +83,16 @@ let color = [121 / 255, 85 / 255, 72 / 255, 1];
 let mw = canvas.width() / 2;
 let mh = canvas.height() / 2;
 let renderer = new Renderer(canvas[0], geometry, color, [mw, mh], [mw, mh]);
+let primitiveType = renderer.gl.TRIANGLES;
 renderer.drawScene();
 let sliders = setupSliders();
 sliders.angle.updateValue(180);
 
 buttonClear.click(() => resetTransform());
+buttonTriangles.click(() => setPrimitive(renderer.gl.TRIANGLES));
+buttonLines.click(() => setPrimitive(renderer.gl.LINES));
+
+setPrimitive(primitiveType);
 
 function setupSliders() {
 
@@ -134,7 +141,17 @@ function setupSliders() {
 }
 
 function resetTransform() {
+    setPrimitive(renderer.gl.TRIANGLES);
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
     }
+}
+
+function setPrimitive(_primitiveType) {
+    primitiveType = _primitiveType;
+    let [on, off] = primitiveType === renderer.gl.TRIANGLES ? [buttonTriangles, buttonLines] : [buttonLines, buttonTriangles];
+    on.addClass('active');
+    off.removeClass('active');
+    renderer.primitiveType = primitiveType;
+    renderer.drawScene();
 }

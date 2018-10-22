@@ -37,6 +37,8 @@ class Renderer {
         this.originTranslation = originTranslation || [0, 0];
         this.color = color;
 
+        this.resizeCanvasToDisplaySize();
+
         this.updatePosition = (index, event, value) => {
             this.translation[index] = value;
             this.drawScene();
@@ -65,24 +67,15 @@ class Renderer {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, geometry, this.gl.STATIC_DRAW);
     }
 
-    resizeCanvasToDisplaySize(canvas, multiplier) {
-        multiplier = multiplier || 1;
-        let width = canvas.clientWidth * multiplier | 0;
-        let height = canvas.clientHeight * multiplier | 0;
-
-        if (canvas.width !== width || canvas.height !== height) {
-            canvas.width = width;
-            canvas.height = height;
-            return true;
-        }
-        return false;
+    resizeCanvasToDisplaySize() {
+        let canvas = this.gl.canvas;
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
     }
 
     drawScene() {
         let gl = this.gl;
         let program = this.program;
-
-        this.resizeCanvasToDisplaySize(gl.canvas);
 
         // Tell WebGL how to convert from clip space to pixels
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
