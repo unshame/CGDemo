@@ -71,7 +71,7 @@ class CanvasAnalysisInterface {
         let colors = ['red', 'green', 'blue'];
 
         let [ys, ms] = this.renderer.getHistogramData();
-        var data = [];
+        let data = [];
         for(let i = 0; i < colors.length; i++) {
             data[i] = {
                 name: colors[i][0].toLocaleUpperCase() + colors[i].substr(1),
@@ -84,7 +84,7 @@ class CanvasAnalysisInterface {
             };
         }
 
-        var layout = {
+        let layout = {
             barmode: 'overlay',
             bargap: 0,
             xaxis: {

@@ -1,1 +1,1 @@
-https://unshame.github.io/CGDemo/Lab8-ImageFilters
+https://unshame.github.io/CGDemo/Lab9-ImageAnalysis
