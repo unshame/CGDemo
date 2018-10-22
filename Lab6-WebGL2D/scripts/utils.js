@@ -16,7 +16,7 @@ exported
  */
 function loadShader(gl, shaderSource, shaderType) {
     // Create the shader object
-    var shader = gl.createShader(shaderType);
+    let shader = gl.createShader(shaderType);
 
     // Load the shader source
     gl.shaderSource(shader, shaderSource);
@@ -25,10 +25,10 @@ function loadShader(gl, shaderSource, shaderType) {
     gl.compileShader(shader);
 
     // Check the compile status
-    var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    let compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!compiled) {
         // Something went wrong during compilation; get the error
-        var lastError = gl.getShaderInfoLog(shader);
+        let lastError = gl.getShaderInfoLog(shader);
         console.error("Error compiling shader '" + shader + "':" + lastError);
         gl.deleteShader(shader);
         return null;
@@ -43,35 +43,37 @@ function loadShader(gl, shaderSource, shaderType) {
  * @param {WebGLShader[]} shaders The shaders to attach
  * @param {string[]} [opt_attribs] An array of attribs names. Locations will be assigned by index if not passed in
  * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
- * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
- *        on error. If you want something else pass an callback. It's passed an error message.
  */
-function createProgram(
-    gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
-    var program = gl.createProgram();
-    shaders.forEach(function (shader) {
+function createProgram(gl, shaders, opt_attribs, opt_locations) {
+    let program = gl.createProgram();
+
+    shaders.forEach((shader) => {
         gl.attachShader(program, shader);
     });
+
     if (opt_attribs) {
-        opt_attribs.forEach(function (attrib, ndx) {
+        opt_attribs.forEach((attrib, ndx) => {
             gl.bindAttribLocation(
                 program,
                 opt_locations ? opt_locations[ndx] : ndx,
-                attrib);
+                attrib
+            );
         });
     }
+
     gl.linkProgram(program);
 
     // Check the link status
-    var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+    let linked = gl.getProgramParameter(program, gl.LINK_STATUS);
     if (!linked) {
         // something went wrong with the link
-        var lastError = gl.getProgramInfoLog(program);
-        console.error("Error in program linking:" + lastError);
+        let lastError = gl.getProgramInfoLog(program);
+        console.error("Error in program linking:", lastError);
 
         gl.deleteProgram(program);
         return null;
     }
+
     return program;
 }
 
@@ -81,35 +83,35 @@ function createProgram(
  * @param {string} scriptId The id of the script tag.
  * @param {number} opt_shaderType The type of shader. If not passed in it will
  *     be derived from the type of the script tag.
- * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors.
  * @return {WebGLShader} The created shader.
  */
-function createShaderFromScript(
-    gl, scriptId, opt_shaderType, opt_errorCallback) {
-    var shaderSource = "";
-    var shaderType;
-    var shaderScript = document.getElementById(scriptId);
+function createShaderFromScript(gl, scriptId, opt_shaderType) {
+    let shaderSource = "";
+    let shaderType;
+    let shaderScript = document.getElementById(scriptId);
+
     if (!shaderScript) {
-        throw ("Error: unknown script element" + scriptId);
+        throw ("Error: unknown script element " + scriptId);
     }
     shaderSource = shaderScript.text;
 
     if (!opt_shaderType) {
+
         if (shaderScript.type === "x-shader/x-vertex") {
             shaderType = gl.VERTEX_SHADER;
-        } else if (shaderScript.type === "x-shader/x-fragment") {
+        }
+        else if (shaderScript.type === "x-shader/x-fragment") {
             shaderType = gl.FRAGMENT_SHADER;
-        } else if (shaderType !== gl.VERTEX_SHADER && shaderType !== gl.FRAGMENT_SHADER) {
+        }
+        else if (shaderType !== gl.VERTEX_SHADER && shaderType !== gl.FRAGMENT_SHADER) {
             throw ("Error: unknown shader type");
         }
     }
 
-    return loadShader(
-        gl, shaderSource, opt_shaderType ? opt_shaderType : shaderType,
-        opt_errorCallback);
+    return loadShader(gl, shaderSource, opt_shaderType ? opt_shaderType : shaderType);
 }
 
-var defaultShaderType = [
+let defaultShaderType = [
     "VERTEX_SHADER",
     "FRAGMENT_SHADER",
 ];
@@ -124,16 +126,14 @@ var defaultShaderType = [
  *        vertex shader, the second the fragment shader.
  * @param {string[]} [opt_attribs] An array of attribs names. Locations will be assigned by index if not passed in
  * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
- * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
- *        on error. If you want something else pass an callback. It's passed an error message.
  * @return {WebGLProgram} The created program.
  */
-function createProgramFromScripts(
-    gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {
-    var shaders = [];
-    for (var ii = 0; ii < shaderScriptIds.length; ++ii) {
-        shaders.push(createShaderFromScript(
-            gl, shaderScriptIds[ii], gl[defaultShaderType[ii]], opt_errorCallback));
+function createProgramFromScripts(gl, shaderScriptIds, opt_attribs, opt_locations) {
+    let shaders = [];
+
+    for (let i = 0; i < shaderScriptIds.length; ++i) {
+        shaders.push(createShaderFromScript(gl, shaderScriptIds[i], gl[defaultShaderType[i]]));
     }
-    return createProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback);
+
+    return createProgram(gl, shaders, opt_attribs, opt_locations);
 }

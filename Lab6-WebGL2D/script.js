@@ -4,7 +4,7 @@ let canvas = $('#canvas');
 let buttonClear = $('#button_clear');
 let buttonTriangles = $('#button_triangles');
 let buttonLines = $('#button_lines');
-let geometry = new Float32Array([
+let geometry = [
     // top left rect
     170, 54,
     317, 54,
@@ -77,9 +77,13 @@ let geometry = new Float32Array([
     477, 312,
     529, 121
 
-]);
+];
 
-let color = [121 / 255, 85 / 255, 72 / 255, 1];
+let color = [
+    121 / 255, 85 / 255, 72 / 255, 1,
+    141 / 255, 110 / 255, 99 / 255, 1,
+    62 / 255, 39 / 255, 35 / 255, 1
+];
 let mw = canvas.width() / 2;
 let mh = canvas.height() / 2;
 let renderer = new Renderer(canvas[0], geometry, color, [mw, mh], [mw, mh]);

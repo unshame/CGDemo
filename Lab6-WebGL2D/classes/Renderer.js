@@ -1,7 +1,7 @@
 /* exported Renderer */
 class Renderer {
 
-    constructor(canvas, geometry, color, originTranslation, initialTranslation, primitiveType) {
+    constructor(canvas, geometry, colors, originTranslation, initialTranslation, primitiveType) {
 
         /**
         * Холст.
@@ -17,10 +17,11 @@ class Renderer {
 
         // look up where the vertex data needs to go.
         this.positionLocation = gl.getAttribLocation(program, 'a_position');
+        this.colorLocation = gl.getAttribLocation(program, 'a_vertex_color');
 
         // lookup uniforms
-        this.colorLocation = gl.getUniformLocation(program, 'u_color');
         this.matrixLocation = gl.getUniformLocation(program, 'u_matrix');
+
 
         // Create a buffer to put positions in
         this.positionBuffer = gl.createBuffer();
@@ -31,11 +32,14 @@ class Renderer {
         // Put geometry data into buffer
         this.setGeometry(geometry);
 
+        this.colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+        this.setColors(colors);
+
         // Transformations
         this.initialTranslation = initialTranslation || [0, 0];
         this.resetTransform();
         this.originTranslation = originTranslation || [0, 0];
-        this.color = color;
 
         this.resizeCanvasToDisplaySize();
 
@@ -64,13 +68,39 @@ class Renderer {
 
     setGeometry(geometry) {
         this.geometry = geometry;
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, geometry, this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(geometry), this.gl.STATIC_DRAW);
+    }
+
+    setColors(colors) {
+        let extrapolatedColors = [];
+
+        for(let i = 0; i < this.geometry.length / 2; i += colors.length / 4) {
+            for(let j = 0; j < colors.length; j += 4) {
+                extrapolatedColors.push(colors[j]);
+                extrapolatedColors.push(colors[j + 1]);
+                extrapolatedColors.push(colors[j + 2]);
+                extrapolatedColors.push(colors[j + 3]);
+            }
+        }
+
+        this.colors = new Float32Array(extrapolatedColors);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.colors), this.gl.STATIC_DRAW);
     }
 
     resizeCanvasToDisplaySize() {
         let canvas = this.gl.canvas;
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+    }
+
+    setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
+        let gl = this.gl;
+        // Turn on the attribute
+        gl.enableVertexAttribArray(location);
+        // Bind the position buffer.
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+        gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
     drawScene() {
@@ -86,24 +116,20 @@ class Renderer {
         // Tell it to use our program (pair of shaders)
         gl.useProgram(program);
 
-        // Turn on the attribute
-        gl.enableVertexAttribArray(this.positionLocation);
-
-        // Bind the position buffer.
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-
-        // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
         {
             let size = 2; // 2 components per iteration
             let type = gl.FLOAT; // the data is 32bit floats
             let normalize = false; // don't normalize the data
             let stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
             let offset = 0; // start at the beginning of the buffer
-            gl.vertexAttribPointer(this.positionLocation, size, type, normalize, stride, offset);
-        }
 
-        // set the color
-        gl.uniform4fv(this.colorLocation, this.color);
+            // Position
+            this.setVertexAttrib(this.positionLocation, this.positionBuffer, size, type, normalize, stride, offset);
+
+            // Color
+            size = 4;
+            this.setVertexAttrib(this.colorLocation, this.colorBuffer, size, type, normalize, stride, offset);
+        }
 
         // Compute the matrices
         let matrix = M3Math.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
