@@ -78,15 +78,15 @@ canvas {
 }
 
 .button_floating.back::after {
-    background: url('../shared/images/back_orange.png');
+    background: url('../shared/images/back_brown.png');
 }
 
 .button_floating.forward::after {
-    background: url('../shared/images/forward_orange.png');
+    background: url('../shared/images/forward_brown.png');
 }
 
 .button_floating.home::after {
-    background: url('../shared/images/home_orange.png');
+    background: url('../shared/images/home_brown.png');
 }
 
 .github-corner svg {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>WebGL 2D</title>
-    <link rel="shortcut icon" href="../shared/icons/green.ico">
+    <link rel="shortcut icon" href="../shared/icons/brown.ico">
     <link href="../shared/css/reset.css" rel="stylesheet" type="text/css">
     <link href="../shared/css/floating_button.css" rel="stylesheet" type="text/css">
     <link href="../shared/css/layout.css" rel="stylesheet" type="text/css">
@@ -22,14 +22,18 @@
             </header>
             <canvas id="canvas"></canvas>
         </div>
+        <div class="buttons">
+            <div id="x" class="slider_holder"></div>
+            <div id="y" class="slider_holder"></div>
+            <div id="angle" class="slider_holder"></div>
+            <div id="scaleX" class="slider_holder"></div>
+            <div id="scaleY" class="slider_holder"></div>
+        </div>
     </main>
-    <div class="buttons">
-        <div id="x" class="slider_holder"></div>
-        <div id="y" class="slider_holder"></div>
-        <div id="angle" class="slider_holder"></div>
-        <div id="scaleX" class="slider_holder"></div>
-        <div id="scaleY" class="slider_holder"></div>
-    </div>
+
+    <a class="button_floating back" href="../Lab9-ImageAnalysis" title="Image Lab9-ImageAnalysis"></a>
+    <a class="button_floating home right" href=".." title="Back to previews"></a>
+    <!--<a class="button_floating forward" href="../Lab9-ImageStats" title="Flood Fill Algorithms"></a>-->
 
     <script src="../shared/scripts/polyfills.js"></script>
     <script src="../shared/lib/jquery.min.js"></script>
