@@ -63,28 +63,24 @@ class Renderer {
 
     bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(array), usage);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, array, usage);
     }
 
     setGeometry(geometry) {
         this.geometry = geometry;
-        this.bufferArray(this.positionBuffer, geometry);
+        this.bufferArray(this.positionBuffer, new Float32Array(geometry));
     }
 
     setColors(colors) {
-        let extrapolatedColors = [];
+        this.colors = [];
 
-        for(let i = 0; i < this.geometry.length / 2; i += colors.length / 4) {
-            for(let j = 0; j < colors.length; j += 4) {
-                extrapolatedColors.push(colors[j]);
-                extrapolatedColors.push(colors[j + 1]);
-                extrapolatedColors.push(colors[j + 2]);
-                extrapolatedColors.push(colors[j + 3]);
+        for(let i = 0; i < this.geometry.length / 2; i += colors.length / 3) {
+            for(let j = 0; j < colors.length; j++) {
+                this.colors.push(colors[j]);
             }
         }
 
-        this.colors = new Float32Array(extrapolatedColors);
-        this.bufferArray(this.colorBuffer, this.colors);
+        this.bufferArray(this.colorBuffer, new Uint8Array(this.colors));
     }
 
     resizeCanvasToDisplaySize() {
@@ -127,7 +123,9 @@ class Renderer {
             this.setVertexAttrib(this.positionLocation, this.positionBuffer, size, type, normalize, stride, offset);
 
             // Color
-            size = 4;
+            size = 3;
+            type = gl.UNSIGNED_BYTE;
+            normalize = true;
             this.setVertexAttrib(this.colorLocation, this.colorBuffer, size, type, normalize, stride, offset);
         }
 
