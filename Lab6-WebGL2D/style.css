@@ -1,0 +1,115 @@
+
+header {
+	background-color: #E65100;
+}
+
+canvas {
+    cursor: default;
+}
+
+.button_control {
+    color: #E65100;
+    cursor: pointer;
+}
+
+.button_control.active {
+    background: #E65100;
+}
+
+
+.button_control.button_canvas, .button_control.button_canvas::before {
+    border-radius: 24px 0 0 24px;
+    padding-left: 56px;
+}
+
+.button_control.button_canvas::after {
+    top: 0;
+    left: 8px;
+    background: url('../shared/images/image_orange.png');
+}
+
+.button_control.active.button_canvas::after {
+    background: url('../shared/images/image.png');
+}
+
+.button_control.button_graph, .button_control.button_graph::before {
+    border-radius: 0 24px 24px 0;
+    padding-right: 56px;
+}
+
+.button_control.button_graph::after {
+    top: 0;
+    right: 8px;
+    background: url('../shared/images/poll_orange.png');
+}
+
+
+.button_control.active.button_graph::after {
+    background: url('../shared/images/poll.png');
+}
+
+.button_control.button_upload, .button_control.button_upload::before {
+    border-radius: 24px;
+}
+
+.button_control.button_upload {
+    width: 250px;
+    padding-left: 56px;
+    padding-right: 8px;
+    line-height: 48px;
+    text-align: center;
+    display: block;
+}
+
+.button_control.button_upload>span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.button_control.button_upload:active {
+    background: #E65100;
+    color: #fafafa;
+}
+
+.button_control.button_upload::after {
+    top: 0;
+    left: 7px;
+    z-index: 3;
+    background: url('../shared/images/image_orange.png');
+}
+
+.button_control.button_upload:active::after {
+    background: url('../shared/images/image.png');
+}
+
+.button_control.button_upload input {
+    width: 190px;
+    outline: rgba(0, 0, 0, 0);
+    cursor: pointer;
+}
+
+#input_file {
+    display: none;
+}
+
+.button_floating:active {
+    background: rgb(175, 180, 43);
+}
+
+.button_floating.back::after {
+    background: url('../shared/images/back_orange.png');
+}
+
+.button_floating.forward::after {
+    background: url('../shared/images/forward_orange.png');
+}
+
+.button_floating.home::after {
+    background: url('../shared/images/home_orange.png');
+}
+
+.github-corner svg {
+    fill: #E65100;
+}
