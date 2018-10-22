@@ -61,11 +61,14 @@ class Renderer {
         this.scale = [1, 1];
     }
 
+    bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(array), usage);
+    }
+
     setGeometry(geometry) {
         this.geometry = geometry;
-        // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(geometry), this.gl.STATIC_DRAW);
+        this.bufferArray(this.positionBuffer, geometry);
     }
 
     setColors(colors) {
@@ -81,8 +84,7 @@ class Renderer {
         }
 
         this.colors = new Float32Array(extrapolatedColors);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.colors), this.gl.STATIC_DRAW);
+        this.bufferArray(this.colorBuffer, this.colors);
     }
 
     resizeCanvasToDisplaySize() {
@@ -130,7 +132,8 @@ class Renderer {
         }
 
         // Compute the matrices
-        let matrix = M3Math.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+        let matrix;
+        matrix = M3Math.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
         matrix = M3Math.translate(matrix, this.translation[0], this.translation[1]);
         matrix = M3Math.rotate(matrix, this.angleInRadians);
         matrix = M3Math.scale(matrix, this.scale[0], this.scale[1]);
