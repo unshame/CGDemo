@@ -107,7 +107,7 @@ canvas {
 }
 
 .button_floating:active {
-    background: rgb(175, 180, 43);
+    background: #E65100;
 }
 
 .button_floating.back::after {
