@@ -1,6 +1,6 @@
 
 header {
-	background-color: #E65100;
+	background-color: #795548;
 }
 
 canvas {
@@ -8,94 +8,73 @@ canvas {
 }
 
 .button_control {
-    color: #E65100;
+    color: #795548;
     cursor: pointer;
 }
 
 .button_control.active {
-    background: #E65100;
+    background: #795548;
 }
 
 
-.button_control.button_canvas, .button_control.button_canvas::before {
-    border-radius: 24px 0 0 24px;
-    padding-left: 56px;
-}
+.slider_holder {
+    display: block;
+    position: relative;
+    margin-top: 8px;
+    padding: 6px 8px;
 
-.button_control.button_canvas::after {
-    top: 0;
-    left: 8px;
-    background: url('../shared/images/image_orange.png');
-}
+    width: 160px;
+    height: 48px;
 
-.button_control.active.button_canvas::after {
-    background: url('../shared/images/image.png');
-}
-
-.button_control.button_graph, .button_control.button_graph::before {
-    border-radius: 0 24px 24px 0;
-    padding-right: 56px;
-}
-
-.button_control.button_graph::after {
-    top: 0;
-    right: 8px;
-    background: url('../shared/images/poll_orange.png');
-}
-
-
-.button_control.active.button_graph::after {
-    background: url('../shared/images/poll.png');
-}
-
-.button_control.button_upload, .button_control.button_upload::before {
-    border-radius: 24px;
-}
-
-.button_control.button_upload {
-    width: 250px;
-    padding-left: 56px;
-    padding-right: 8px;
-    line-height: 48px;
+    font-weight: bold;
+    background: #FAFAFA;
+    color: #795548;
     text-align: center;
-    display: block;
+
+    outline: none;
+    transition: background-color 0.3s;
 }
 
-.button_control.button_upload>span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.slider_holder:active {
+    background: #795548;
+    color: #FAFAFA;
 }
 
-.button_control.button_upload:active {
-    background: #E65100;
-    color: #fafafa;
+.slider_holder:first-child,
+.slider_holder:first-child::before {
+    border-radius: 24px 0 0 24px;
 }
 
-.button_control.button_upload::after {
+.slider_holder:last-child,
+.slider_holder:last-child::before {
+    border-radius: 0 24px 24px 0;
+}
+
+.slider_holder::before {
+    content: '';
+    position: absolute;
     top: 0;
-    left: 7px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background: transparent;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.23);
+    transition: box-shadow 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+
+.slider_holder:active::before {
     z-index: 3;
-    background: url('../shared/images/image_orange.png');
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
 }
 
-.button_control.button_upload:active::after {
-    background: url('../shared/images/image.png');
-}
-
-.button_control.button_upload input {
-    width: 190px;
-    outline: rgba(0, 0, 0, 0);
-    cursor: pointer;
-}
-
-#input_file {
-    display: none;
+.slider_holder input {
+    width: 90%;
 }
 
 .button_floating:active {
-    background: rgb(175, 180, 43);
+    background: #795548;
 }
 
 .button_floating.back::after {
@@ -111,5 +90,5 @@ canvas {
 }
 
 .github-corner svg {
-    fill: #E65100;
+    fill: #795548;
 }

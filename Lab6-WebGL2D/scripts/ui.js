@@ -2,12 +2,11 @@
 /* exported setupSlider */
 function setupSlider(selector, options) {
     var parent = document.querySelector(selector);
-    if (!parent) {
-        return; // like jquery don't fail on a bad selector
-    }
+
     if (!options.name) {
-        options.name = selector.substring(1);
+        options.name = selector.substring(1, 2).toUpperCase() + selector.substring(2);
     }
+
     return createSlider(parent, options);
 }
 
@@ -27,14 +26,14 @@ function createSlider(parent, options) {
     value /= step;
 
     parent.innerHTML = `
-      <div class="gman-widget-outer">
-        <div class="gman-widget-label">${name}</div>
-        <div class="gman-widget-value"></div>
-        <input class="gman-widget-slider" type="range" min="${min}" max="${max}" value="${value}" />
+      <div class="slider_outer">
+        <span class="slider_label">${name}</span>
+        <span class="slider_value"></span>
+        <input class="slider_slider" type="range" min="${min}" max="${max}" value="${value}" />
       </div>
     `;
-    var valueElem = parent.querySelector(".gman-widget-value");
-    var sliderElem = parent.querySelector(".gman-widget-slider");
+    var valueElem = parent.querySelector(".slider_value");
+    var sliderElem = parent.querySelector(".slider_slider");
 
     function updateValue(value) {
         valueElem.textContent = (value * step * uiMult).toFixed(uiPrecision);
@@ -45,20 +44,36 @@ function createSlider(parent, options) {
     function handleChange(event) {
         var value = parseInt(event.target.value);
         updateValue(value);
-        fn(event, {
-            value: value * step
-        });
+        fn(event, value * step);
+    }
+
+    function resetValue(event) {
+        updateValue(value);
+        sliderElem.value = value;
+        fn(event, value * step);
+        event.preventDefault();
+    }
+
+    function incrementValue(event) {
+        var value = parseInt(event.target.value) * step + step * Math.sign(event.wheelDelta) * 3;
+        sliderElem.value = value / step;
+        updateValue(value / step);
+        fn(event, value);
+        event.preventDefault();
     }
 
     sliderElem.addEventListener('input', handleChange);
     sliderElem.addEventListener('change', handleChange);
+    parent.addEventListener('contextmenu', resetValue);
+    sliderElem.addEventListener('mousewheel', incrementValue);
 
     return {
         elem: parent,
         updateValue: (v) => {
-            v /= step;
             sliderElem.value = v;
             updateValue(v);
+            fn(null, value * step);
         },
+        defaultValue: value
     };
 }

@@ -7,16 +7,6 @@ exported
 */
 
 /**
- * Resize a canvas to match the size its displayed.
- * @param {HTMLCanvasElement} canvas The canvas to resize.
- * @param {number} [multiplier] amount to multiply by.
- *    Pass in window.devicePixelRatio for native pixels.
- * @return {boolean} true if the canvas was resized.
- * @memberOf module:webgl-utils
- */
-
-
-/**
  * Loads a shader.
  * @param {WebGLRenderingContext} gl The WebGLRenderingContext to use.
  * @param {string} shaderSource The shader source.
@@ -39,7 +29,7 @@ function loadShader(gl, shaderSource, shaderType) {
     if (!compiled) {
         // Something went wrong during compilation; get the error
         var lastError = gl.getShaderInfoLog(shader);
-        console.error("*** Error compiling shader '" + shader + "':" + lastError);
+        console.error("Error compiling shader '" + shader + "':" + lastError);
         gl.deleteShader(shader);
         return null;
     }
@@ -55,7 +45,6 @@ function loadShader(gl, shaderSource, shaderType) {
  * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
  * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
  *        on error. If you want something else pass an callback. It's passed an error message.
- * @memberOf module:webgl-utils
  */
 function createProgram(
     gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
@@ -101,7 +90,7 @@ function createShaderFromScript(
     var shaderType;
     var shaderScript = document.getElementById(scriptId);
     if (!shaderScript) {
-        throw ("*** Error: unknown script element" + scriptId);
+        throw ("Error: unknown script element" + scriptId);
     }
     shaderSource = shaderScript.text;
 
@@ -111,7 +100,7 @@ function createShaderFromScript(
         } else if (shaderScript.type === "x-shader/x-fragment") {
             shaderType = gl.FRAGMENT_SHADER;
         } else if (shaderType !== gl.VERTEX_SHADER && shaderType !== gl.FRAGMENT_SHADER) {
-            throw ("*** Error: unknown shader type");
+            throw ("Error: unknown shader type");
         }
     }
 
@@ -138,7 +127,6 @@ var defaultShaderType = [
  * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
  *        on error. If you want something else pass an callback. It's passed an error message.
  * @return {WebGLProgram} The created program.
- * @memberOf module:webgl-utils
  */
 function createProgramFromScripts(
     gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {

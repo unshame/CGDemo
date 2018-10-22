@@ -1,7 +1,7 @@
 /* exported Renderer */
 class Renderer {
 
-    constructor(canvas, geometry, color) {
+    constructor(canvas, geometry, color, originTranslation, initialTranslation, primitiveType) {
 
         /**
         * Холст.
@@ -10,6 +10,8 @@ class Renderer {
         this.canvas = canvas;
 
         let gl = this.gl = canvas.getContext('webgl');
+
+        this.primitiveType = primitiveType === undefined ? gl.TRIANGLES : primitiveType;
 
         let program = this.program = createProgramFromScripts(gl, ['2d-vertex-shader', '2d-fragment-shader']);
 
@@ -30,26 +32,32 @@ class Renderer {
         this.setGeometry(geometry);
 
         // Transformations
-        this.translation = [100, 150];
-        this.angleInRadians = 0;
-        this.scale = [1, 1];
+        this.initialTranslation = initialTranslation || [0, 0];
+        this.resetTransform();
+        this.originTranslation = originTranslation || [0, 0];
         this.color = color;
 
-        this.updatePosition = (index, event, ui) => {
-            this.translation[index] = ui.value;
+        this.updatePosition = (index, event, value) => {
+            this.translation[index] = value;
             this.drawScene();
         };
 
-        this.updateAngle = (event, ui) => {
-            let angleInDegrees = 360 - ui.value;
+        this.updateAngle = (event, value) => {
+            let angleInDegrees = 360 - value;
             this.angleInRadians = angleInDegrees * Math.PI / 180;
             this.drawScene();
         };
 
-        this.updateScale = (index, event, ui) => {
-            this.scale[index] = ui.value;
+        this.updateScale = (index, event, value) => {
+            this.scale[index] = value;
             this.drawScene();
         };
+    }
+
+    resetTransform() {
+        this.translation = this.initialTranslation || [0, 0];
+        this.angleInRadians = 0;
+        this.scale = [1, 1];
     }
 
     setGeometry(geometry) {
@@ -109,15 +117,13 @@ class Renderer {
         matrix = M3Math.translate(matrix, this.translation[0], this.translation[1]);
         matrix = M3Math.rotate(matrix, this.angleInRadians);
         matrix = M3Math.scale(matrix, this.scale[0], this.scale[1]);
+        matrix = M3Math.translate(matrix, -this.originTranslation[0], -this.originTranslation[1]);
 
         // Set the matrix.
         gl.uniformMatrix3fv(this.matrixLocation, false, matrix);
 
         // Draw the geometry.
-        {
-            let primitiveType = gl.TRIANGLES;
-            let offset = 0;
-            gl.drawArrays(primitiveType, offset, this.geometry.length / 2);
-        }
+        let offset = 0;
+        gl.drawArrays(this.primitiveType, offset, this.geometry.length / 2);
     }
 }

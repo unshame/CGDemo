@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sutherland-Hodgman's Polygon Clipping Algorithm</title>
+    <title>WebGL 2D</title>
     <link rel="shortcut icon" href="../shared/icons/green.ico">
     <link href="../shared/css/reset.css" rel="stylesheet" type="text/css">
     <link href="../shared/css/floating_button.css" rel="stylesheet" type="text/css">
@@ -18,48 +18,51 @@
             <header>
                 <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
                 <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
-                <div class="title">Sutherland-Hodgman's Polygon Clipping Algorithm</div>
+                <div class="title">WebGL 2D</div>
             </header>
             <canvas id="canvas"></canvas>
         </div>
     </main>
-    <div id="uiContainer" class="buttons">
-        <div id="ui">
-            <div id="x"></div>
-            <div id="y"></div>
-            <div id="angle"></div>
-            <div id="scaleX"></div>
-            <div id="scaleY"></div>
-        </div>
+    <div class="buttons">
+        <div id="x" class="slider_holder"></div>
+        <div id="y" class="slider_holder"></div>
+        <div id="angle" class="slider_holder"></div>
+        <div id="scaleX" class="slider_holder"></div>
+        <div id="scaleY" class="slider_holder"></div>
     </div>
 
     <script src="../shared/scripts/polyfills.js"></script>
     <script src="../shared/lib/jquery.min.js"></script>
-    <!-- vertex shader -->
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
-    attribute vec2 a_position;
 
-    uniform mat3 u_matrix;
-
-    void main() {
-    // Multiply the position by the matrix.
-    gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-    }
-    </script>
-    <!-- fragment shader -->
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
-    precision mediump float;
-
-    uniform vec4 u_color;
-
-    void main() {
-    gl_FragColor = u_color;
-    }
-    </script>
-    <script src="./scripts/utils.js"></script>
-    <script src="./scripts/ui.js"></script>
     <script src="./classes/M3Math.js"></script>
     <script src="./classes/Renderer.js"></script>
+
+    <script src="./scripts/utils.js"></script>
+    <script src="./scripts/ui.js"></script>
+
+    <!-- vertex shader -->
+    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+        attribute vec2 a_position;
+
+        uniform mat3 u_matrix;
+
+        void main() {
+            // Multiply the position by the matrix.
+            gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+        }
+    </script>
+
+    <!-- fragment shader -->
+    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+
+        uniform vec4 u_color;
+
+        void main() {
+            gl_FragColor = u_color;
+        }
+    </script>
+
     <script src="./script.js"></script>
     <script src="../shared/scripts/transition.js"></script>
 </body>

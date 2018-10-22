@@ -99,6 +99,10 @@ main.ready .card {
     background-color: #E65100;
 }
 
+.card8 {
+    background-color: #795548;
+}
+
 .card4 .card_title, .card5 .card_title {
     font-size: 14px;
     padding-top: 18px;
