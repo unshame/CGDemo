@@ -29,11 +29,14 @@ fileInput.change(() => onFileChanged());
 
 setCanvasShown(canvasShown);
 
-canvasInterface.loadImage('./default_image.png');
+canvasInterface.loadImage('../default_image.png');
 fileInputLabel.html('default_image.png');
 
 $(() => {
-    canvasInterface.drawHistogram();
+    let plotlyUrl = 'https://cdn.plot.ly/plotly-latest.min.js';
+    $.getScript(plotlyUrl, (d) => {
+        canvasInterface.drawHistogram();
+    });
 });
 
 function setCanvasShown(enabled) {
