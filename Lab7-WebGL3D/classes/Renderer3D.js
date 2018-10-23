@@ -1,7 +1,7 @@
 /* exported Renderer3D */
 class Renderer3D {
 
-    constructor(canvas, geometry, colors, originTranslation, initialTranslation, primitiveType) {
+    constructor(canvas, geometry, colors, initialTranslation, initialRotation, primitiveType) {
 
         /**
         * Холст.
@@ -33,8 +33,8 @@ class Renderer3D {
 
         // Transformations
         this.initialTranslation = initialTranslation || [0, 0, 0];
+        this.initialRotation = initialRotation || [0, 0, 0];
         this.resetTransform();
-        this.originTranslation = originTranslation || [0, 0, 0];
 
         this.resizeCanvasToDisplaySize();
     }
@@ -57,8 +57,8 @@ class Renderer3D {
     }
 
     resetTransform() {
-        this.translation = this.initialTranslation || [0, 0, 0];
-        this.rotation = [degToRad(40), degToRad(25), degToRad(325)];
+        this.translation = this.initialTranslation;
+        this.rotation = this.initialRotation;
         this.scale = [1, 1, 1];
     }
 
@@ -143,19 +143,31 @@ class Renderer3D {
         let zNear = 1;
         let zFar = 2000;
         let fieldOfViewRadians = degToRad(60);
-        matrix = M4Math.perspective(1, aspect, zNear, zFar);
+        matrix = M4Math.perspective(fieldOfViewRadians, aspect, zNear, zFar);
         matrix = M4Math.translate(matrix, this.translation[0], this.translation[1], this.translation[2]);
         matrix = M4Math.xRotate(matrix, this.rotation[0]);
         matrix = M4Math.yRotate(matrix, this.rotation[1]);
         matrix = M4Math.zRotate(matrix, this.rotation[2]);
-        matrix = M4Math.scale(matrix, this.scale[0], this.scale[1], this.scale[2]);
-        matrix = M4Math.translate(matrix, -this.originTranslation[0], -this.originTranslation[1], -this.originTranslation[2]);
 
-        // Set the matrix.
-        gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+        let numFs = 8;
+        let radius = 400;
+        for (let i = 0; i < numFs; ++i) {
+            let angle = i * Math.PI * 2 / numFs;
+            let x = Math.cos(angle) * radius;
+            let y = Math.sin(angle) * radius;
 
-        // Draw the geometry.
-        let offset = 0;
-        gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
+            // starting with the view projection matrix
+            // compute a matrix for the F
+            let curMatrix = M4Math.translate(matrix, x, 0, y);
+            curMatrix = M4Math.yRotate(curMatrix, -angle);
+            curMatrix = M4Math.scale(curMatrix, this.scale[0], this.scale[1], this.scale[2]);
+
+            // Set the matrix.
+            gl.uniformMatrix4fv(this.matrixLocation, false, curMatrix);
+
+            // Draw the geometry.
+            let offset = 0;
+            gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
+        }
     }
 }

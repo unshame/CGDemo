@@ -11,9 +11,7 @@ let colors = [
     97, 97, 97,
 ];
 
-let mw = canvas.width() / 2;
-let mh = canvas.height() / 2;
-let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 0, 0], [0, 0, -500]);
+let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 100, -850], [degToRad(25), degToRad(30), 0]);
 let primitiveType = renderer.gl.TRIANGLE_STRIP;
 renderer.drawScene();
 let sliders = setupSliders();
