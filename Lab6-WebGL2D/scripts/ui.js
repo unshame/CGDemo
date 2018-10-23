@@ -56,6 +56,7 @@ function createSlider(parent, options) {
 
     function incrementValue(event) {
         var value = parseInt(event.target.value) * step + step * Math.sign(event.wheelDelta) * 3;
+        value = Math.min(Math.max(value, min * step), max * step);
         sliderElem.value = value / step;
         updateValue(value / step);
         fn(event, value);
