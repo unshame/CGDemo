@@ -8,14 +8,6 @@ const M3Math = {
         ];
     },
 
-    identity() {
-        return [
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1,
-        ];
-    },
-
     translation(tx, ty) {
         return [
             1, 0, 0,

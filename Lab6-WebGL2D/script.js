@@ -86,7 +86,7 @@ let color = [
 ];
 let mw = canvas.width() / 2;
 let mh = canvas.height() / 2;
-let renderer = new Renderer(canvas[0], geometry, color, [mw, mh], [mw, mh]);
+let renderer = new Renderer2D(canvas[0], geometry, color, [mw, mh], [mw, mh]);
 let primitiveType = renderer.gl.TRIANGLES;
 renderer.drawScene();
 let sliders = setupSliders();
@@ -104,27 +104,27 @@ function setupSliders() {
 
         x: setupSlider('#x', {
             value: renderer.translation[0],
-            slide: renderer.updatePosition.bind(null, 0),
+            slide: (...args) => renderer.updatePosition(0, ...args),
             min: -mw,
             max: renderer.gl.canvas.width + mw
         }),
 
         y: setupSlider('#y', {
             value: renderer.translation[1],
-            slide: renderer.updatePosition.bind(null, 1),
+            slide: (...args) => renderer.updatePosition(1, ...args),
             min: -mh,
             max: renderer.gl.canvas.height + mh
         }),
 
         angle: setupSlider('#angle', {
             value: 180,
-            slide: renderer.updateAngle,
+            slide: (...args) => renderer.updateAngle(...args),
             max: 360
         }),
 
         scaleX: setupSlider('#scaleX', {
             value: renderer.scale[0],
-            slide: renderer.updateScale.bind(null, 0),
+            slide: (...args) => renderer.updateScale(0, ...args),
             min: -2,
             max: 2,
             step: 0.01,
@@ -134,7 +134,7 @@ function setupSliders() {
 
         scaleY: setupSlider('#scaleY', {
             value: renderer.scale[1],
-            slide: renderer.updateScale.bind(null, 1),
+            slide: (...args) => renderer.updateScale(1, ...args),
             min: -2,
             max: 2,
             step: 0.01,

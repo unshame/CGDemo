@@ -1,5 +1,5 @@
-/* exported Renderer */
-class Renderer {
+/* exported Renderer2D */
+class Renderer2D {
 
     constructor(canvas, geometry, colors, originTranslation, initialTranslation, primitiveType) {
 
@@ -37,23 +37,23 @@ class Renderer {
         this.originTranslation = originTranslation || [0, 0];
 
         this.resizeCanvasToDisplaySize();
-
-        this.updatePosition = (index, event, value) => {
-            this.translation[index] = value;
-            this.drawScene();
-        };
-
-        this.updateAngle = (event, value) => {
-            let angleInDegrees = 360 - value;
-            this.angleInRadians = angleInDegrees * Math.PI / 180;
-            this.drawScene();
-        };
-
-        this.updateScale = (index, event, value) => {
-            this.scale[index] = value;
-            this.drawScene();
-        };
     }
+
+    updatePosition(index, event, value) {
+        this.translation[index] = value;
+        this.drawScene();
+    };
+
+    updateAngle(event, value) {
+        let angleInDegrees = 360 - value;
+        this.angleInRadians = angleInDegrees * Math.PI / 180;
+        this.drawScene();
+    };
+
+    updateScale(index, event, value) {
+        this.scale[index] = value;
+        this.drawScene();
+    };
 
     resetTransform() {
         this.translation = this.initialTranslation || [0, 0];

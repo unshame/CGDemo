@@ -26,9 +26,8 @@
     },
     "globals": {
         "$": true,
-        "Renderer": true,
+        "Renderer2D": true,
         "CanvasAnalysisInterface": true,
-        "Plotly": true,
         "createProgramFromScripts": true,
         "resizeCanvasToDisplaySize": true,
         "setupSlider": true,
