@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebGL 3D</title>
+    <link rel="shortcut icon" href="../shared/icons/brown.ico">
+    <link href="../shared/css/reset.css" rel="stylesheet" type="text/css">
+    <link href="../shared/css/floating_button.css" rel="stylesheet" type="text/css">
+    <link href="../shared/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="../shared/css/github.css" rel="stylesheet" type="text/css">
+    <link href="./style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <main>
+        <div class="elevated">
+            <header>
+                <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
+                <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
+                <div class="title">WebGL 3D</div>
+            </header>
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="buttons">
+            <div id="x" class="slider_holder first"></div>
+            <div id="y" class="slider_holder"></div>
+            <div id="z" class="slider_holder"></div>
+            <div id="angleX" class="slider_holder"></div>
+            <div id="angleY" class="slider_holder"></div>
+            <div id="angleZ" class="slider_holder"></div>
+            <div id="scaleX" class="slider_holder"></div>
+            <div id="scaleY" class="slider_holder"></div>
+            <div id="scaleZ" class="slider_holder last"></div>
+            <div class="divider"></div>
+            <button id="button_triangles" class="button_control button_triangles first"  title="Primitive type: triangles"></button>
+            <button id="button_lines" class="button_control button_lines last" title="Primitive type: lines"></button>
+        </div>
+    </main>
+
+    <a class="button_floating back" href="../Lab6-WebGL2D" title="WebGL 2D"></a>
+    <a class="button_floating home right" href=".." title="Back to previews"></a>
+
+    <script src="../shared/scripts/polyfills.js"></script>
+    <script src="../shared/lib/jquery.min.js"></script>
+
+    <script src="./classes/M4Math.js"></script>
+    <script src="./classes/Renderer3D.js"></script>
+
+    <script src="./scripts/utils.js"></script>
+    <script src="./scripts/ui.js"></script>
+
+    <!-- vertex shader -->
+    <script id="3d-vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 a_position;
+        attribute vec4 a_vertex_color;
+
+        uniform mat4 u_matrix;
+
+        varying lowp vec4 v_color;
+
+        void main() {
+            // Multiply the position by the matrix.
+            gl_Position = u_matrix * a_position;
+            v_color = a_vertex_color;
+        }
+    </script>
+
+    <!-- fragment shader -->
+    <script id="3d-fragment-shader" type="x-shader/x-fragment">
+        varying lowp vec4 v_color;
+
+        void main() {
+            gl_FragColor = v_color;
+        }
+    </script>
+
+    <script src="./script.js"></script>
+    <script src="../shared/scripts/transition.js"></script>
+</body>
+
+</html>
+
