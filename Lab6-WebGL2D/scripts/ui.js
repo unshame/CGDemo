@@ -1,7 +1,7 @@
 
 /* exported setupSlider */
 function setupSlider(selector, options) {
-    var parent = document.querySelector(selector);
+    let parent = document.querySelector(selector);
 
     if (!options.name) {
         options.name = selector.substring(1, 2).toUpperCase() + selector.substring(2);
@@ -11,15 +11,15 @@ function setupSlider(selector, options) {
 }
 
 function createSlider(parent, options) {
-    var precision = options.precision || 0;
-    var min = options.min || 0;
-    var step = options.step || 1;
-    var value = options.value || 0;
-    var max = options.max || 1;
-    var fn = options.slide;
-    var name = options.name;
-    var uiPrecision = options.uiPrecision === undefined ? precision : options.uiPrecision;
-    var uiMult = options.uiMult || 1;
+    let precision = options.precision || 0;
+    let min = options.min || 0;
+    let step = options.step || 1;
+    let value = options.value || 0;
+    let max = options.max || 1;
+    let fn = options.slide;
+    let name = options.name;
+    let uiPrecision = options.uiPrecision === undefined ? precision : options.uiPrecision;
+    let uiMult = options.uiMult || 1;
 
     min /= step;
     max /= step;
@@ -29,11 +29,11 @@ function createSlider(parent, options) {
       <div class="slider_outer">
         <span class="slider_label">${name}</span>
         <span class="slider_value"></span>
-        <input class="slider_slider" type="range" min="${min}" max="${max}" value="${value}" />
+        <input class="slider_slider" type="range" min="${min}" max="${max}" value="${value}">
       </div>
     `;
-    var valueElem = parent.querySelector(".slider_value");
-    var sliderElem = parent.querySelector(".slider_slider");
+    let valueElem = parent.querySelector(".slider_value");
+    let sliderElem = parent.querySelector(".slider_slider");
 
     function updateValue(value) {
         valueElem.textContent = (value * step * uiMult).toFixed(uiPrecision);
@@ -42,7 +42,7 @@ function createSlider(parent, options) {
     updateValue(value);
 
     function handleChange(event) {
-        var value = parseInt(event.target.value);
+        let value = parseInt(event.target.value);
         updateValue(value);
         fn(event, value * step);
     }
@@ -55,7 +55,7 @@ function createSlider(parent, options) {
     }
 
     function incrementValue(event) {
-        var value = parseInt(event.target.value) * step + step * Math.sign(event.wheelDelta) * 3;
+        let value = parseInt(event.target.value) * step + step * Math.sign(event.wheelDelta) * 3;
         value = Math.min(Math.max(value, min * step), max * step);
         sliderElem.value = value / step;
         updateValue(value / step);
