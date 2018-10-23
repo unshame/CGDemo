@@ -29,9 +29,11 @@ fileInput.change(() => onFileChanged());
 
 setCanvasShown(canvasShown);
 
+canvasInterface.loadImage('./default_image.png');
+fileInputLabel.html('default_image.png');
+
 $(() => {
-    canvasInterface.loadImage('./default_image.png');
-    fileInputLabel.html('default_image.png');
+    canvasInterface.drawHistogram();
 });
 
 function setCanvasShown(enabled) {

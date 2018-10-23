@@ -68,6 +68,10 @@ class CanvasAnalysisInterface {
 
     drawHistogram() {
 
+        if (!window.Plotly) {
+            return;
+        }
+
         let colors = ['red', 'green', 'blue'];
 
         let [ys, ms] = this.renderer.getHistogramData();
