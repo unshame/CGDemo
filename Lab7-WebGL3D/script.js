@@ -4,95 +4,22 @@ let canvas = $('#canvas');
 let buttonClear = $('#button_clear');
 let buttonTriangles = $('#button_triangles');
 let buttonLines = $('#button_lines');
-let geometry = [
-    // top left rect
-    170, 54, 0,
-    317, 54, 0,
-    317, 121, 0,
-
-    170, 54, 0,
-    170, 121, 0,
-    317, 121, 0,
-
-    // bottom left rect
-    242, 421, 0,
-    242, 487, 0,
-    388, 487, 0,
-
-    242, 421, 0,
-    388, 421, 0,
-    388, 487, 0,
-
-    // top right rect
-    491, 54, 0,
-    640, 54, 0,
-    640, 121, 0,
-
-    491, 54, 0,
-    491, 121, 0,
-    640, 121, 0,
-
-    // bottom right rect
-    421, 421, 0,
-    421, 487, 0,
-    568, 487, 0,
-
-    421, 421, 0,
-    568, 421, 0,
-    568, 487, 0,
-
-    // left column
-    209, 121, 0,
-    281, 121, 0,
-    332, 312, 0,
-
-    209, 121, 0,
-    277, 421, 0,
-    332, 312, 0,
-
-    // middle left column
-    404, 169, 0,
-    277, 421, 0,
-    355, 421, 0,
-
-    404, 169, 0,
-    449, 256, 0,
-    355, 421, 0,
-
-    // middle right column
-    449, 256, 0,
-    533, 421, 0,
-    455, 421, 0,
-
-    449, 256, 0,
-    404, 334, 0,
-    455, 421, 0,
-
-    // right column
-    533, 421, 0,
-    601, 121, 0,
-    529, 121, 0,
-
-    533, 421, 0,
-    477, 312, 0,
-    529, 121, 0
-
-];
-
-let color = [
+let { vertices } = Geometry.makeTorus(100, 50, 30, 15, 1);
+let colors = [
     66, 66, 66,
     33, 33, 33,
     97, 97, 97,
 ];
+
 let mw = canvas.width() / 2;
 let mh = canvas.height() / 2;
-let renderer = new Renderer3D(canvas[0], geometry, color, [mw, mh, 0], [mw, mh, 0]);
-let primitiveType = renderer.gl.TRIANGLES;
+let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 0, 0], [0, 0, -500]);
+let primitiveType = renderer.gl.TRIANGLE_STRIP;
 renderer.drawScene();
 let sliders = setupSliders();
 
 buttonClear.click(() => resetTransform());
-buttonTriangles.click(() => setPrimitive(renderer.gl.TRIANGLES));
+buttonTriangles.click(() => setPrimitive(renderer.gl.TRIANGLE_STRIP));
 buttonLines.click(() => setPrimitive(renderer.gl.LINES));
 
 setPrimitive(primitiveType);
@@ -104,22 +31,22 @@ function setupSliders() {
         x: setupSlider('#x', {
             value: renderer.translation[0],
             slide: (...args) => renderer.updatePosition(0, ...args),
-            min: -mw,
-            max: renderer.gl.canvas.width + mw
+            min: -renderer.gl.canvas.width,
+            max: renderer.gl.canvas.width
         }),
 
         y: setupSlider('#y', {
             value: renderer.translation[1],
             slide: (...args) => renderer.updatePosition(1, ...args),
-            min: -mh,
-            max: renderer.gl.canvas.height + mh
+            min: -renderer.gl.canvas.height,
+            max: renderer.gl.canvas.height
         }),
 
         z: setupSlider('#z', {
             value: renderer.translation[2],
             slide: (...args) => renderer.updatePosition(2, ...args),
-            min: -800,
-            max: 800
+            min: -1500,
+            max: 0
         }),
 
         angleX: setupSlider('#angleX', {
@@ -176,7 +103,7 @@ function setupSliders() {
 }
 
 function resetTransform() {
-    setPrimitive(renderer.gl.TRIANGLES);
+    setPrimitive(renderer.gl.TRIANGLE_STRIP);
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
     }
@@ -184,7 +111,7 @@ function resetTransform() {
 
 function setPrimitive(_primitiveType) {
     primitiveType = _primitiveType;
-    let [on, off] = primitiveType === renderer.gl.TRIANGLES ? [buttonTriangles, buttonLines] : [buttonLines, buttonTriangles];
+    let [on, off] = primitiveType === renderer.gl.TRIANGLE_STRIP ? [buttonTriangles, buttonLines] : [buttonLines, buttonTriangles];
     on.addClass('active');
     off.removeClass('active');
     renderer.primitiveType = primitiveType;

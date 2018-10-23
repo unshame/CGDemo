@@ -108,7 +108,14 @@ class Renderer3D {
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         // Clear the canvas.
-        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        // Turn on culling. By default backfacing triangles
+        // will be culled.
+        gl.enable(gl.CULL_FACE);
+
+        // Enable the depth buffer
+        gl.enable(gl.DEPTH_TEST);
 
         // Tell it to use our program (pair of shaders)
         gl.useProgram(program);
@@ -132,7 +139,11 @@ class Renderer3D {
 
         // Compute the matrices
         let matrix;
-        matrix = M4Math.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 800);
+        let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+        let zNear = 1;
+        let zFar = 2000;
+        let fieldOfViewRadians = degToRad(60);
+        matrix = M4Math.perspective(1, aspect, zNear, zFar);
         matrix = M4Math.translate(matrix, this.translation[0], this.translation[1], this.translation[2]);
         matrix = M4Math.xRotate(matrix, this.rotation[0]);
         matrix = M4Math.yRotate(matrix, this.rotation[1]);
