@@ -1,7 +1,7 @@
 /* exported Renderer3D */
 class Renderer3D {
 
-    constructor(canvas, geometry, colors, initialTranslation, initialRotation, primitiveType) {
+    constructor(canvas, geometry, colors) {
 
         /**
         * Холст.
@@ -11,7 +11,7 @@ class Renderer3D {
 
         let gl = this.gl = canvas.getContext('webgl');
 
-        this.primitiveType = primitiveType === undefined ? gl.TRIANGLES : primitiveType;
+        this.primitiveType = gl.TRIANGLE_STRIP;
 
         let program = this.program = createProgramFromScripts(gl, ['3d-vertex-shader', '3d-fragment-shader']);
 
@@ -32,8 +32,6 @@ class Renderer3D {
         this.setColors(colors);
 
         // Transformations
-        this.initialTranslation = initialTranslation || [0, 0, 0];
-        this.initialRotation = initialRotation || [0, 0, 0];
         this.resetTransform();
 
         this.resizeCanvasToDisplaySize();
@@ -75,8 +73,8 @@ class Renderer3D {
     }
 
     resetTransform() {
-        this.translation = this.initialTranslation;
-        this.rotation = this.initialRotation;
+        this.translation = [0, 120, 0];
+        this.rotation = [degToRad(25), degToRad(0), 0];
         this.scale = [1, 1, 1];
         this.cameraTranslation = [0, 0, 1100];
         this.targetTranslation = [0, 0, 0];

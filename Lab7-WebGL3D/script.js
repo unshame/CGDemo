@@ -1,4 +1,4 @@
-window.pageNum = 8;
+window.pageNum = 9;
 
 let canvas = $('#canvas');
 let buttonClear = $('#button_clear');
@@ -13,7 +13,7 @@ let colors = [
     97, 97, 97,
 ];
 
-let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 160, -1], [degToRad(25), degToRad(0), 0]);
+let renderer = new Renderer3D(canvas[0], vertices, colors);
 let primitiveType = renderer.gl.TRIANGLE_STRIP;
 renderer.drawScene();
 let sliders = setupSliders();
