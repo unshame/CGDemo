@@ -41,13 +41,20 @@ const geometryRef = [
 ];
 
 let renderer = new Renderer3D(canvas[0]);
-let primitiveType = renderer.gl.TRIANGLE_STRIP;
+
+const primitiveTypes = [
+    renderer.gl.TRIANGLE_STRIP,
+    renderer.gl.LINES
+];
+
+let primitiveType = primitiveTypes[0];
 let geometryType = 0;
 let sliders = setupSliders(renderer);
 
+
 buttonClear.click(() => resetTransform());
-buttonTriangles.click(() => setPrimitive(renderer.gl.TRIANGLE_STRIP));
-buttonLines.click(() => setPrimitive(renderer.gl.LINES));
+buttonTriangles.click(() => setPrimitive(primitiveTypes[0]));
+buttonLines.click(() => setPrimitive(primitiveTypes[1]));
 buttonMore.click(() => moreControls.toggleClass('visible'));
 
 buttonTorus.click(() => setGeometryType(0));
@@ -58,7 +65,7 @@ setPrimitive(primitiveType);
 requestAnimationFrame((now) => renderer.drawScene(now));
 
 function resetTransform() {
-    setPrimitive(renderer.gl.TRIANGLE_STRIP);
+    setPrimitive(primitiveTypes[0]);
     setGeometryType(0);
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
@@ -67,7 +74,7 @@ function resetTransform() {
 
 function setPrimitive(_primitiveType) {
     primitiveType = _primitiveType;
-    toggleButtons(buttonTriangles, buttonLines, primitiveType === renderer.gl.TRIANGLE_STRIP);
+    toggleButtons(buttonTriangles, buttonLines, primitiveType === primitiveTypes[0]);
     renderer.primitiveType = primitiveType;
 }
 
