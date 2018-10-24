@@ -56,10 +56,16 @@ class Renderer3D {
         this.drawScene();
     }
 
+    updateCameraAngle(event, value) {
+        this.cameraAngleRadians = degToRad(value);
+        this.drawScene();
+    }
+
     resetTransform() {
         this.translation = this.initialTranslation;
         this.rotation = this.initialRotation;
         this.scale = [1, 1, 1];
+        this.cameraAngleRadians = 0;
     }
 
     bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
@@ -137,20 +143,52 @@ class Renderer3D {
             this.setVertexAttrib(this.colorLocation, this.colorBuffer, size, type, normalize, stride, offset);
         }
 
+        let numFs = 7;
+        let radius = 500;
+
         // Compute the matrices
-        let matrix;
         let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
         let zNear = 1;
         let zFar = 2000;
         let fieldOfViewRadians = degToRad(60);
-        matrix = M4Math.perspective(fieldOfViewRadians, aspect, zNear, zFar);
-        matrix = M4Math.translate(matrix, this.translation[0], this.translation[1], this.translation[2]);
-        matrix = M4Math.xRotate(matrix, this.rotation[0]);
-        matrix = M4Math.yRotate(matrix, this.rotation[1]);
-        matrix = M4Math.zRotate(matrix, this.rotation[2]);
+        let projectionMatrix = M4Math.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 
-        let numFs = 8;
-        let radius = 400;
+        // Compute the position of the first F
+        let fPosition = [300, 100, 0];
+
+        // Use matrix math to compute a position on a circle where
+        // the camera is
+        let cameraMatrix = M4Math.yRotation(this.cameraAngleRadians);
+        cameraMatrix = M4Math.translate(cameraMatrix, 0, 0, radius * 1.5);
+
+        // Get the camera's postion from the matrix we computed
+        let cameraPosition = [
+            cameraMatrix[12],
+            cameraMatrix[13],
+            cameraMatrix[14],
+        ];
+
+        let up = [0, 1, 0];
+
+        // Compute the camera's matrix using look at.
+        cameraMatrix = M4Math.lookAt(cameraPosition, fPosition, up);
+
+        // Make a view matrix from the camera matrix
+        let viewMatrix = M4Math.inverse(cameraMatrix);
+
+
+
+        // Compute a view projection matrix
+        let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
+        let anchorProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...fPosition);
+        this.drawGeometryAt(anchorProjectionMatrix);
+
+        viewProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.translation);
+        viewProjectionMatrix = M4Math.xRotate(viewProjectionMatrix, this.rotation[0]);
+        viewProjectionMatrix = M4Math.yRotate(viewProjectionMatrix, this.rotation[1]);
+        viewProjectionMatrix = M4Math.zRotate(viewProjectionMatrix, this.rotation[2]);
+
+
         for (let i = 0; i < numFs; ++i) {
             let angle = i * Math.PI * 2 / numFs;
             let x = Math.cos(angle) * radius;
@@ -158,16 +196,22 @@ class Renderer3D {
 
             // starting with the view projection matrix
             // compute a matrix for the F
-            let curMatrix = M4Math.translate(matrix, x, 0, y);
+            let curMatrix = M4Math.translate(viewProjectionMatrix, x, 0, y);
             curMatrix = M4Math.yRotate(curMatrix, -angle);
             curMatrix = M4Math.scale(curMatrix, this.scale[0], this.scale[1], this.scale[2]);
 
-            // Set the matrix.
-            gl.uniformMatrix4fv(this.matrixLocation, false, curMatrix);
+            this.drawGeometryAt(curMatrix);
 
-            // Draw the geometry.
-            let offset = 0;
-            gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
+
         }
+    }
+
+    drawGeometryAt(matrix) {
+        // Set the matrix.
+        this.gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+
+        // Draw the geometry.
+        let offset = 0;
+        this.gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
     }
 }

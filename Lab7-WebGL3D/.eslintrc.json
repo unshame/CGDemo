@@ -34,6 +34,7 @@
         "M4Math": true,
         "Geometry": true,
         "radToDeg": true,
-        "degToRad": true
+        "degToRad": true,
+        "V3Math": true
     }
 }

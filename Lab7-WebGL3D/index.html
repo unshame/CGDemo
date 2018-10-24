@@ -33,7 +33,8 @@
         <div class="buttons">
             <div id="scaleX" class="slider_holder first"></div>
             <div id="scaleY" class="slider_holder"></div>
-            <div id="scaleZ" class="slider_holder last"></div>
+            <div id="scaleZ" class="slider_holder"></div>
+            <div id="cameraAngle" class="slider_holder last" style="width: 200px"></div>
             <div class="divider"></div>
             <button id="button_triangles" class="button_control button_triangles first"  title="Primitive type: triangles"></button>
             <button id="button_lines" class="button_control button_lines last" title="Primitive type: lines"></button>
@@ -46,6 +47,7 @@
     <script src="../shared/scripts/polyfills.js"></script>
     <script src="../shared/lib/jquery.min.js"></script>
 
+    <script src="./classes/V3Math.js"></script>
     <script src="./classes/M4Math.js"></script>
     <script src="./classes/Geometry.js"></script>
     <script src="./classes/Renderer3D.js"></script>

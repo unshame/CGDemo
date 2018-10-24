@@ -6,6 +6,9 @@ exported
     createProgramFromScripts
     radToDeg
     degToRad
+    subtractVectors
+    normalizeVectors
+    crossVectors
 */
 
 /**
@@ -141,10 +144,10 @@ function createProgramFromScripts(gl, shaderScriptIds, opt_attribs, opt_location
 }
 
 
-  function radToDeg(r) {
-      return r * 180 / Math.PI;
-  }
+function radToDeg(r) {
+    return r * 180 / Math.PI;
+}
 
-  function degToRad(d) {
-      return d * Math.PI / 180;
-  }
+function degToRad(d) {
+    return d * Math.PI / 180;
+}

@@ -11,7 +11,7 @@ let colors = [
     97, 97, 97,
 ];
 
-let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 100, -850], [degToRad(25), degToRad(30), 0]);
+let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 100, -1], [degToRad(25), degToRad(0), 0]);
 let primitiveType = renderer.gl.TRIANGLE_STRIP;
 renderer.drawScene();
 let sliders = setupSliders();
@@ -44,7 +44,7 @@ function setupSliders() {
             value: renderer.translation[2],
             slide: (...args) => renderer.updatePosition(2, ...args),
             min: -1500,
-            max: 0
+            max: 1500
         }),
 
         angleX: setupSlider('#angleX', {
@@ -96,7 +96,15 @@ function setupSliders() {
             step: 0.01,
             precision: 2,
             name: 'Scale Z'
-        })
+        }),
+
+        cameraAngle: setupSlider('#cameraAngle', {
+            value: radToDeg(renderer.cameraAngleRadians),
+            slide: (...args) => renderer.updateCameraAngle(...args),
+            min: -360,
+            max: 360,
+            name: 'Camera Angle'
+        }),
     };
 }
 
