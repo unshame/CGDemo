@@ -1,7 +1,7 @@
 /* exported Renderer3D */
 class Renderer3D {
 
-    constructor(canvas, geometry, colors) {
+    constructor(canvas) {
 
         /**
         * Холст.
@@ -28,11 +28,7 @@ class Renderer3D {
         // Create a buffer to put positions in
         this.positionBuffer = gl.createBuffer();
 
-        // Put geometry data into buffer
-        this.setGeometry(geometry);
-
         this.colorBuffer = gl.createBuffer();
-        this.setColors(colors);
 
         // Transformations
         this.resetTransform();
@@ -122,16 +118,6 @@ class Renderer3D {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     }
 
-    setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
-        let gl = this.gl;
-        // Turn on the attribute
-        gl.enableVertexAttribArray(location);
-        // Bind the position buffer.
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-        gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
-    }
-
     drawScene() {
         this.clearViewport();
 
@@ -154,13 +140,13 @@ class Renderer3D {
         let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
 
         // Выводим объект в точке, в которую направлена камера
-        let targetProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
-        this.drawGeometryAt(targetProjectionMatrix);
+        let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
+        this.drawGeometryAt(targetMatrix);
 
-        let sceneProjectionMatrix = this.calculateSceneMatrix(viewProjectionMatrix);
+        let sceneMatrix = this.calculateSceneMatrix(viewProjectionMatrix);
 
         for (let i = 0; i < this.numObjects; ++i) {
-            this.drawGeometryOnCircle(i, sceneProjectionMatrix);
+            this.drawGeometryOnCircle(i, sceneMatrix);
         }
     }
 
@@ -176,6 +162,16 @@ class Renderer3D {
 
         // Enable the depth buffer
         gl.enable(gl.DEPTH_TEST);
+    }
+
+    setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
+        let gl = this.gl;
+        // Turn on the attribute
+        gl.enableVertexAttribArray(location);
+        // Bind the position buffer.
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+        gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
     drawGeometryOnCircle(i, matrix) {

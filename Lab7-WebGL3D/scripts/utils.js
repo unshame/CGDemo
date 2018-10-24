@@ -1,14 +1,8 @@
 /*
 exported
-    loadShader
-    createProgram
-    createShaderFromScript
     createProgramFromScripts
     radToDeg
     degToRad
-    subtractVectors
-    normalizeVectors
-    crossVectors
 */
 
 /**

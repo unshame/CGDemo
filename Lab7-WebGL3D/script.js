@@ -40,7 +40,7 @@ const geometryRef = [
     }
 ];
 
-let renderer = new Renderer3D(canvas[0], [], colors);
+let renderer = new Renderer3D(canvas[0]);
 let primitiveType = renderer.gl.TRIANGLE_STRIP;
 let geometryType = 0;
 let sliders = setupSliders(renderer);
