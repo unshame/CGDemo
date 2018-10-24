@@ -63,6 +63,7 @@ class Renderer3D {
     setColors(colors) {
         this.colors = [];
 
+        // Экстраполируем цвета на все вершины
         for(let i = 0; i < this.geometry.length / 3; i += colors.length / 3) {
             for(let j = 0; j < colors.length; j++) {
                 this.colors.push(colors[j]);
