@@ -1,19 +1,24 @@
 window.pageNum = 9;
 
-let canvas = $('#canvas');
-let buttonClear = $('#button_clear');
-let buttonTriangles = $('#button_triangles');
-let buttonLines = $('#button_lines');
-let buttonMore = $('#button_more');
-let buttonTorus = $('#button_torus');
-let buttonCylinder = $('#button_cylinder');
-let moreControls = $('.buttons.more');
+let canvas = $('#canvas');                    // холст
+
+// Кнопки
+let buttonClear = $('#button_clear');         // ресет
+let buttonTriangles = $('#button_triangles'); // отрисовка треугольниками
+let buttonLines = $('#button_lines');         // отрисовка линиями
+let buttonTorus = $('#button_torus');         // объект - тор
+let buttonCylinder = $('#button_cylinder');   // объект - цилиндр
+let buttonMore = $('#button_more');           // показ остальных слайдеров
+let moreControls = $('.buttons.more');        // остальные слайдеры
+
+// Цвета вершин
 let colors = [
     66, 66, 66,
     33, 33, 33,
     97, 97, 97,
 ];
 
+// Свойства тора
 const torusProps = [
     100, // radius
     50,  // stripRadius
@@ -21,12 +26,14 @@ const torusProps = [
     15   // numSections
 ];
 
+// Свойства цилиндра
 const cylinderProps = [
     100, // radius
     200, // height
     32   // numSides
 ];
 
+// Объекты для упрощения создания геометрии тора и цилиндра
 const geometryRef = [
     {
         func: (...args) => Geometry.makeTorus(...args),
@@ -40,18 +47,20 @@ const geometryRef = [
     }
 ];
 
+// Рендерер
 let renderer = new Renderer3D(canvas[0]);
 
+// Режимы отрисовки
 const primitiveTypes = [
     renderer.gl.TRIANGLE_STRIP,
     renderer.gl.LINES
 ];
 
-let primitiveType = primitiveTypes[0];
-let geometryType = 0;
-let sliders = setupSliders(renderer);
+let primitiveType = primitiveTypes[0];  // Текущие режим отрисовки
+let geometryType = 0;                   // Текущий тип объекта
+let sliders = setupSliders(renderer);   // Слайдеры
 
-
+// События при нажатии на кнопки
 buttonClear.click(() => resetTransform());
 buttonTriangles.click(() => setPrimitive(primitiveTypes[0]));
 buttonLines.click(() => setPrimitive(primitiveTypes[1]));
@@ -60,10 +69,16 @@ buttonMore.click(() => moreControls.toggleClass('visible'));
 buttonTorus.click(() => setGeometryType(0));
 buttonCylinder.click(() => setGeometryType(1));
 
+
+/* Запуск */
 setGeometryType(geometryType);
 setPrimitive(primitiveType);
 requestAnimationFrame((now) => renderer.drawScene(now));
 
+
+/* Функции */
+
+// Ресетит все настройки
 function resetTransform() {
     setPrimitive(primitiveTypes[0]);
     setGeometryType(0);
@@ -72,12 +87,14 @@ function resetTransform() {
     }
 }
 
+// Устанавливает режим отрисовки
 function setPrimitive(_primitiveType) {
     primitiveType = _primitiveType;
     toggleButtons(buttonTriangles, buttonLines, primitiveType === primitiveTypes[0]);
     renderer.primitiveType = primitiveType;
 }
 
+// Устанавливает тип объектов
 function setGeometryType(_geometryType) {
     geometryRef[geometryType].els.hide();
     geometryType = _geometryType;
@@ -85,6 +102,7 @@ function setGeometryType(_geometryType) {
     updateGeometry();
 }
 
+// Применяет свойства геометрии объектов
 function updateGeometry() {
     let ref = geometryRef[geometryType];
     ref.els.show();
@@ -92,6 +110,7 @@ function updateGeometry() {
     renderer.setColors(colors);
 }
 
+// Вспомогательная функция для кнопок-переключателей
 function toggleButtons(a, b, cond) {
     let [on, off] = cond ? [a, b] : [b, a];
     on.addClass('active');

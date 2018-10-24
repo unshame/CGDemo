@@ -106,7 +106,7 @@ function setupSliders(renderer) {
             name: 'FOV'
         }),
 
-        cameraX: setupSlider('#camX', {
+        camX: setupSlider('#camX', {
             value: renderer.cameraTranslation[0],
             slide: (event, value) => renderer.cameraTranslation[0] = value,
             min: minPos,
@@ -115,7 +115,7 @@ function setupSliders(renderer) {
             scrollStep: 10
         }),
 
-        cameraY: setupSlider('#camY', {
+        camY: setupSlider('#camY', {
             value: renderer.cameraTranslation[1],
             slide: (event, value) => renderer.cameraTranslation[1] = value,
             min: minPos,
@@ -124,7 +124,7 @@ function setupSliders(renderer) {
             scrollStep: 10
         }),
 
-        cameraZ: setupSlider('#camZ', {
+        camZ: setupSlider('#camZ', {
             value: renderer.cameraTranslation[2],
             slide: (event, value) => renderer.cameraTranslation[2] = value,
             min: minPos,
@@ -133,7 +133,7 @@ function setupSliders(renderer) {
             scrollStep: 10
         }),
 
-        cameraAngleX: setupSlider('#camAngleX', {
+        camAngleX: setupSlider('#camAngleX', {
             value: radToDeg(renderer.cameraRotation[0]),
             slide: (event, value) => renderer.cameraRotation[0] = degToRad(value),
             min: -180,
@@ -141,7 +141,7 @@ function setupSliders(renderer) {
             name: 'CircleX'
         }),
 
-        cameraAngleY: setupSlider('#camAngleY', {
+        camAngleY: setupSlider('#camAngleY', {
             value: radToDeg(renderer.cameraRotation[1]),
             slide: (event, value) => renderer.cameraRotation[1] = degToRad(value),
             min: -180,
