@@ -38,7 +38,6 @@ class Renderer3D {
         this.lastUpdate = 0;
     }
 
-
     resetTransform() {
         this.translation = [0, 120, 0];
         this.rotation = [degToRad(25), degToRad(0), 0];
@@ -56,20 +55,9 @@ class Renderer3D {
         this.zFar = 4000;
     }
 
-    updateObjectRotation(dt) {
-        for(let i = 0; i < this.objectRotationRate.length; i++) {
-            this.objectRotation[i] += this.objectRotationRate[i] * dt * 0.1;
-        }
-    }
-
-    bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, array, usage);
-    }
-
     setGeometry(geometry) {
         this.geometry = geometry;
-        this.bufferArray(this.positionBuffer, new Float32Array(geometry));
+        this._bufferArray(this.positionBuffer, new Float32Array(geometry));
     }
 
     setColors(colors) {
@@ -81,7 +69,12 @@ class Renderer3D {
             }
         }
 
-        this.bufferArray(this.colorBuffer, new Uint8Array(this.colors));
+        this._bufferArray(this.colorBuffer, new Uint8Array(this.colors));
+    }
+
+    _bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, array, usage);
     }
 
     resizeCanvasToDisplaySize() {
@@ -97,12 +90,12 @@ class Renderer3D {
 
         let dt = now - this.lastUpdate;
 
-        this.updateObjectRotation(dt);
+        this._updateObjectRotation(dt);
 
         this.clearViewport();
 
         // Position
-        this.setVertexAttrib(this.positionLocation, this.positionBuffer,
+        this._setVertexAttrib(this.positionLocation, this.positionBuffer,
             3,             // Кол-во компонент в одной вершине
             this.gl.FLOAT, // Тип данных
             false,         // Нужно ли нормализовывать значения (переводить из 0-255 в 0-1)
@@ -111,22 +104,22 @@ class Renderer3D {
         );
 
         // Color
-        this.setVertexAttrib(this.colorLocation, this.colorBuffer, 3, this.gl.UNSIGNED_BYTE, true, 0, 0);
+        this._setVertexAttrib(this.colorLocation, this.colorBuffer, 3, this.gl.UNSIGNED_BYTE, true, 0, 0);
 
-        let projectionMatrix = this.getProjectionMatrix();
-        let viewMatrix = this.getViewMatrix();
+        let projectionMatrix = this._getProjectionMatrix();
+        let viewMatrix = this._getViewMatrix();
 
         // Compute a view projection matrix
         let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
 
         // Выводим объект в точке, в которую направлена камера
         let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
-        this.drawGeometryAt(targetMatrix);
+        this._drawGeometryAt(targetMatrix);
 
-        let sceneMatrix = this.calculateSceneMatrix(viewProjectionMatrix);
+        let sceneMatrix = this._calculateSceneMatrix(viewProjectionMatrix);
 
         for (let i = 0; i < this.numObjects; ++i) {
-            this.drawGeometryOnCircle(i, sceneMatrix);
+            this._drawGeometryOnCircle(i, sceneMatrix);
         }
 
         requestAnimationFrame((now) => this.drawScene(now));
@@ -148,7 +141,13 @@ class Renderer3D {
         gl.enable(gl.DEPTH_TEST);
     }
 
-    setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
+    _updateObjectRotation(dt) {
+        for (let i = 0; i < this.objectRotationRate.length; i++) {
+            this.objectRotation[i] += this.objectRotationRate[i] * dt * 0.1;
+        }
+    }
+
+    _setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
         let gl = this.gl;
         // Turn on the attribute
         gl.enableVertexAttribArray(location);
@@ -158,7 +157,7 @@ class Renderer3D {
         gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
-    drawGeometryOnCircle(i, matrix) {
+    _drawGeometryOnCircle(i, matrix) {
         let angle = i * Math.PI * 2 / this.numObjects;
         let x = Math.cos(angle) * this.sceneRadius;
         let y = Math.sin(angle) * this.sceneRadius;
@@ -172,10 +171,10 @@ class Renderer3D {
         curMatrix = M4Math.zRotate(curMatrix, this.objectRotation[2]);
         curMatrix = M4Math.scale(curMatrix, ...this.scale);
 
-        this.drawGeometryAt(curMatrix);
+        this._drawGeometryAt(curMatrix);
     }
 
-    drawGeometryAt(matrix) {
+    _drawGeometryAt(matrix) {
         // Set the matrix.
         this.gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
 
@@ -184,12 +183,12 @@ class Renderer3D {
         this.gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
     }
 
-    getProjectionMatrix() {
+    _getProjectionMatrix() {
         let aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
         return M4Math.perspective(this.fieldOfView, aspect, this.zNear, this.zFar);
     }
 
-    getViewMatrix() {
+    _getViewMatrix() {
         // Use matrix math to compute a position on a circle where
         // the camera is
         let cameraMatrix = M4Math.xRotation(this.cameraRotation[0]);
@@ -210,7 +209,7 @@ class Renderer3D {
         return M4Math.inverse(cameraMatrix);
     }
 
-    calculateSceneMatrix(matrix) {
+    _calculateSceneMatrix(matrix) {
         matrix = M4Math.translate(matrix, ...this.translation);
         matrix = M4Math.xRotate(matrix, this.rotation[0]);
         matrix = M4Math.yRotate(matrix, this.rotation[1]);
