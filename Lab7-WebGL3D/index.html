@@ -14,6 +14,7 @@
 
 <body>
     <main>
+
         <div class="elevated">
             <header>
                 <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
@@ -22,6 +23,7 @@
             </header>
             <canvas id="canvas"></canvas>
         </div>
+
         <div class="buttons scene">
             <div class="button_control no_action first" style="width: 80px">Scene</div>
             <div id="x" class="slider_holder"></div>
@@ -32,15 +34,7 @@
             <div id="angleZ" class="slider_holder"></div>
             <button id="button_more" class="button_control button_more immediate last" title="More controls">...</button>
         </div>
-        <div class="buttons more objects">
-            <div class="button_control no_action first" style="width: 100px">Geometry</div>
-            <div id="scaleX" class="slider_holder"></div>
-            <div id="scaleY" class="slider_holder"></div>
-            <div id="scaleZ" class="slider_holder"></div>
-            <div id="rotationX" class="slider_holder"></div>
-            <div id="rotationY" class="slider_holder"></div>
-            <div id="rotationZ" class="slider_holder last"></div>
-        </div>
+
         <div class="buttons more camera">
             <div class="button_control no_action first" style="width: 80px">Camera</div>
             <div id="fov" class="slider_holder"></div>
@@ -50,15 +44,42 @@
             <div id="camAngleX" class="slider_holder"></div>
             <div id="camAngleY" class="slider_holder last"></div>
         </div>
+
         <div class="buttons more target">
             <div class="button_control no_action first" style="width: 120px">Target</div>
             <div id="targetX" class="slider_holder"></div>
             <div id="targetY" class="slider_holder"></div>
             <div id="targetZ" class="slider_holder last"></div>
+        </div>
+
+        <div class="buttons more objects">
+            <div class="button_control no_action first" style="width: 100px">Geometry</div>
+            <div id="scaleX" class="slider_holder"></div>
+            <div id="scaleY" class="slider_holder"></div>
+            <div id="scaleZ" class="slider_holder"></div>
+            <div id="rotationX" class="slider_holder"></div>
+            <div id="rotationY" class="slider_holder"></div>
+            <div id="rotationZ" class="slider_holder last"></div>
+        </div>
+
+        <div class="buttons more">
+            <div id="button_torus" class="button_control first" style="width: 80px">Torus</div>
+            <div id="button_cylinder" class="button_control last" style="width: 80px">Cylinder</div>
             <div class="divider"></div>
-            <button id="button_triangles" class="button_control button_triangles first" title="Primitive type: triangles"></button>
+            <div id="torusR" class="slider_holder torus first"></div>
+            <div id="torusSR" class="slider_holder torus"></div>
+            <div id="torusStrips" class="slider_holder torus"></div>
+            <div id="torusSections" class="slider_holder torus last"></div>
+
+            <div id="cylinderRadius" class="slider_holder cylinder first"></div>
+            <div id="cylinderHeight" class="slider_holder cylinder"></div>
+            <div id="cylinderSides" class="slider_holder cylinder last"></div>
+
+            <div class="divider"></div>
+            <button id="button_triangles" class="button_control button_triangles first" title="Primitive type: triangle strips"></button>
             <button id="button_lines" class="button_control button_lines last" title="Primitive type: lines"></button>
         </div>
+        
     </main>
 
     <a class="button_floating back" href="../Lab6-WebGL2D" title="WebGL 2D"></a>
@@ -74,6 +95,7 @@
 
     <script src="./scripts/utils.js"></script>
     <script src="./scripts/ui.js"></script>
+    <script src="./scripts/setupSliders.js"></script>
 
     <!-- vertex shader -->
     <script id="3d-vertex-shader" type="x-shader/x-vertex">

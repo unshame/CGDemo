@@ -15,6 +15,9 @@ class Renderer3D {
 
         let program = this.program = createProgramFromScripts(gl, ['3d-vertex-shader', '3d-fragment-shader']);
 
+        // Tell it to use our program (pair of shaders)
+        gl.useProgram(program);
+
         // look up where the vertex data needs to go.
         this.positionLocation = gl.getAttribLocation(program, 'a_position');
         this.colorLocation = gl.getAttribLocation(program, 'a_vertex_color');
@@ -35,6 +38,22 @@ class Renderer3D {
         this.resetTransform();
 
         this.resizeCanvasToDisplaySize();
+    }
+
+
+    resetTransform() {
+        this.translation = [0, 120, 0];
+        this.rotation = [degToRad(25), degToRad(0), 0];
+        this.scale = [1, 1, 1];
+        this.cameraTranslation = [0, 0, 1100];
+        this.cameraUpVector = [0, 1, 0];
+        this.targetTranslation = [0, 0, 0];
+        this.cameraRotation = [0, 0];
+        this.fieldOfView = degToRad(60);
+        this.numObjects = 6;
+        this.sceneRadius = 600;
+        this.zNear = 1;
+        this.zFar = 4000;
     }
 
     updatePosition(index, event, value) {
@@ -72,20 +91,6 @@ class Renderer3D {
         this.drawScene();
     }
 
-    resetTransform() {
-        this.translation = [0, 120, 0];
-        this.rotation = [degToRad(25), degToRad(0), 0];
-        this.scale = [1, 1, 1];
-        this.cameraTranslation = [0, 0, 1100];
-        this.targetTranslation = [0, 0, 0];
-        this.cameraRotation = [0, 0];
-        this.fieldOfView = degToRad(60);
-        this.numObjects = 6;
-        this.sceneRadius = 600;
-        this.zNear = 1;
-        this.zFar = 4000;
-    }
-
     bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, array, usage);
@@ -112,6 +117,9 @@ class Renderer3D {
         let canvas = this.gl.canvas;
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+
+        // Tell WebGL how to convert from clip space to pixels
+        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     }
 
     setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
@@ -125,11 +133,39 @@ class Renderer3D {
     }
 
     drawScene() {
-        let gl = this.gl;
-        let program = this.program;
+        this.clearViewport();
 
-        // Tell WebGL how to convert from clip space to pixels
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        // Position
+        this.setVertexAttrib(this.positionLocation, this.positionBuffer,
+            3,             // Кол-во компонент в одной вершине
+            this.gl.FLOAT, // Тип данных
+            false,         // Нужно ли нормализовывать значения (переводить из 0-255 в 0-1)
+            0,             // stride
+            0              // offset
+        );
+
+        // Color
+        this.setVertexAttrib(this.colorLocation, this.colorBuffer, 3, this.gl.UNSIGNED_BYTE, true, 0, 0);
+
+        let projectionMatrix = this.getProjectionMatrix();
+        let viewMatrix = this.getViewMatrix();
+
+        // Compute a view projection matrix
+        let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
+
+        // Выводим объект в точке, в которую направлена камера
+        let targetProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
+        this.drawGeometryAt(targetProjectionMatrix);
+
+        let sceneProjectionMatrix = this.calculateSceneMatrix(viewProjectionMatrix);
+
+        for (let i = 0; i < this.numObjects; ++i) {
+            this.drawGeometryOnCircle(i, sceneProjectionMatrix);
+        }
+    }
+
+    clearViewport() {
+        let gl = this.gl;
 
         // Clear the canvas.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -140,31 +176,37 @@ class Renderer3D {
 
         // Enable the depth buffer
         gl.enable(gl.DEPTH_TEST);
+    }
 
-        // Tell it to use our program (pair of shaders)
-        gl.useProgram(program);
+    drawGeometryOnCircle(i, matrix) {
+        let angle = i * Math.PI * 2 / this.numObjects;
+        let x = Math.cos(angle) * this.sceneRadius;
+        let y = Math.sin(angle) * this.sceneRadius;
 
-        {
-            let size = 3; // 3 components per iteration
-            let type = gl.FLOAT; // the data is 32bit floats
-            let normalize = false; // don't normalize the data
-            let stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-            let offset = 0; // start at the beginning of the buffer
+        // starting with the view projection matrix
+        // compute a matrix for the F
+        let curMatrix = M4Math.translate(matrix, x, 0, y);
+        curMatrix = M4Math.yRotate(curMatrix, -angle);
+        curMatrix = M4Math.scale(curMatrix, this.scale[0], this.scale[1], this.scale[2]);
 
-            // Position
-            this.setVertexAttrib(this.positionLocation, this.positionBuffer, size, type, normalize, stride, offset);
+        this.drawGeometryAt(curMatrix);
+    }
 
-            // Color
-            size = 3;
-            type = gl.UNSIGNED_BYTE;
-            normalize = true;
-            this.setVertexAttrib(this.colorLocation, this.colorBuffer, size, type, normalize, stride, offset);
-        }
+    drawGeometryAt(matrix) {
+        // Set the matrix.
+        this.gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
 
-        // Compute the matrices
-        let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-        let projectionMatrix = M4Math.perspective(this.fieldOfView, aspect, this.zNear, this.zFar);
+        // Draw the geometry.
+        let offset = 0;
+        this.gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
+    }
 
+    getProjectionMatrix() {
+        let aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
+        return M4Math.perspective(this.fieldOfView, aspect, this.zNear, this.zFar);
+    }
+
+    getViewMatrix() {
         // Use matrix math to compute a position on a circle where
         // the camera is
         let cameraMatrix = M4Math.xRotation(this.cameraRotation[0]);
@@ -178,48 +220,18 @@ class Renderer3D {
             cameraMatrix[14],
         ];
 
-        let up = [0, 1, 0];
-
         // Compute the camera's matrix using look at.
-        cameraMatrix = M4Math.lookAt(cameraPosition, this.targetTranslation, up);
+        cameraMatrix = M4Math.lookAt(cameraPosition, this.targetTranslation, this.cameraUpVector);
 
         // Make a view matrix from the camera matrix
-        let viewMatrix = M4Math.inverse(cameraMatrix);
-
-        // Compute a view projection matrix
-        let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
-        let anchorProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
-        this.drawGeometryAt(anchorProjectionMatrix);
-
-        viewProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.translation);
-        viewProjectionMatrix = M4Math.xRotate(viewProjectionMatrix, this.rotation[0]);
-        viewProjectionMatrix = M4Math.yRotate(viewProjectionMatrix, this.rotation[1]);
-        viewProjectionMatrix = M4Math.zRotate(viewProjectionMatrix, this.rotation[2]);
-
-
-        for (let i = 0; i < this.numObjects; ++i) {
-            let angle = i * Math.PI * 2 / this.numObjects;
-            let x = Math.cos(angle) * this.sceneRadius;
-            let y = Math.sin(angle) * this.sceneRadius;
-
-            // starting with the view projection matrix
-            // compute a matrix for the F
-            let curMatrix = M4Math.translate(viewProjectionMatrix, x, 0, y);
-            curMatrix = M4Math.yRotate(curMatrix, -angle);
-            curMatrix = M4Math.scale(curMatrix, this.scale[0], this.scale[1], this.scale[2]);
-
-            this.drawGeometryAt(curMatrix);
-
-
-        }
+        return M4Math.inverse(cameraMatrix);
     }
 
-    drawGeometryAt(matrix) {
-        // Set the matrix.
-        this.gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
-
-        // Draw the geometry.
-        let offset = 0;
-        this.gl.drawArrays(this.primitiveType, offset, this.geometry.length / 3);
+    calculateSceneMatrix(matrix) {
+        matrix = M4Math.translate(matrix, ...this.translation);
+        matrix = M4Math.xRotate(matrix, this.rotation[0]);
+        matrix = M4Math.yRotate(matrix, this.rotation[1]);
+        matrix = M4Math.zRotate(matrix, this.rotation[2]);
+        return matrix;
     }
 }

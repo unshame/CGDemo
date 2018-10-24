@@ -35,6 +35,10 @@
         "Geometry": true,
         "radToDeg": true,
         "degToRad": true,
-        "V3Math": true
+        "V3Math": true,
+        "setupSliders": true,
+        "torusProps": true,
+        "cylinderProps": true,
+        "updateGeometry": true
     }
 }

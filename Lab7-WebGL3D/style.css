@@ -19,7 +19,6 @@ canvas {
     background: #424242;
 }
 
-
 .slider_holder {
     display: block;
     position: relative;
@@ -47,7 +46,19 @@ canvas {
 }
 
 .buttons.target .slider_holder {
-    width: 132px;
+    width: 226.6px;
+}
+
+.slider_holder.torus {
+    width: 116px;
+}
+
+.slider_holder.cylinder {
+    width: 154px;
+}
+
+.slider_holder.cylinder.last {
+    width: 156px;
 }
 
 .slider_holder:active {
@@ -86,6 +97,10 @@ canvas {
 
 .slider_holder input {
     width: 90%;
+}
+
+.slider_holder.torus, .slider_holder.cylinder {
+    display: none;
 }
 
 .buttons.more {
