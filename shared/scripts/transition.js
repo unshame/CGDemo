@@ -156,8 +156,8 @@ function copyCard(card) {
 
 function centerCard(card) {
     card.css({
-        left: body.width() / 2 - card.width() / 2 + 'px',
-        top: body.height() / 2 - card.height() / 2 - 20 + 'px'
+        left: window.innerWidth / 2 - card.width() / 2 + window.pageXOffset + 'px',
+        top: window.innerHeight / 2 - card.height() / 2 + window.pageYOffset - 20 + 'px'
     });
 }
 
