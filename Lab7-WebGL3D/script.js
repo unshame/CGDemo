@@ -4,6 +4,8 @@ let canvas = $('#canvas');
 let buttonClear = $('#button_clear');
 let buttonTriangles = $('#button_triangles');
 let buttonLines = $('#button_lines');
+let buttonMore = $('#button_more');
+let moreControls = $('.buttons.more');
 let { vertices } = Geometry.makeTorus(100, 50, 30, 15, 1);
 let colors = [
     66, 66, 66,
@@ -19,6 +21,7 @@ let sliders = setupSliders();
 buttonClear.click(() => resetTransform());
 buttonTriangles.click(() => setPrimitive(renderer.gl.TRIANGLE_STRIP));
 buttonLines.click(() => setPrimitive(renderer.gl.LINES));
+buttonMore.click(() => moreControls.toggleClass('visible'));
 
 setPrimitive(primitiveType);
 
@@ -103,7 +106,7 @@ function setupSliders() {
             slide: (...args) => renderer.updateCameraAngle(...args),
             min: -360,
             max: 360,
-            name: 'Camera Angle'
+            name: 'Angle'
         }),
     };
 }

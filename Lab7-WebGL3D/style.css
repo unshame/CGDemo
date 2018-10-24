@@ -10,10 +10,12 @@ canvas {
 .button_control {
     color: #424242;
     cursor: pointer;
-    width: 64px;
+    width: auto;
+    min-width: 64px;
 }
 
-.button_control.active {
+.button_control.active,
+.button_control.immediate:active {
     background: #424242;
 }
 
@@ -23,7 +25,6 @@ canvas {
     position: relative;
     margin-top: 8px;
     padding: 6px 8px;
-    width: 129px;
     height: 48px;
     font-weight: bold;
     background: #FAFAFA;
@@ -31,6 +32,22 @@ canvas {
     text-align: center;
     outline: none;
     transition: background-color 0.3s;
+}
+
+.buttons.scene .slider_holder {
+    width: 109px;
+}
+
+.buttons.objects .slider_holder {
+    width: 116px;
+}
+
+.buttons.camera .slider_holder {
+    width: 120px;
+}
+
+.buttons.target .slider_holder {
+    width: 132px;
 }
 
 .slider_holder:active {
@@ -71,12 +88,25 @@ canvas {
     width: 90%;
 }
 
+.buttons.more {
+    display: none;
+    margin-top: 0;
+}
+
+.buttons.more.visible {
+    display: flex;
+}
+
+.button_triangles,
+.button_lines {
+    width: 64px;
+}
+
 .button_control.button_triangles::after {
     top: 0;
     left: 8px;
     background: url('../shared/images/clip_poly_brown.png');
 }
-
 
 .button_control.active.button_triangles::after {
     background: url('../shared/images/clip_poly.png');

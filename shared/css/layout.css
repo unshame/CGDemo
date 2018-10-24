@@ -142,6 +142,8 @@ canvas {
     
     width: 160px;    
     height: 48px;
+    line-height: 48px;
+    text-align: center;
     
     font-weight: bold;
     background:#FAFAFA;
@@ -150,7 +152,8 @@ canvas {
     transition: background-color 0.3s;
 }
 
-.button_control.active {
+.button_control.active,
+.button_control.immediate:active {
     color: #FAFAFA;
 }
 
@@ -167,7 +170,11 @@ canvas {
     transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
-.button_control:active::before {
+.button_control.no_action {
+    cursor: default;
+}
+
+.button_control:not(.no_action):active::before {
     z-index: 3;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
 }
