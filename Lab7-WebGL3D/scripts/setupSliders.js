@@ -119,7 +119,7 @@ function setupSliders(renderer) {
             value: renderer.cameraTranslation[1],
             slide: (event, value) => renderer.cameraTranslation[1] = value,
             min: minPos,
-            max: renderer.gl.canvas.height,
+            max: maxPos,
             name: 'OffsetY',
             scrollStep: 10
         }),
@@ -162,7 +162,7 @@ function setupSliders(renderer) {
             value: renderer.targetTranslation[1],
             slide: (event, value) => renderer.targetTranslation[1] = value,
             min: minPos,
-            max: renderer.gl.canvas.height,
+            max: maxPos,
             name: 'Y',
             scrollStep: 10
         }),
