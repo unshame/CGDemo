@@ -17,7 +17,7 @@
         <div class="elevated">
             <header>
                 <a title="Back to previews" class="button_toolbar close" id="button_close" href=".."></a>
-                <button title="Clear Canvas" class="button_toolbar clear" id="button_clear"></button>
+                <button title="Reset Viewport" class="button_toolbar clear" id="button_clear"></button>
                 <div class="title">WebGL 3D</div>
             </header>
             <canvas id="canvas"></canvas>
@@ -43,16 +43,15 @@
         </div>
         <div class="buttons more camera">
             <div class="button_control no_action first" style="width: 80px">Camera</div>
+            <div id="fov" class="slider_holder"></div>
             <div id="camX" class="slider_holder"></div>
             <div id="camY" class="slider_holder"></div>
             <div id="camZ" class="slider_holder"></div>
-            <div id="cameraAngle" class="slider_holder"></div>
-            <div id="camAngleY" class="slider_holder"></div>
-            <div id="camAngleZ" class="slider_holder last"></div>
+            <div id="camAngleX" class="slider_holder"></div>
+            <div id="camAngleY" class="slider_holder last"></div>
         </div>
         <div class="buttons more target">
-            <div class="button_control no_action first" style="width: 120px">Camera cont.</div>
-            <div id="fov" class="slider_holder"></div>
+            <div class="button_control no_action first" style="width: 120px">Target</div>
             <div id="targetX" class="slider_holder"></div>
             <div id="targetY" class="slider_holder"></div>
             <div id="targetZ" class="slider_holder last"></div>

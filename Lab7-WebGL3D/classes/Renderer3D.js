@@ -45,9 +45,7 @@ class Renderer3D {
     }
 
     updateAngle(index, event, value) {
-        let angleInDegrees = value;
-        let angleInRadians = angleInDegrees * Math.PI / 180;
-        this.rotation[index] = angleInRadians;
+        this.rotation[index] = degToRad(value);
         this.drawScene();
     }
 
@@ -56,8 +54,23 @@ class Renderer3D {
         this.drawScene();
     }
 
-    updateCameraAngle(event, value) {
-        this.cameraAngleRadians = degToRad(value);
+    updateCameraPosition(index, event, value) {
+        this.cameraTranslation[index] = value;
+        this.drawScene();
+    }
+
+    updateCameraAngle(index, event, value) {
+        this.cameraRotation[index] = degToRad(value);
+        this.drawScene();
+    }
+
+    updateTargetPosition(index, event, value) {
+        this.targetTranslation[index] = value;
+        this.drawScene();
+    }
+
+    updateFOV(event, value) {
+        this.fieldOfView = degToRad(value);
         this.drawScene();
     }
 
@@ -65,7 +78,14 @@ class Renderer3D {
         this.translation = this.initialTranslation;
         this.rotation = this.initialRotation;
         this.scale = [1, 1, 1];
-        this.cameraAngleRadians = 0;
+        this.cameraTranslation = [0, 0, 1100];
+        this.targetTranslation = [0, 0, 0];
+        this.cameraRotation = [0, 0];
+        this.fieldOfView = degToRad(60);
+        this.numObjects = 6;
+        this.sceneRadius = 600;
+        this.zNear = 1;
+        this.zFar = 4000;
     }
 
     bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
@@ -143,23 +163,15 @@ class Renderer3D {
             this.setVertexAttrib(this.colorLocation, this.colorBuffer, size, type, normalize, stride, offset);
         }
 
-        let numFs = 7;
-        let radius = 500;
-
         // Compute the matrices
         let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-        let zNear = 1;
-        let zFar = 2000;
-        let fieldOfViewRadians = degToRad(60);
-        let projectionMatrix = M4Math.perspective(fieldOfViewRadians, aspect, zNear, zFar);
-
-        // Compute the position of the first F
-        let fPosition = [300, 100, 0];
+        let projectionMatrix = M4Math.perspective(this.fieldOfView, aspect, this.zNear, this.zFar);
 
         // Use matrix math to compute a position on a circle where
         // the camera is
-        let cameraMatrix = M4Math.yRotation(this.cameraAngleRadians);
-        cameraMatrix = M4Math.translate(cameraMatrix, 0, 0, radius * 1.5);
+        let cameraMatrix = M4Math.xRotation(this.cameraRotation[0]);
+        cameraMatrix = M4Math.yRotate(cameraMatrix, this.cameraRotation[1]);
+        cameraMatrix = M4Math.translate(cameraMatrix, ...this.cameraTranslation);
 
         // Get the camera's postion from the matrix we computed
         let cameraPosition = [
@@ -171,16 +183,14 @@ class Renderer3D {
         let up = [0, 1, 0];
 
         // Compute the camera's matrix using look at.
-        cameraMatrix = M4Math.lookAt(cameraPosition, fPosition, up);
+        cameraMatrix = M4Math.lookAt(cameraPosition, this.targetTranslation, up);
 
         // Make a view matrix from the camera matrix
         let viewMatrix = M4Math.inverse(cameraMatrix);
 
-
-
         // Compute a view projection matrix
         let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
-        let anchorProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...fPosition);
+        let anchorProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
         this.drawGeometryAt(anchorProjectionMatrix);
 
         viewProjectionMatrix = M4Math.translate(viewProjectionMatrix, ...this.translation);
@@ -189,10 +199,10 @@ class Renderer3D {
         viewProjectionMatrix = M4Math.zRotate(viewProjectionMatrix, this.rotation[2]);
 
 
-        for (let i = 0; i < numFs; ++i) {
-            let angle = i * Math.PI * 2 / numFs;
-            let x = Math.cos(angle) * radius;
-            let y = Math.sin(angle) * radius;
+        for (let i = 0; i < this.numObjects; ++i) {
+            let angle = i * Math.PI * 2 / this.numObjects;
+            let x = Math.cos(angle) * this.sceneRadius;
+            let y = Math.sin(angle) * this.sceneRadius;
 
             // starting with the view projection matrix
             // compute a matrix for the F

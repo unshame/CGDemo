@@ -13,7 +13,7 @@ let colors = [
     97, 97, 97,
 ];
 
-let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 100, -1], [degToRad(25), degToRad(0), 0]);
+let renderer = new Renderer3D(canvas[0], vertices, colors, [0, 160, -1], [degToRad(25), degToRad(0), 0]);
 let primitiveType = renderer.gl.TRIANGLE_STRIP;
 renderer.drawScene();
 let sliders = setupSliders();
@@ -27,27 +27,30 @@ setPrimitive(primitiveType);
 
 function setupSliders() {
 
+    const minPos = -1500;
+    const maxPos = 1500;
+
     return {
 
         x: setupSlider('#x', {
             value: renderer.translation[0],
             slide: (...args) => renderer.updatePosition(0, ...args),
-            min: -renderer.gl.canvas.width,
-            max: renderer.gl.canvas.width
+            min: minPos,
+            max: maxPos
         }),
 
         y: setupSlider('#y', {
             value: renderer.translation[1],
             slide: (...args) => renderer.updatePosition(1, ...args),
-            min: -renderer.gl.canvas.height,
-            max: renderer.gl.canvas.height
+            min: minPos,
+            max: maxPos
         }),
 
         z: setupSlider('#z', {
             value: renderer.translation[2],
             slide: (...args) => renderer.updatePosition(2, ...args),
-            min: -1500,
-            max: 1500
+            min: minPos,
+            max: maxPos
         }),
 
         angleX: setupSlider('#angleX', {
@@ -101,13 +104,76 @@ function setupSliders() {
             name: 'Scale Z'
         }),
 
-        cameraAngle: setupSlider('#cameraAngle', {
-            value: radToDeg(renderer.cameraAngleRadians),
-            slide: (...args) => renderer.updateCameraAngle(...args),
-            min: -360,
-            max: 360,
-            name: 'Angle'
+        fov: setupSlider('#fov', {
+            value: radToDeg(renderer.fieldOfView),
+            slide: (...args) => renderer.updateFOV(...args),
+            min: 30,
+            max: 160,
+            name: 'FOV'
         }),
+
+        cameraX: setupSlider('#camX', {
+            value: renderer.cameraTranslation[0],
+            slide: (...args) => renderer.updateCameraPosition(0, ...args),
+            min: minPos,
+            max: maxPos,
+            name: 'X'
+        }),
+
+        cameraY: setupSlider('#camY', {
+            value: renderer.cameraTranslation[1],
+            slide: (...args) => renderer.updateCameraPosition(1, ...args),
+            min: minPos,
+            max: renderer.gl.canvas.height,
+            name: 'Y'
+        }),
+
+        cameraZ: setupSlider('#camZ', {
+            value: renderer.cameraTranslation[2],
+            slide: (...args) => renderer.updateCameraPosition(2, ...args),
+            min: minPos,
+            max: maxPos,
+            name: 'Z'
+        }),
+
+        cameraAngleX: setupSlider('#camAngleX', {
+            value: radToDeg(renderer.cameraRotation[0]),
+            slide: (...args) => renderer.updateCameraAngle(0, ...args),
+            max: 360,
+            name: 'Angle X'
+        }),
+
+        cameraAngleY: setupSlider('#camAngleY', {
+            value: radToDeg(renderer.cameraRotation[1]),
+            slide: (...args) => renderer.updateCameraAngle(1, ...args),
+            max: 360,
+            name: 'Angle Y'
+        }),
+
+        targetX: setupSlider('#targetX', {
+            value: renderer.targetTranslation[0],
+            slide: (...args) => renderer.updateTargetPosition(0, ...args),
+            min: minPos,
+            max: maxPos,
+            name: 'X'
+        }),
+
+        targetY: setupSlider('#targetY', {
+            value: renderer.targetTranslation[1],
+            slide: (...args) => renderer.updateTargetPosition(1, ...args),
+            min: minPos,
+            max: renderer.gl.canvas.height,
+            name: 'Y'
+        }),
+
+        targetZ: setupSlider('#targetZ', {
+            value: renderer.targetTranslation[2],
+            slide: (...args) => renderer.updateTargetPosition(2, ...args),
+            min: minPos,
+            max: maxPos,
+            name: 'Z'
+        }),
+
     };
 }
 
