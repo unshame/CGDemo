@@ -138,16 +138,12 @@ canvas {
     display: block;
     position: relative;
     margin-top: 8px;
-	padding: 0 8px;
-    
-    width: 160px;    
+    padding: 0 8px;
     height: 48px;
     line-height: 48px;
     text-align: center;
-    
     font-weight: bold;
     background:#FAFAFA;
-    
     outline: none;
     transition: background-color 0.3s;
 }
