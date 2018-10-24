@@ -8,76 +8,99 @@ function setupSliders(renderer) {
 
         x: setupSlider('#x', {
             value: renderer.translation[0],
-            slide: (...args) => renderer.updatePosition(0, ...args),
+            slide: (event, value) => renderer.translation[0] = value,
             min: minPos,
-            max: maxPos
+            max: maxPos,
+            scrollStep: 10
         }),
 
         y: setupSlider('#y', {
             value: renderer.translation[1],
-            slide: (...args) => renderer.updatePosition(1, ...args),
+            slide: (event, value) => renderer.translation[1] = value,
             min: minPos,
-            max: maxPos
+            max: maxPos,
+            scrollStep: 10
         }),
 
         z: setupSlider('#z', {
             value: renderer.translation[2],
-            slide: (...args) => renderer.updatePosition(2, ...args),
+            slide: (event, value) => renderer.translation[2] = value,
             min: minPos,
-            max: maxPos
+            max: maxPos,
+            scrollStep: 10
         }),
 
         angleX: setupSlider('#angleX', {
             value: radToDeg(renderer.rotation[0]),
-            slide: (...args) => renderer.updateAngle(0, ...args),
+            slide: (event, value) => renderer.rotation[0] = degToRad(value),
             min: -180,
             max: 180,
         }),
 
         angleY: setupSlider('#angleY', {
             value: radToDeg(renderer.rotation[1]),
-            slide: (...args) => renderer.updateAngle(1, ...args),
+            slide: (event, value) => renderer.rotation[1] = degToRad(value),
             min: -180,
             max: 180,
         }),
 
         angleZ: setupSlider('#angleZ', {
             value: radToDeg(renderer.rotation[2]),
-            slide: (...args) => renderer.updateAngle(2, ...args),
+            slide: (event, value) => renderer.rotation[2] = degToRad(value),
             min: -180,
             max: 180,
         }),
 
-        scaleX: setupSlider('#scaleX', {
+        amount: setupSlider('#amount', {
+            value: renderer.numObjects,
+            slide: (event, value) => renderer.numObjects = value,
+            min: 1,
+            max: 50,
+        }),
+
+        spacing: setupSlider('#spacing', {
+            value: renderer.sceneRadius,
+            slide: (event, value) => renderer.sceneRadius = value,
+            min: 0,
+            max: 900,
+        }),
+
+        scale: setupSlider('#scale', {
             value: renderer.scale[0],
-            slide: (...args) => renderer.updateScale(0, ...args),
+            slide: (event, value) => renderer.scale.fill(value),
             min: -2,
             max: 2,
             step: 0.01,
             precision: 2,
         }),
 
-        scaleY: setupSlider('#scaleY', {
-            value: renderer.scale[1],
-            slide: (...args) => renderer.updateScale(1, ...args),
-            min: -2,
-            max: 2,
-            step: 0.01,
-            precision: 2,
+        rotationX: setupSlider('#rotationX', {
+            value: radToDeg(renderer.objectRotationRate[0]),
+            slide: (event, value) => renderer.objectRotationRate[0] = degToRad(value),
+            min: -9,
+            max: 9,
+            scrollStep: 1
         }),
 
-        scaleZ: setupSlider('#scaleZ', {
-            value: renderer.scale[2],
-            slide: (...args) => renderer.updateScale(2, ...args),
-            min: -2,
-            max: 2,
-            step: 0.01,
-            precision: 2,
+        rotationY: setupSlider('#rotationY', {
+            value: radToDeg(renderer.objectRotationRate[1]),
+            slide: (event, value) => renderer.objectRotationRate[1] = degToRad(value),
+            min: -9,
+            max: 9,
+            scrollStep: 1
+        }),
+
+        rotationZ: setupSlider('#rotationZ', {
+            value: radToDeg(renderer.objectRotationRate[2]),
+            slide: (event, value) => renderer.objectRotationRate[2] = degToRad(value),
+            min: -9,
+            max: 9,
+            scrollStep: 1
         }),
 
         fov: setupSlider('#fov', {
             value: radToDeg(renderer.fieldOfView),
-            slide: (...args) => renderer.updateFOV(...args),
+            slide: (event, value) => renderer.fieldOfView = degToRad(value),
             min: 30,
             max: 160,
             name: 'FOV'
@@ -85,31 +108,34 @@ function setupSliders(renderer) {
 
         cameraX: setupSlider('#camX', {
             value: renderer.cameraTranslation[0],
-            slide: (...args) => renderer.updateCameraPosition(0, ...args),
+            slide: (event, value) => renderer.cameraTranslation[0] = value,
             min: minPos,
             max: maxPos,
-            name: 'OffsetX'
+            name: 'OffsetX',
+            scrollStep: 10
         }),
 
         cameraY: setupSlider('#camY', {
             value: renderer.cameraTranslation[1],
-            slide: (...args) => renderer.updateCameraPosition(1, ...args),
+            slide: (event, value) => renderer.cameraTranslation[1] = value,
             min: minPos,
             max: renderer.gl.canvas.height,
-            name: 'OffsetY'
+            name: 'OffsetY',
+            scrollStep: 10
         }),
 
         cameraZ: setupSlider('#camZ', {
             value: renderer.cameraTranslation[2],
-            slide: (...args) => renderer.updateCameraPosition(2, ...args),
+            slide: (event, value) => renderer.cameraTranslation[2] = value,
             min: minPos,
             max: maxPos,
-            name: 'OffsetZ'
+            name: 'OffsetZ',
+            scrollStep: 10
         }),
 
         cameraAngleX: setupSlider('#camAngleX', {
             value: radToDeg(renderer.cameraRotation[0]),
-            slide: (...args) => renderer.updateCameraAngle(0, ...args),
+            slide: (event, value) => renderer.cameraRotation[0] = degToRad(value),
             min: -180,
             max: 180,
             name: 'CircleX'
@@ -117,7 +143,7 @@ function setupSliders(renderer) {
 
         cameraAngleY: setupSlider('#camAngleY', {
             value: radToDeg(renderer.cameraRotation[1]),
-            slide: (...args) => renderer.updateCameraAngle(1, ...args),
+            slide: (event, value) => renderer.cameraRotation[1] = degToRad(value),
             min: -180,
             max: 180,
             name: 'CircleY'
@@ -125,26 +151,29 @@ function setupSliders(renderer) {
 
         targetX: setupSlider('#targetX', {
             value: renderer.targetTranslation[0],
-            slide: (...args) => renderer.updateTargetPosition(0, ...args),
+            slide: (event, value) => renderer.targetTranslation[0] = value,
             min: minPos,
             max: maxPos,
-            name: 'X'
+            name: 'X',
+            scrollStep: 10
         }),
 
         targetY: setupSlider('#targetY', {
             value: renderer.targetTranslation[1],
-            slide: (...args) => renderer.updateTargetPosition(1, ...args),
+            slide: (event, value) => renderer.targetTranslation[1] = value,
             min: minPos,
             max: renderer.gl.canvas.height,
-            name: 'Y'
+            name: 'Y',
+            scrollStep: 10
         }),
 
         targetZ: setupSlider('#targetZ', {
             value: renderer.targetTranslation[2],
-            slide: (...args) => renderer.updateTargetPosition(2, ...args),
+            slide: (event, value) => renderer.targetTranslation[2] = value,
             min: minPos,
             max: maxPos,
-            name: 'Z'
+            name: 'Z',
+            scrollStep: 10
         }),
 
         torusR: setupSlider('#torusR', {
@@ -155,7 +184,8 @@ function setupSliders(renderer) {
             },
             min: 1,
             max: 500,
-            name: 'Radius'
+            name: 'Radius',
+            scrollStep: 5
         }),
 
         torusSR: setupSlider('#torusSR', {
@@ -166,7 +196,8 @@ function setupSliders(renderer) {
             },
             min: 1,
             max: 100,
-            name: 'S Radius'
+            name: 'S Radius',
+            scrollStep: 5
         }),
 
         torusStrips: setupSlider('#torusStrips', {
@@ -177,7 +208,8 @@ function setupSliders(renderer) {
             },
             min: 2,
             max: 50,
-            name: 'Strips'
+            name: 'Strips',
+            scrollStep: 1
         }),
 
         torusSections: setupSlider('#torusSections', {
@@ -188,7 +220,8 @@ function setupSliders(renderer) {
             },
             min: 2,
             max: 30,
-            name: 'Sections'
+            name: 'Sections',
+            scrollStep: 1
         }),
 
         cylinderRadius: setupSlider('#cylinderRadius', {
@@ -199,7 +232,8 @@ function setupSliders(renderer) {
             },
             min: 1,
             max: 500,
-            name: 'Radius'
+            name: 'Radius',
+            scrollStep: 5
         }),
 
         cylinderHeight: setupSlider('#cylinderHeight', {
@@ -210,7 +244,8 @@ function setupSliders(renderer) {
             },
             min: 1,
             max: 1000,
-            name: 'Height'
+            name: 'Height',
+            scrollStep: 10
         }),
 
         cylinderSides: setupSlider('#cylinderSides', {
@@ -221,7 +256,8 @@ function setupSliders(renderer) {
             },
             min: 2,
             max: 50,
-            name: 'Sides'
+            name: 'Sides',
+            scrollStep: 1
         }),
     };
 }

@@ -55,6 +55,7 @@ buttonCylinder.click(() => setGeometryType(1));
 
 setGeometryType(geometryType);
 setPrimitive(primitiveType);
+requestAnimationFrame((now) => renderer.drawScene(now));
 
 function resetTransform() {
     setPrimitive(renderer.gl.TRIANGLE_STRIP);
@@ -68,7 +69,6 @@ function setPrimitive(_primitiveType) {
     primitiveType = _primitiveType;
     toggleButtons(buttonTriangles, buttonLines, primitiveType === renderer.gl.TRIANGLE_STRIP);
     renderer.primitiveType = primitiveType;
-    renderer.drawScene();
 }
 
 function setGeometryType(_geometryType) {
@@ -83,7 +83,6 @@ function updateGeometry() {
     ref.els.show();
     renderer.setGeometry(ref.func(...ref.args));
     renderer.setColors(colors);
-    renderer.drawScene();
 }
 
 function toggleButtons(a, b, cond) {

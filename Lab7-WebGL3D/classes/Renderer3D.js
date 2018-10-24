@@ -34,12 +34,16 @@ class Renderer3D {
         this.resetTransform();
 
         this.resizeCanvasToDisplaySize();
+
+        this.lastUpdate = 0;
     }
 
 
     resetTransform() {
         this.translation = [0, 120, 0];
         this.rotation = [degToRad(25), degToRad(0), 0];
+        this.objectRotation = [0, 0, 0];
+        this.objectRotationRate = [degToRad(0), degToRad(3), degToRad(0)];
         this.scale = [1, 1, 1];
         this.cameraTranslation = [0, 0, 1100];
         this.cameraUpVector = [0, 1, 0];
@@ -52,39 +56,10 @@ class Renderer3D {
         this.zFar = 4000;
     }
 
-    updatePosition(index, event, value) {
-        this.translation[index] = value;
-        this.drawScene();
-    }
-
-    updateAngle(index, event, value) {
-        this.rotation[index] = degToRad(value);
-        this.drawScene();
-    }
-
-    updateScale(index, event, value) {
-        this.scale[index] = value;
-        this.drawScene();
-    }
-
-    updateCameraPosition(index, event, value) {
-        this.cameraTranslation[index] = value;
-        this.drawScene();
-    }
-
-    updateCameraAngle(index, event, value) {
-        this.cameraRotation[index] = degToRad(value);
-        this.drawScene();
-    }
-
-    updateTargetPosition(index, event, value) {
-        this.targetTranslation[index] = value;
-        this.drawScene();
-    }
-
-    updateFOV(event, value) {
-        this.fieldOfView = degToRad(value);
-        this.drawScene();
+    updateObjectRotation(dt) {
+        for(let i = 0; i < this.objectRotationRate.length; i++) {
+            this.objectRotation[i] += this.objectRotationRate[i] * dt * 0.1;
+        }
     }
 
     bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
@@ -118,7 +93,12 @@ class Renderer3D {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     }
 
-    drawScene() {
+    drawScene(now) {
+
+        let dt = now - this.lastUpdate;
+
+        this.updateObjectRotation(dt);
+
         this.clearViewport();
 
         // Position
@@ -148,6 +128,10 @@ class Renderer3D {
         for (let i = 0; i < this.numObjects; ++i) {
             this.drawGeometryOnCircle(i, sceneMatrix);
         }
+
+        requestAnimationFrame((now) => this.drawScene(now));
+
+        this.lastUpdate = now;
     }
 
     clearViewport() {
@@ -183,7 +167,10 @@ class Renderer3D {
         // compute a matrix for the F
         let curMatrix = M4Math.translate(matrix, x, 0, y);
         curMatrix = M4Math.yRotate(curMatrix, -angle);
-        curMatrix = M4Math.scale(curMatrix, this.scale[0], this.scale[1], this.scale[2]);
+        curMatrix = M4Math.xRotate(curMatrix, this.objectRotation[0]);
+        curMatrix = M4Math.yRotate(curMatrix, this.objectRotation[1]);
+        curMatrix = M4Math.zRotate(curMatrix, this.objectRotation[2]);
+        curMatrix = M4Math.scale(curMatrix, ...this.scale);
 
         this.drawGeometryAt(curMatrix);
     }

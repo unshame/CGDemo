@@ -172,6 +172,7 @@ canvas {
 
 .button_control.no_action {
     cursor: default;
+    text-align: left;
 }
 
 .button_control:not(.no_action):active::before {

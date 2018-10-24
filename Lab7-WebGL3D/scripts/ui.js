@@ -13,13 +13,14 @@ function setupSlider(selector, options) {
 function createSlider(parent, options) {
     let precision = options.precision || 0;
     let min = options.min || 0;
-    let step = options.step || 1;
+    let step = options.step === undefined ? 1 : options.step;
     let value = options.value || 0;
-    let max = options.max || 1;
+    let max = options.max === undefined ? 1 : options.max;
     let fn = options.slide;
     let name = options.name;
     let uiPrecision = options.uiPrecision === undefined ? precision : options.uiPrecision;
     let uiMult = options.uiMult || 1;
+    let scrollStep = options.scrollStep === undefined ? 3 : options.scrollStep;
 
     min /= step;
     max /= step;
@@ -55,7 +56,7 @@ function createSlider(parent, options) {
     }
 
     function incrementValue(event) {
-        let value = parseInt(event.target.value) * step + step * Math.sign(event.wheelDelta) * 3;
+        let value = parseInt(event.target.value) * step + step * Math.sign(event.wheelDelta) * scrollStep;
         value = Math.min(Math.max(value, min * step), max * step);
         sliderElem.value = value / step;
         updateValue(value / step);
