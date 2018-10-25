@@ -4,6 +4,7 @@ header {
 
 .button_control {
     color: #689F38;
+    width: 190px;
 }
 
 .button_control.active {
