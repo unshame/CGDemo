@@ -138,15 +138,15 @@ const M4Math = {
             m20 = m[2 * 4 + 0], m21 = m[2 * 4 + 1], m22 = m[2 * 4 + 2], m23 = m[2 * 4 + 3],
             m30 = m[3 * 4 + 0], m31 = m[3 * 4 + 1], m32 = m[3 * 4 + 2], m33 = m[3 * 4 + 3];
 
-        let tmp_0 = m22 * m33, tmp_1 = m32 * m23, tmp_2 = m12 * m33, tmp_3 = m32 * m13,
-            tmp_4 = m12 * m23, tmp_5 = m22 * m13, tmp_6 = m02 * m33, tmp_7 = m32 * m03,
-            tmp_8 = m02 * m23, tmp_9 = m22 * m03, tmp_10 = m02 * m13, tmp_11 = m12 * m03,
+        let tmp_0 = m22 * m33,  tmp_1  = m32 * m23, tmp_2  = m12 * m33, tmp_3  = m32 * m13,
+            tmp_4 = m12 * m23,  tmp_5  = m22 * m13, tmp_6  = m02 * m33, tmp_7  = m32 * m03,
+            tmp_8 = m02 * m23,  tmp_9  = m22 * m03, tmp_10 = m02 * m13, tmp_11 = m12 * m03,
             tmp_12 = m20 * m31, tmp_13 = m30 * m21, tmp_14 = m10 * m31, tmp_15 = m30 * m11,
             tmp_16 = m10 * m21, tmp_17 = m20 * m11, tmp_18 = m00 * m31, tmp_19 = m30 * m01,
             tmp_20 = m00 * m21, tmp_21 = m20 * m01, tmp_22 = m00 * m11, tmp_23 = m10 * m01;
 
-        let t0 = (tmp_0 * m11 + tmp_3 * m21 + tmp_4 * m31) - (tmp_1 * m11 + tmp_2 * m21 + tmp_5 * m31);
-        let t1 = (tmp_1 * m01 + tmp_6 * m21 + tmp_9 * m31) - (tmp_0 * m01 + tmp_7 * m21 + tmp_8 * m31);
+        let t0 = (tmp_0 * m11 + tmp_3 * m21 + tmp_4  * m31) - (tmp_1 * m11 + tmp_2 * m21 + tmp_5  * m31);
+        let t1 = (tmp_1 * m01 + tmp_6 * m21 + tmp_9  * m31) - (tmp_0 * m01 + tmp_7 * m21 + tmp_8  * m31);
         let t2 = (tmp_2 * m01 + tmp_7 * m11 + tmp_10 * m31) - (tmp_3 * m01 + tmp_6 * m11 + tmp_11 * m31);
         let t3 = (tmp_5 * m01 + tmp_8 * m11 + tmp_11 * m21) - (tmp_4 * m01 + tmp_9 * m11 + tmp_10 * m21);
 
