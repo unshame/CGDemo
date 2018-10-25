@@ -15,8 +15,10 @@ canvas {
 }
 
 .button_control.active,
-.button_control.immediate:active {
+.button_control.immediate:active,
+.slider_holder.active {
     background: #424242;
+    color: #FAFAFA;
 }
 
 .slider_holder {

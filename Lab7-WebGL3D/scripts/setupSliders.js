@@ -259,6 +259,14 @@ function setupSliders(renderer) {
             name: 'Sides',
             scrollStep: 1
         },
+
+        alpha: {
+            value: renderer.alphaValue,
+            slide: (e, value) => renderer.setAlpha(renderer.alphaEnabled, value),
+            min: 0,
+            max: 255,
+            scrollStep: 5
+        },
     };
 
     let sliders = {};

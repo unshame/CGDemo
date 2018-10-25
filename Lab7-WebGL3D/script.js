@@ -10,6 +10,9 @@ let buttonTorus = $('#button_torus');         // объект - тор
 let buttonCylinder = $('#button_cylinder');   // объект - цилиндр
 let buttonMore = $('#button_more');           // показ остальных слайдеров
 let moreControls = $('.buttons.more');        // остальные слайдеры
+let buttonTranslucent = $('#button_translucent');
+let buttonOpaque = $('#button_opaque');
+let alphaSlider = $('#alpha');
 
 // Цвета вершин
 let colors = [
@@ -68,11 +71,13 @@ buttonMore.click(() => moreControls.toggleClass('visible'));
 
 buttonTorus.click(() => setGeometryType(0));
 buttonCylinder.click(() => setGeometryType(1));
-
+buttonTranslucent.click(() => setAlpha(true));
+buttonOpaque.click(() => setAlpha(false));
 
 /* Запуск */
 setGeometryType(geometryType);
 setPrimitive(primitiveType);
+setAlpha(renderer.alphaEnabled);
 requestAnimationFrame((now) => renderer.drawScene(now));
 
 
@@ -82,6 +87,7 @@ requestAnimationFrame((now) => renderer.drawScene(now));
 function resetTransform() {
     setPrimitive(primitiveTypes[0]);
     setGeometryType(0);
+    setAlpha(false);
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
     }
@@ -98,7 +104,7 @@ function setPrimitive(_primitiveType) {
 function setGeometryType(_geometryType) {
     geometryRef[geometryType].els.hide();
     geometryType = _geometryType;
-    toggleButtons(buttonTorus, buttonCylinder, !geometryType);
+    toggleButtons(buttonTorus, buttonCylinder, geometryType === 0);
     updateGeometry();
 }
 
@@ -108,6 +114,21 @@ function updateGeometry() {
     ref.els.show();
     renderer.setGeometry(ref.func(...ref.args));
     renderer.setColors(colors);
+}
+
+function setAlpha(alphaEnabled, value) {
+    toggleButtons(buttonTranslucent, buttonOpaque, alphaEnabled);
+
+    if(alphaEnabled) {
+        buttonTranslucent.hide();
+        alphaSlider.show();
+    }
+    else {
+        buttonTranslucent.show();
+        alphaSlider.hide();
+    }
+
+    renderer.setAlpha(alphaEnabled, value);
 }
 
 // Вспомогательная функция для кнопок-переключателей
