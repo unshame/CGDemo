@@ -5,6 +5,7 @@ let buttonHomeSide = $('.button_floating.home');
 let cards = $('.card');
 let main = $('main');
 let body = $('body');
+let wndow = $(window);
 
 let transitionRelation = {
     'back': 'forward',
@@ -156,8 +157,8 @@ function copyCard(card) {
 
 function centerCard(card) {
     card.css({
-        left: window.innerWidth / 2 - card.width() / 2 + window.pageXOffset + 'px',
-        top: window.innerHeight / 2 - card.height() / 2 + window.pageYOffset - 20 + 'px'
+        left: wndow.width() / 2 - card.width() / 2 + window.pageXOffset - 20 + 'px',
+        top: wndow.height() / 2 - card.height() / 2 + window.pageYOffset - 20 + 'px'
     });
 }
 
