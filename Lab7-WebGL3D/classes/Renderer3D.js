@@ -9,7 +9,12 @@ class Renderer3D {
         */
         this.canvas = canvas;
 
-        let gl = this.gl = canvas.getContext('webgl');
+        let gl = this.gl = canvas.getContext('webgl', {premultipliedAlpha: true});
+
+        // Turn on culling. By default backfacing triangles
+        // will be culled.
+        gl.enable(gl.CULL_FACE);
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
         this.primitiveType = gl.TRIANGLE_STRIP;
 
@@ -36,6 +41,8 @@ class Renderer3D {
         this.resizeCanvasToDisplaySize();
 
         this.lastUpdate = 0;
+
+        this.alphaEnabled = false;
     }
 
     resetTransform() {
@@ -53,6 +60,7 @@ class Renderer3D {
         this.sceneRadius = 600;
         this.zNear = 1;
         this.zFar = 4000;
+        this.alphaValue = 150;
     }
 
     setGeometry(geometry) {
@@ -61,16 +69,30 @@ class Renderer3D {
     }
 
     setColors(colors) {
+        this.providedColors = colors;
         this.colors = [];
 
         // Экстраполируем цвета на все вершины
         for(let i = 0; i < this.geometry.length / 3; i += colors.length / 3) {
-            for(let j = 0; j < colors.length; j++) {
-                this.colors.push(colors[j]);
+            for(let j = 0; j < colors.length; j += 3) {
+                this.colors.push(colors[j + 0]);
+                this.colors.push(colors[j + 1]);
+                this.colors.push(colors[j + 2]);
+                this.colors.push(this.alphaEnabled ? this.alphaValue : 255);
             }
         }
 
         this._bufferArray(this.colorBuffer, new Uint8Array(this.colors));
+    }
+
+    setAlpha(alphaEnabled, value) {
+        this.alphaEnabled = alphaEnabled;
+
+        if (value !== undefined) {
+            this.alphaValue = value;
+        }
+
+        this.setColors(this.providedColors);
     }
 
     _bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
@@ -105,7 +127,7 @@ class Renderer3D {
         );
 
         // Color
-        this._setVertexAttrib(this.colorLocation, this.colorBuffer, 3, this.gl.UNSIGNED_BYTE, true, 0, 0);
+        this._setVertexAttrib(this.colorLocation, this.colorBuffer, 4, this.gl.UNSIGNED_BYTE, true, 0, 0);
 
         let projectionMatrix = this._getProjectionMatrix();
         let viewMatrix = this._getViewMatrix();
@@ -134,12 +156,16 @@ class Renderer3D {
         // Clear the canvas.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // Turn on culling. By default backfacing triangles
-        // will be culled.
-        gl.enable(gl.CULL_FACE);
+        if(this.alphaEnabled) {
+            gl.enable(gl.BLEND);
 
-        // Enable the depth buffer
-        gl.enable(gl.DEPTH_TEST);
+            gl.disable(gl.DEPTH_TEST);
+        }
+        else {
+            gl.enable(gl.DEPTH_TEST);
+
+            gl.disable(gl.BLEND);
+        }
     }
 
     _updateObjectRotation(dt) {
