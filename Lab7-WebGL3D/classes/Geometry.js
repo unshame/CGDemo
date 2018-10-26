@@ -40,8 +40,8 @@ const Geometry = {
                 let z = radius * Math.sin(i / numSides * Math.PI * 2);
                 _pushVertex(vertices, invert ? x : 0, y, invert ? z : 0);
                 _pushVertex(vertices, invert ? 0 : x, y, invert ? 0 : z);
-                _pushVertex(texcoords, i / numSides, 1);
-                _pushVertex(texcoords, 0, 0);
+                _pushVertex(texcoords, invert ? i / numSides : 0, 1);
+                _pushVertex(texcoords, invert ? 0 : i / numSides, 0);
             }
         }
 
