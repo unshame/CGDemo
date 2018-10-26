@@ -18,31 +18,57 @@ class Renderer3D {
 
         this.primitiveType = gl.TRIANGLE_STRIP;
 
-        let program = this.program = createProgramFromScripts(gl, ['3d-vertex-shader', '3d-fragment-shader']);
+        let programs = this.programs =[
+            createProgramFromScripts(gl, ['3d-vertex-shader', '3d-fragment-shader']),
+            createProgramFromScripts(gl, ['3d-vertex-shader-light', '3d-fragment-shader-light']),
+        ];
 
-        // Tell it to use our program (pair of shaders)
-        gl.useProgram(program);
+        this.locations = [
+            {
+                // look up where the vertex data needs to go.
+                position: gl.getAttribLocation(programs[0], 'a_position'),
+                color: gl.getAttribLocation(programs[0], 'a_vertex_color'),
 
-        // look up where the vertex data needs to go.
-        this.positionLocation = gl.getAttribLocation(program, 'a_position');
-        this.colorLocation = gl.getAttribLocation(program, 'a_vertex_color');
+                // lookup uniforms
+                matrix: gl.getUniformLocation(programs[0], 'u_matrix')
+            },
+            {
+                // look up where the vertex data needs to go.
+                position: gl.getAttribLocation(programs[1], 'a_position'),
+                texcoords: gl.getAttribLocation(programs[1], 'a_texcoord'),
 
-        // lookup uniforms
-        this.matrixLocation = gl.getUniformLocation(program, 'u_matrix');
+                // lookup uniforms
+                matrix: gl.getUniformLocation(programs[1], 'u_matrix')
+            }
+        ];
 
         // Create a buffer to put positions in
         this.positionBuffer = gl.createBuffer();
 
         this.colorBuffer = gl.createBuffer();
 
+        this.texcoordsBuffer = gl.createBuffer();
+
+        this.texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
         // Transformations
         this.resetTransform();
 
+        this.resetTexture();
+
         this.resizeCanvasToDisplaySize();
+
+        this.useProgram(0);
 
         this.lastUpdate = 0;
 
         this.alphaEnabled = false;
+    }
+
+    useProgram(index) {
+        this.programIndex = index;
+        this.gl.useProgram(this.programs[index]);
     }
 
     resetTransform() {
@@ -61,6 +87,27 @@ class Renderer3D {
         this.zNear = 1;
         this.zFar = 4000;
         this.alphaValue = 150;
+    }
+
+    loadTexture(url) {
+        let img = new Image();
+        let gl = this.gl;
+
+        img.onload = () => {
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+            gl.generateMipmap(gl.TEXTURE_2D);
+        };
+
+        img.src = url;
+        img.setAttribute('crossOrigin', '');
+    }
+
+    resetTexture() {
+        let gl = this.gl;
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([66, 66, 66, 255]));
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     }
 
     setGeometry(geometry) {
@@ -83,6 +130,11 @@ class Renderer3D {
         }
 
         this._bufferArray(this.colorBuffer, new Uint8Array(this.colors));
+    }
+
+    setTexcoords(texcoords) {
+        this.texcoords = texcoords;
+        this._bufferArray(this.texcoordsBuffer, new Float32Array(texcoords));
     }
 
     setAlpha(alphaEnabled, value) {
@@ -117,8 +169,12 @@ class Renderer3D {
 
         this.clearViewport();
 
+        this.gl.useProgram(this.programs[this.programIndex]);
+
+        let locations = this.locations[this.programIndex];
+
         // Position
-        this._setVertexAttrib(this.positionLocation, this.positionBuffer,
+        this._setVertexAttrib(locations.position, this.positionBuffer,
             3,             // Кол-во компонент в одной вершине
             this.gl.FLOAT, // Тип данных
             false,         // Нужно ли нормализовывать значения (переводить из 0-255 в 0-1)
@@ -127,7 +183,13 @@ class Renderer3D {
         );
 
         // Color
-        this._setVertexAttrib(this.colorLocation, this.colorBuffer, 4, this.gl.UNSIGNED_BYTE, true, 0, 0);
+        if(locations.color) {
+            this._setVertexAttrib(locations.color, this.colorBuffer, 4, this.gl.UNSIGNED_BYTE, true, 0, 0);
+        }
+
+        if(locations.texcoords) {
+            this._setVertexAttrib(locations.texcoords, this.texcoordsBuffer, 2, this.gl.FLOAT, false, 0, 0);
+        }
 
         let projectionMatrix = this._getProjectionMatrix();
         let viewMatrix = this._getViewMatrix();
@@ -202,8 +264,9 @@ class Renderer3D {
     }
 
     _drawGeometryAt(matrix) {
+        let matrixLocation = this.locations[this.programIndex].matrix;
         // Set the matrix.
-        this.gl.uniformMatrix4fv(this.matrixLocation, false, matrix);
+        this.gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
         // Draw the geometry.
         let offset = 0;

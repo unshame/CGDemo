@@ -30,7 +30,7 @@
         "CanvasAnalysisInterface": true,
         "createProgramFromScripts": true,
         "resizeCanvasToDisplaySize": true,
-        "setupSlider": true,
+        "createSliderFromSelector": true,
         "M4Math": true,
         "Geometry": true,
         "radToDeg": true,

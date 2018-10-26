@@ -80,10 +80,12 @@
             <button id="button_lines" class="button_control button_lines last" title="Primitive type: lines"></button>
         </div>
 
-        <div class="buttons more">
-            <div id="button_opaque" class="button_control first" style="width: 120px">Opaque</div>
+        <div class="buttons modes more">
+            <div id="button_opaque" class="button_control button_mode first">Opaque</div>
+            <div id="texture" class="slider_holder active" style="width: 120px; display: none;"></div>
+            <div id="button_textured" class="button_control button_mode">Textured</div>
             <div id="alpha" class="slider_holder last active" style="width: 120px; display: none;"></div>
-            <div id="button_translucent" class="button_control last" style="width: 120px">Translucent</div>
+            <div id="button_translucent" class="button_control button_mode last">Translucent</div>
         </div>
         
     </main>
@@ -125,6 +127,36 @@
 
         void main() {
             gl_FragColor = v_color;
+        }
+    </script>
+
+    <script id="3d-vertex-shader-light" type="x-shader/x-vertex">
+        attribute vec4 a_position;
+        attribute vec2 a_texcoord;
+        
+        uniform mat4 u_matrix;
+        
+        varying vec2 v_texcoord;
+        
+        void main() {
+            // Multiply the position by the matrix.
+            gl_Position = u_matrix * a_position;
+            
+            // Pass the texcoord to the fragment shader.
+            v_texcoord = a_texcoord;
+        }
+    </script>
+
+    <script id="3d-fragment-shader-light" type="x-shader/x-fragment">
+        precision mediump float;
+        // Passed in from the vertex shader.
+        varying vec2 v_texcoord;
+        
+        // The texture.
+        uniform sampler2D u_texture;
+        
+        void main() {
+            gl_FragColor = texture2D(u_texture, v_texcoord);
         }
     </script>
 

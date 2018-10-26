@@ -10,9 +10,11 @@ let buttonTorus = $('#button_torus');         // объект - тор
 let buttonCylinder = $('#button_cylinder');   // объект - цилиндр
 let buttonMore = $('#button_more');           // показ остальных слайдеров
 let moreControls = $('.buttons.more');        // остальные слайдеры
+
+let buttonModes = $('.button_mode');
 let buttonTranslucent = $('#button_translucent');
 let buttonOpaque = $('#button_opaque');
-let alphaSlider = $('#alpha');
+let buttonTextured = $('#button_textured');
 
 // Цвета вершин
 let colors = [
@@ -50,6 +52,35 @@ const geometryRef = [
     }
 ];
 
+let mode = 'opaque';
+const modes = {
+    opaque: () => {
+        renderer.setAlpha(false);
+        renderer.useProgram(0);
+        buttonOpaque.addClass('active');
+    },
+    textured: () => {
+        renderer.setAlpha(false);
+        renderer.useProgram(1);
+        $(sliders.texture.elem).show();
+        buttonTextured.hide();
+        buttonTextured.addClass('active');
+    },
+    translucent: () => {
+        renderer.setAlpha(true);
+        renderer.useProgram(0);
+        $(sliders.alpha.elem).show();
+        buttonTranslucent.hide();
+        buttonTranslucent.addClass('active');
+    }
+};
+
+const textures = [
+    './textures/gradient.png',
+    './textures/rock.png',
+    './textures/face.png',
+];
+
 // Рендерер
 let renderer = new Renderer3D(canvas[0]);
 
@@ -61,7 +92,7 @@ const primitiveTypes = [
 
 let primitiveType = primitiveTypes[0];  // Текущие режим отрисовки
 let geometryType = 0;                   // Текущий тип объекта
-let sliders = setupSliders(renderer);   // Слайдеры
+let sliders = setupSliders(renderer, textures);   // Слайдеры
 
 // События при нажатии на кнопки
 buttonClear.click(() => resetTransform());
@@ -71,13 +102,15 @@ buttonMore.click(() => moreControls.toggleClass('visible'));
 
 buttonTorus.click(() => setGeometryType(0));
 buttonCylinder.click(() => setGeometryType(1));
-buttonTranslucent.click(() => setAlpha(true));
-buttonOpaque.click(() => setAlpha(false));
+buttonOpaque.click(() => setMode('opaque'));
+buttonTextured.click(() => setMode('textured'));
+buttonTranslucent.click(() => setMode('translucent'));
 
 /* Запуск */
 setGeometryType(geometryType);
 setPrimitive(primitiveType);
-setAlpha(renderer.alphaEnabled);
+setMode(mode);
+renderer.loadTexture(textures[0]);
 requestAnimationFrame((now) => renderer.drawScene(now));
 
 
@@ -87,10 +120,19 @@ requestAnimationFrame((now) => renderer.drawScene(now));
 function resetTransform() {
     setPrimitive(primitiveTypes[0]);
     setGeometryType(0);
-    setAlpha(false);
+    setMode('opaque');
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
     }
+}
+
+function setMode(_mode) {
+    mode = _mode;
+    $(sliders.alpha.elem).hide();
+    $(sliders.texture.elem).hide();
+    buttonModes.show();
+    buttonModes.removeClass('active');
+    modes[mode]();
 }
 
 // Устанавливает режим отрисовки
@@ -112,23 +154,10 @@ function setGeometryType(_geometryType) {
 function updateGeometry() {
     let ref = geometryRef[geometryType];
     ref.els.show();
-    renderer.setGeometry(ref.func(...ref.args));
+    let { vertices, texcoords } = ref.func(...ref.args);
+    renderer.setGeometry(vertices);
+    renderer.setTexcoords(texcoords);
     renderer.setColors(colors);
-}
-
-function setAlpha(alphaEnabled, value) {
-    toggleButtons(buttonTranslucent, buttonOpaque, alphaEnabled);
-
-    if(alphaEnabled) {
-        buttonTranslucent.hide();
-        alphaSlider.show();
-    }
-    else {
-        buttonTranslucent.show();
-        alphaSlider.hide();
-    }
-
-    renderer.setAlpha(alphaEnabled, value);
 }
 
 // Вспомогательная функция для кнопок-переключателей

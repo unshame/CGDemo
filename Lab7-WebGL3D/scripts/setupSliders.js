@@ -1,5 +1,5 @@
 /* exported setupSliders */
-function setupSliders(renderer) {
+function setupSliders(renderer, textures) {
 
     const minPos = -1500;
     const maxPos = 1500;
@@ -267,11 +267,19 @@ function setupSliders(renderer) {
             max: 255,
             scrollStep: 5
         },
+
+        texture: {
+            value: 0,
+            slide: (e, value) => renderer.loadTexture(textures[value]),
+            min: 0,
+            max: textures.length - 1,
+            scrollStep: 1
+        },
     };
 
     let sliders = {};
     for(let key of Object.keys(configs)) {
-        sliders[key] = setupSlider('#' + key, configs[key]);
+        sliders[key] = createSliderFromSelector('#' + key, configs[key]);
     }
 
     return sliders;

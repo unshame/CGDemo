@@ -3,6 +3,7 @@ const Geometry = {
     makeTorus(radius, stripRadius, numStrips, numSections) {
 
         let vertices = [];
+        let texcoords = [];
 
         // Iterates along the big circle and then around a section
         for (let i = 0; i < numStrips; i++) { // Iterates over all strip rounds
@@ -14,18 +15,22 @@ const Geometry = {
                     let sa = 2 * Math.PI * j / numSections;
 
                     // Coordinates on the surface of the torus
-                    vertices.push((radius + stripRadius * Math.cos(sa)) * Math.cos(a)); // X
-                    vertices.push((radius + stripRadius * Math.cos(sa)) * Math.sin(a)); // Y
-                    vertices.push(stripRadius * Math.sin(sa)); // Z
+                    let x = (radius + stripRadius * Math.cos(sa)) * Math.cos(a); // X
+                    let y = (radius + stripRadius * Math.cos(sa)) * Math.sin(a); // Y
+                    let z = stripRadius * Math.sin(sa); // Z
+
+                    _pushVertex(vertices, x, y, z);
+                    _pushVertex(texcoords, (i + v) / numStrips, j < numSections ? (j + 1) / numSections : 0);
                 }
             }
         }
 
-        return vertices;
+        return { vertices, texcoords };
     },
 
     makeCylinder(radius, height, numSides) {
         let vertices = [];
+        let texcoords = [];
 
         let offsetY = -height / 2;
 
@@ -33,12 +38,10 @@ const Geometry = {
             for (let i = 0; i <= numSides; i++) {
                 let x = radius * Math.cos(i / numSides * Math.PI * 2);
                 let z = radius * Math.sin(i / numSides * Math.PI * 2);
-                vertices.push(invert ? x : 0);
-                vertices.push(y);
-                vertices.push(invert ? z : 0);
-                vertices.push(invert ? 0 : x);
-                vertices.push(y);
-                vertices.push(invert ? 0 : z);
+                _pushVertex(vertices, invert ? x : 0, y, invert ? z : 0);
+                _pushVertex(vertices, invert ? 0 : x, y, invert ? 0 : z);
+                _pushVertex(texcoords, i / numSides, 1);
+                _pushVertex(texcoords, 0, 0);
             }
         }
 
@@ -48,17 +51,21 @@ const Geometry = {
             let y = offsetY + height;
             let x = radius * Math.cos(i / numSides * Math.PI * 2);
             let z = radius * Math.sin(i / numSides * Math.PI * 2);
-            vertices.push(x);
-            vertices.push(offsetY);
-            vertices.push(z);
-            vertices.push(x);
-            vertices.push(y);
-            vertices.push(z);
+            _pushVertex(vertices, x, offsetY, z);
+            _pushVertex(vertices, x, y, z);
+            _pushVertex(texcoords, (numSides - i) / numSides, 1);
+            _pushVertex(texcoords, (numSides - i) / numSides, 0);
         }
 
         drawCap(offsetY + height, true);
 
-        return vertices;
+        return { vertices, texcoords };
     }
 
 };
+
+function _pushVertex(array, ...components) {
+    for(let component of components) {
+        array.push(component);
+    }
+}

@@ -1,6 +1,6 @@
 
-/* exported setupSlider */
-function setupSlider(selector, options) {
+/* exported createSliderFromSelector */
+function createSliderFromSelector(selector, options) {
     let parent = document.querySelector(selector);
 
     if (!options.name) {
@@ -33,8 +33,8 @@ function createSlider(parent, options) {
         <input class="slider_slider" type="range" min="${min}" max="${max}" value="${value}">
       </div>
     `;
-    let valueElem = parent.querySelector(".slider_value");
-    let sliderElem = parent.querySelector(".slider_slider");
+    let valueElem = parent.querySelector('.slider_value');
+    let sliderElem = parent.querySelector('.slider_slider');
 
     function updateValue(value) {
         valueElem.textContent = (value * step * uiMult).toFixed(uiPrecision);
