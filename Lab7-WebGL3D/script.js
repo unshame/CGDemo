@@ -79,6 +79,8 @@ const textures = [
     './textures/gradient.png',
     './textures/rock.png',
     './textures/face.png',
+    './textures/bone.png',
+    './textures/tiles.png',
 ];
 
 // Рендерер
