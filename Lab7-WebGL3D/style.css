@@ -63,6 +63,10 @@ canvas {
     width: 154px;
 }
 
+.buttons.light .slider_holder  {
+    width: 180px;
+}
+
 .slider_holder.cylinder.last {
     width: 156px;
 }

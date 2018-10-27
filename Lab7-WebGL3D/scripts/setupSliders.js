@@ -275,6 +275,45 @@ function setupSliders(renderer, textures) {
             max: textures.length - 1,
             scrollStep: 1
         },
+
+        lightX: {
+            value: renderer.lightDirection[0],
+            slide: (event, value) => renderer.lightDirection[0] = value,
+            min: -1,
+            max: 1,
+            step: 0.01,
+            precision: 2,
+            name: 'DirX'
+        },
+
+        lightY: {
+            value: renderer.lightDirection[1],
+            slide: (event, value) => renderer.lightDirection[1] = value,
+            min: -1,
+            max: 1,
+            step: 0.01,
+            precision: 2,
+            name: 'DirY'
+        },
+
+        lightZ: {
+            value: renderer.lightDirection[2],
+            slide: (event, value) => renderer.lightDirection[2] = value,
+            min: -1,
+            max: 1,
+            step: 0.01,
+            precision: 2,
+            name: 'DirZ'
+        },
+
+        ambient: {
+            value: renderer.ambientLight,
+            slide: (event, value) => renderer.ambientLight = value,
+            min: 0,
+            max: 2,
+            step: 0.01,
+            precision: 2,
+        },
     };
 
     let sliders = {};

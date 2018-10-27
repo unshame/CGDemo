@@ -27,22 +27,26 @@ class Renderer3D {
             {
                 // look up where the vertex data needs to go.
                 position: gl.getAttribLocation(programs[0], 'a_position'),
-                //color: gl.getAttribLocation(programs[0], 'a_vertex_color'),
                 normal: gl.getAttribLocation(programs[0], 'a_normal'),
 
                 // lookup uniforms
                 worldViewProjection: gl.getUniformLocation(programs[0], 'u_worldViewProjection'),
-                world: gl.getUniformLocation(programs[0], "u_world"),
+                world: gl.getUniformLocation(programs[0], 'u_world'),
                 color: gl.getUniformLocation(programs[0], 'u_color'),
                 reverseLightDirection: gl.getUniformLocation(programs[0], 'u_reverseLightDirection'),
+                ambientLight: gl.getUniformLocation(programs[0], 'u_ambient_light'),
             },
             {
                 // look up where the vertex data needs to go.
                 position: gl.getAttribLocation(programs[1], 'a_position'),
+                normal: gl.getAttribLocation(programs[1], 'a_normal'),
                 texcoords: gl.getAttribLocation(programs[1], 'a_texcoord'),
 
                 // lookup uniforms
-                worldViewProjection: gl.getUniformLocation(programs[1], 'u_worldViewProjection')
+                worldViewProjection: gl.getUniformLocation(programs[1], 'u_worldViewProjection'),
+                world: gl.getUniformLocation(programs[1], 'u_world'),
+                reverseLightDirection: gl.getUniformLocation(programs[1], 'u_reverseLightDirection'),
+                ambientLight: gl.getUniformLocation(programs[1], 'u_ambient_light'),
             }
         ];
 
@@ -94,6 +98,8 @@ class Renderer3D {
         this.zNear = 1;
         this.zFar = 4000;
         this.alphaValue = 150;
+        this.lightDirection = [0.5, 0.7, 0.5];
+        this.ambientLight = 0.5;
     }
 
     loadTexture(url) {
@@ -184,9 +190,10 @@ class Renderer3D {
         this._setVertexAttrib(locations.normal, this.normalBuffer, 3, this.gl.FLOAT, false, 0, 0);
 
         this.gl.uniform4fv(locations.color, this.color);
+        this.gl.uniform1f(locations.ambientLight, this.ambientLight);
 
         // set the light direction.
-        this.gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize([0.5, 0.7, 0.5]));
+        this.gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize(this.lightDirection));
 
         if(locations.texcoords) {
             this._setVertexAttrib(locations.texcoords, this.texcoordsBuffer, 2, this.gl.FLOAT, false, 0, 0);

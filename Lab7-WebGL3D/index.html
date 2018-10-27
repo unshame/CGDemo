@@ -87,6 +87,14 @@
             <div id="alpha" class="slider_holder last active" style="width: 120px; display: none;"></div>
             <div id="button_translucent" class="button_control button_mode last">Translucent</div>
         </div>
+
+        <div class="buttons light more">
+            <div class="button_control no_action first" style="width: 80px">Light</div>
+            <div id="lightX" class="slider_holder"></div>
+            <div id="lightY" class="slider_holder"></div>
+            <div id="lightZ" class="slider_holder"></div>
+            <div id="ambient" class="slider_holder last"></div>
+        </div>
         
     </main>
 
@@ -130,6 +138,50 @@
 
         uniform vec4 u_color;
         uniform vec3 u_reverseLightDirection;
+        uniform float u_ambient_light;
+
+        void main() {
+            // because v_normal is a varying it's interpolated
+            // we it will not be a uint vector. Normalizing it
+            // will make it a unit vector again
+            vec3 normal = normalize(v_normal);
+            
+            float light = dot(normal, u_reverseLightDirection);
+
+            gl_FragColor = u_color;
+
+            gl_FragColor.rgb *= u_ambient_light + light;
+        }
+    </script>
+
+    <script id="3d-vertex-shader-light" type="x-shader/x-vertex">
+        attribute vec4 a_position;
+        attribute vec3 a_normal;
+        attribute vec2 a_texcoord;
+
+        uniform mat4 u_worldViewProjection;
+        uniform mat4 u_world;
+
+        varying vec3 v_normal;
+        varying vec2 v_texcoord;
+
+        void main() {
+            // Multiply the position by the matrix.
+            gl_Position = u_worldViewProjection * a_position;
+            v_normal = mat3(u_world) * a_normal;
+            v_texcoord = a_texcoord;
+        }
+    </script>
+
+    <script id="3d-fragment-shader-light" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec3 v_normal;
+        varying vec2 v_texcoord;
+
+        uniform vec3 u_reverseLightDirection;
+        uniform sampler2D u_texture;
+        uniform float u_ambient_light;
 
         void main() {
             // because v_normal is a varying it's interpolated
@@ -139,39 +191,9 @@
 
             float light = dot(normal, u_reverseLightDirection);
 
-            gl_FragColor = u_color;
-
-            gl_FragColor.rgb *= light;
-        }
-    </script>
-
-    <script id="3d-vertex-shader-light" type="x-shader/x-vertex">
-        attribute vec4 a_position;
-        attribute vec2 a_texcoord;
-        
-        uniform mat4 u_world;
-        
-        varying vec2 v_texcoord;
-        
-        void main() {
-            // Multiply the position by the matrix.
-            gl_Position = u_world * a_position;
-            
-            // Pass the texcoord to the fragment shader.
-            v_texcoord = a_texcoord;
-        }
-    </script>
-
-    <script id="3d-fragment-shader-light" type="x-shader/x-fragment">
-        precision mediump float;
-        // Passed in from the vertex shader.
-        varying vec2 v_texcoord;
-        
-        // The texture.
-        uniform sampler2D u_texture;
-        
-        void main() {
             gl_FragColor = texture2D(u_texture, v_texcoord);
+
+            gl_FragColor.rgb *= u_ambient_light + light;
         }
     </script>
 
