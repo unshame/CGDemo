@@ -126,7 +126,7 @@ canvas {
 .button_control.button_triangles::after {
     top: 0;
     left: 8px;
-    background: url('../shared/images/clip_poly_brown.png');
+    background: url('../shared/images/clip_poly_grey.png');
 }
 
 .button_control.active.button_triangles::after {
@@ -136,7 +136,7 @@ canvas {
 .button_control.button_lines::after {
     top: 0;
     left: 8px;
-    background: url('../shared/images/clip_brown.png');
+    background: url('../shared/images/clip_grey.png');
 }
 
 .divider {
@@ -153,15 +153,15 @@ canvas {
 }
 
 .button_floating.back::after {
-    background: url('../shared/images/back_brown.png');
+    background: url('../shared/images/back_grey.png');
 }
 
 .button_floating.forward::after {
-    background: url('../shared/images/forward_brown.png');
+    background: url('../shared/images/forward_grey.png');
 }
 
 .button_floating.home::after {
-    background: url('../shared/images/home_brown.png');
+    background: url('../shared/images/home_grey.png');
 }
 
 .github-corner svg {
