@@ -30,6 +30,7 @@ const Geometry = {
 
     makeCylinder(radius, height, numSides) {
         let vertices = [];
+        let normals = [];
         let texcoords = [];
 
         let offsetY = -height / 2;
@@ -40,6 +41,8 @@ const Geometry = {
                 let z = radius * Math.sin(i / numSides * Math.PI * 2);
                 _pushVertex(vertices, invert ? x : 0, y, invert ? z : 0);
                 _pushVertex(vertices, invert ? 0 : x, y, invert ? 0 : z);
+                _pushVertex(normals, 0, invert ? 1 : -1, 0);
+                _pushVertex(normals, 0, invert ? 1 : -1, 0);
                 _pushVertex(texcoords, invert ? i / numSides : 0, 1);
                 _pushVertex(texcoords, invert ? 0 : i / numSides, 0);
             }
@@ -49,17 +52,21 @@ const Geometry = {
 
         for (let i = 0; i <= numSides; i++) {
             let y = offsetY + height;
-            let x = radius * Math.cos(i / numSides * Math.PI * 2);
-            let z = radius * Math.sin(i / numSides * Math.PI * 2);
+            let nx = Math.cos(i / numSides * Math.PI * 2);
+            let nz = Math.sin(i / numSides * Math.PI * 2);
+            let x = radius * nx;
+            let z = radius * nz;
             _pushVertex(vertices, x, offsetY, z);
             _pushVertex(vertices, x, y, z);
+            _pushVertex(normals, nx, 0, nz);
+            _pushVertex(normals, nx, 0, nz);
             _pushVertex(texcoords, (numSides - i) / numSides, 1);
             _pushVertex(texcoords, (numSides - i) / numSides, 0);
         }
 
         drawCap(offsetY + height, true);
 
-        return { vertices, texcoords };
+        return { vertices, normals, texcoords };
     }
 
 };

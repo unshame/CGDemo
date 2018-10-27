@@ -17,11 +17,7 @@ let buttonOpaque = $('#button_opaque');
 let buttonTextured = $('#button_textured');
 
 // Цвета вершин
-let colors = [
-    66, 66, 66,
-    33, 33, 33,
-    97, 97, 97,
-];
+let color = [66 / 255, 66 / 255, 66 / 255];
 
 // Свойства тора
 const torusProps = [
@@ -49,7 +45,7 @@ const geometryRef = [
         func: (...args) => Geometry.makeCylinder(...args),
         args: cylinderProps,
         els: $('.cylinder')
-    }
+    },
 ];
 
 let mode = 'opaque';
@@ -88,12 +84,12 @@ let renderer = new Renderer3D(canvas[0]);
 
 // Режимы отрисовки
 const primitiveTypes = [
-    renderer.gl.TRIANGLES,
+    renderer.gl.TRIANGLE_STRIP,
     renderer.gl.LINES
 ];
 
 let primitiveType = primitiveTypes[0];  // Текущие режим отрисовки
-let geometryType = 0;                   // Текущий тип объекта
+let geometryType = 1;                   // Текущий тип объекта
 let sliders = setupSliders(renderer, textures);   // Слайдеры
 
 // События при нажатии на кнопки
@@ -121,7 +117,7 @@ requestAnimationFrame((now) => renderer.drawScene(now));
 // Ресетит все настройки
 function resetTransform() {
     setPrimitive(primitiveTypes[0]);
-    setGeometryType(0);
+    setGeometryType(1);
     setMode('opaque');
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
@@ -160,7 +156,7 @@ function updateGeometry() {
     renderer.setGeometry(vertices);
     renderer.setNormals(normals);
     renderer.setTexcoords(texcoords);
-    renderer.setColors(colors);
+    renderer.setColor(color);
 }
 
 // Вспомогательная функция для кнопок-переключателей

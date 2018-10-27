@@ -122,21 +122,8 @@ class Renderer3D {
         this._bufferArray(this.positionBuffer, new Float32Array(geometry));
     }
 
-    setColors(colors) {
-        this.providedColors = colors;
-        this.colors = [];
-
-        // Экстраполируем цвета на все вершины
-        for(let i = 0; i < this.geometry.length / 3; i += colors.length / 3) {
-            for(let j = 0; j < colors.length; j += 3) {
-                this.colors.push(colors[j + 0]);
-                this.colors.push(colors[j + 1]);
-                this.colors.push(colors[j + 2]);
-                this.colors.push(this.alphaEnabled ? this.alphaValue : 255);
-            }
-        }
-
-        this._bufferArray(this.colorBuffer, new Uint8Array(this.colors));
+    setColor(color) {
+        this.color = [...color, this.alphaEnabled ? this.alphaValue / 255 : 1];
     }
 
     setNormals(normals) {
@@ -156,7 +143,7 @@ class Renderer3D {
             this.alphaValue = value;
         }
 
-        this.setColors(this.providedColors);
+        this.setColor(this.color.slice(0, 3));
     }
 
     _bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
@@ -194,10 +181,9 @@ class Renderer3D {
             0              // offset
         );
 
-        // Color
-        this.gl.uniform4fv(locations.color, [0.2, 1, 0.2, 1]);
-
         this._setVertexAttrib(locations.normal, this.normalBuffer, 3, this.gl.FLOAT, false, 0, 0);
+
+        this.gl.uniform4fv(locations.color, this.color);
 
         // set the light direction.
         this.gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize([0.5, 0.7, 0.5]));
@@ -217,12 +203,11 @@ class Renderer3D {
 
 
         let worldMatrix = this._getWorldMatrix();
-        let worldViewProjection = M4Math.multiply(viewProjectionMatrix, worldMatrix);
-        this._drawGeometryAt(locations.worldViewProjection, worldViewProjection, locations.world, worldMatrix);
+        //this._drawGeometryAt(locations.worldViewProjection, worldViewProjection, locations.world, worldMatrix);
 
-        // for (let i = 0; i < this.numObjects; ++i) {
-        //     this._drawGeometryOnCircle(i, sceneMatrix);
-        // }
+        for (let i = 0; i < this.numObjects; ++i) {
+            this._drawGeometryOnCircle(i, locations.world, worldMatrix, locations.worldViewProjection, viewProjectionMatrix);
+        }
 
         requestAnimationFrame((now) => this.drawScene(now));
 
@@ -263,26 +248,28 @@ class Renderer3D {
         gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
-    _drawGeometryOnCircle(i, matrixLocation, matrix) {
+    _drawGeometryOnCircle(i, worldMatrixLocation, worldMatrix, worldViewProjectionLocation, viewProjectionMatrix) {
         let angle = i * Math.PI * 2 / this.numObjects;
         let x = Math.cos(angle) * this.sceneRadius;
         let y = Math.sin(angle) * this.sceneRadius;
 
         // starting with the view projection matrix
         // compute a matrix for the F
-        let curMatrix = M4Math.translate(matrix, x, 0, y);
+        let curMatrix = M4Math.translate(worldMatrix, x, 0, y);
         curMatrix = M4Math.yRotate(curMatrix, -angle);
         curMatrix = M4Math.xRotate(curMatrix, this.objectRotation[0]);
         curMatrix = M4Math.yRotate(curMatrix, this.objectRotation[1]);
         curMatrix = M4Math.zRotate(curMatrix, this.objectRotation[2]);
         curMatrix = M4Math.scale(curMatrix, ...this.scale);
 
-        this._drawGeometryAt(matrixLocation, curMatrix);
+        let worldViewProjection = M4Math.multiply(viewProjectionMatrix, curMatrix);
+
+        this._drawGeometryAt(worldMatrixLocation, curMatrix, worldViewProjectionLocation, worldViewProjection);
     }
 
-    _drawGeometryAt(matrixLocation, matrix, worldMatrixLocation, worldMatrix) {
+    _drawGeometryAt(worldMatrixLocation, worldMatrix, worldViewProjectionLocation, worldViewProjection) {
         // Set the matrix.
-        this.gl.uniformMatrix4fv(matrixLocation, false, matrix);
+        this.gl.uniformMatrix4fv(worldViewProjectionLocation, false, worldViewProjection);
         this.gl.uniformMatrix4fv(worldMatrixLocation, false, worldMatrix);
 
         // Draw the geometry.
@@ -317,8 +304,8 @@ class Renderer3D {
     }
 
     _getWorldMatrix() {
-        //matrix = M4Math.translate(matrix, ...this.translation);
-        let matrix = M4Math.xRotation(this.rotation[0]);
+        let matrix = M4Math.translation(...this.translation);
+        matrix = M4Math.xRotate(matrix, this.rotation[0]);
         matrix = M4Math.yRotate(matrix, this.rotation[1]);
         matrix = M4Math.zRotate(matrix, this.rotation[2]);
         return matrix;
