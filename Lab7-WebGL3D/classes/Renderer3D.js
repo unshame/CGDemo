@@ -175,9 +175,10 @@ class Renderer3D {
         this.clearViewport();
 
         let locations = this.locations;
+        let buffers = this.buffers;
 
         // Позиция
-        this._setVertexAttrib(locations.position, this.buffers.position,
+        this._setVertexAttrib(locations.position, buffers.position,
             3,             // Кол-во компонент в одной вершине
             gl.FLOAT,      // Тип данных
             false,         // Нужно ли нормализовывать значения (переводить из 0-255 в 0-1)
@@ -186,18 +187,18 @@ class Renderer3D {
         );
 
         // Нормали
-        this._setVertexAttrib(locations.normal, this.buffers.normal, 3, gl.FLOAT, false, 0, 0);
+        this._setVertexAttrib(locations.normal, buffers.normal, 3, gl.FLOAT, false, 0, 0);
+
+        // Координаты текстур
+        if (locations.texcoords) {
+            this._setVertexAttrib(locations.texcoords, buffers.texcoords, 2, gl.FLOAT, false, 0, 0);
+        }
 
         // Освещение окружения
         gl.uniform1f(locations.ambientLight, this.ambientLight);
 
         // Направление света
         gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize(this.lightDirection));
-
-        // Координаты текстур
-        if(locations.texcoords) {
-            this._setVertexAttrib(locations.texcoords, this.buffers.texcoords, 2, gl.FLOAT, false, 0, 0);
-        }
 
         let projectionMatrix = this._getProjectionMatrix();
         let viewMatrix = this._getViewMatrix();
