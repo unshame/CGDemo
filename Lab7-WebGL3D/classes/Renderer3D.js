@@ -84,7 +84,7 @@ class Renderer3D {
         this.translation = [0, 120, 0];
         this.rotation = [degToRad(25), degToRad(0), 0];
         this.objectRotation = [0, 0, 0];
-        this.objectRotationRate = [degToRad(0), degToRad(3), degToRad(0)];
+        this.objectRotationRate = [degToRad(0), degToRad(3), degToRad(1)];
         this.scale = [1, 1, 1];
         this.cameraTranslation = [0, 0, 1100];
         this.cameraUpVector = [0, 1, 0];

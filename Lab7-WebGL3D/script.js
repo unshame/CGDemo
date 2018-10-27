@@ -93,7 +93,7 @@ const primitiveTypes = [
 ];
 
 let primitiveType = primitiveTypes[0];  // Текущие режим отрисовки
-let geometryType = 1;                   // Текущий тип объекта
+let geometryType = 0;                   // Текущий тип объекта
 let sliders = setupSliders(renderer, textures);   // Слайдеры
 
 // События при нажатии на кнопки
@@ -125,7 +125,7 @@ requestAnimationFrame((now) => renderer.drawScene(now));
 // Ресетит все настройки
 function resetTransform() {
     setPrimitive(primitiveTypes[0]);
-    setGeometryType(1);
+    setGeometryType(0);
     setMode('opaque');
     setStencil(false);
     for(let key of Object.keys(sliders)) {
