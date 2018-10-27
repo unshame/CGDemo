@@ -209,7 +209,7 @@ class Renderer3D {
         let worldMatrix = this._getWorldMatrix();
 
         // Выводим объект в точке, в которую направлена камера
-        let targetMatrix = M4Math.multiply(M4Math.translate(viewProjectionMatrix, ...this.targetTranslation), worldMatrix);
+        let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
 
         this.render(locations, worldMatrix, viewProjectionMatrix, targetMatrix);
 
@@ -228,7 +228,7 @@ class Renderer3D {
             gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
         }
 
-        this._drawGeometryAt(locations.world, worldMatrix, locations.worldViewProjection, targetMatrix);
+        this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0), locations.worldViewProjection, targetMatrix);
 
         if (this.stencilEnabled) {
             gl.stencilFunc(gl.EQUAL, 1, 0xff);
