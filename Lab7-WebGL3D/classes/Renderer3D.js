@@ -210,6 +210,7 @@ class Renderer3D {
 
         // Выводим объект в точке, в которую направлена камера
         let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
+        targetMatrix = M4Math.scale(targetMatrix, ...this.scale);
 
         this.render(locations, worldMatrix, viewProjectionMatrix, targetMatrix);
 
