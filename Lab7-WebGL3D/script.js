@@ -77,6 +77,8 @@ const textures = [
     './textures/face.png',
     './textures/bone.png',
     './textures/tiles.png',
+    './textures/what.png',
+    './textures/tich.png',
 ];
 
 // Рендерер
