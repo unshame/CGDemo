@@ -262,8 +262,14 @@ class Renderer3D {
         gl.stencilFunc(gl.ALWAYS, 1, 0xff);
         gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
 
+        let alpha = this.alphaValue;
+        let alphaEnabled = this.alphaEnabled;
+        this.setAlpha(true, 0);
+
         this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0),
             locations.worldViewProjection, targetViewProjectionMatrix);
+
+        this.setAlpha(alphaEnabled, alpha);
 
         gl.stencilFunc(gl.EQUAL, 1, 0xff);
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
