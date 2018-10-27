@@ -3,84 +3,48 @@ class Renderer3D {
 
     constructor(canvas) {
 
-        /**
-        * Холст.
-        * @type {HTMLCanvasElement}
-        */
         this.canvas = canvas;
 
         let gl = this.gl = canvas.getContext('webgl', {stencil: 8});
 
-        // Turn on culling. By default backfacing triangles
-        // will be culled.
         gl.enable(gl.CULL_FACE);
         gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
-        this.primitiveType = gl.TRIANGLE_STRIP;
+        let program = this.program = createProgramFromScripts(gl, [
+            '3d-vertex-shader',
+            '3d-fragment-shader'
+        ]);
 
-        let programs = this.programs =[
-            createProgramFromScripts(gl, ['3d-vertex-shader', '3d-fragment-shader']),
-            createProgramFromScripts(gl, ['3d-vertex-shader-light', '3d-fragment-shader-light']),
-        ];
+        gl.useProgram(this.program);
 
-        this.locations = [
-            {
-                // look up where the vertex data needs to go.
-                position: gl.getAttribLocation(programs[0], 'a_position'),
-                normal: gl.getAttribLocation(programs[0], 'a_normal'),
+        this.locations = {
+            position: gl.getAttribLocation(program, 'a_position'),
+            normal: gl.getAttribLocation(program, 'a_normal'),
+            texcoords: gl.getAttribLocation(program, 'a_texcoord'),
 
-                // lookup uniforms
-                worldViewProjection: gl.getUniformLocation(programs[0], 'u_worldViewProjection'),
-                world: gl.getUniformLocation(programs[0], 'u_world'),
-                color: gl.getUniformLocation(programs[0], 'u_color'),
-                reverseLightDirection: gl.getUniformLocation(programs[0], 'u_reverseLightDirection'),
-                ambientLight: gl.getUniformLocation(programs[0], 'u_ambient_light'),
-            },
-            {
-                // look up where the vertex data needs to go.
-                position: gl.getAttribLocation(programs[1], 'a_position'),
-                normal: gl.getAttribLocation(programs[1], 'a_normal'),
-                texcoords: gl.getAttribLocation(programs[1], 'a_texcoord'),
+            worldViewProjection: gl.getUniformLocation(program, 'u_worldViewProjection'),
+            world: gl.getUniformLocation(program, 'u_world'),
+            reverseLightDirection: gl.getUniformLocation(program, 'u_reverseLightDirection'),
+            ambientLight: gl.getUniformLocation(program, 'u_ambient_light'),
+        };
 
-                // lookup uniforms
-                worldViewProjection: gl.getUniformLocation(programs[1], 'u_worldViewProjection'),
-                world: gl.getUniformLocation(programs[1], 'u_world'),
-                reverseLightDirection: gl.getUniformLocation(programs[1], 'u_reverseLightDirection'),
-                ambientLight: gl.getUniformLocation(programs[1], 'u_ambient_light'),
-            }
-        ];
-
-        // Create a buffer to put positions in
-        this.positionBuffer = gl.createBuffer();
-
-        this.colorBuffer = gl.createBuffer();
-
-        this.normalBuffer = gl.createBuffer();
-
-        this.texcoordsBuffer = gl.createBuffer();
-
+        this.buffers = {
+            position: gl.createBuffer(),
+            color: gl.createBuffer(),
+            normal: gl.createBuffer(),
+            texcoords: gl.createBuffer()
+        };
 
         this.texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
-        // Transformations
-        this.resetTransform();
-
-        this.resizeCanvasToDisplaySize();
-
-        this.useProgram(0);
+        this.resetProperties();
+        this.resizeViewportToDisplaySize();
 
         this.lastUpdate = 0;
-
-        this.alphaEnabled = false;
     }
 
-    useProgram(index) {
-        this.programIndex = index;
-        this.gl.useProgram(this.programs[index]);
-    }
-
-    resetTransform() {
+    resetProperties() {
         this.translation = [0, 120, 0];
         this.rotation = [degToRad(25), degToRad(0), 0];
         this.objectRotation = [0, 0, 0];
@@ -100,17 +64,25 @@ class Renderer3D {
         this.ambientLight = 0.5;
         this.stencilEnabled = false;
         this.colorMode = this.gl.RGBA;
+        this.textureEnabled = false;
+        this.alphaEnabled = false;
+        this.primitiveType = this.gl.TRIANGLE_STRIP;
     }
 
     loadTexture(url) {
         let img = new Image();
         let gl = this.gl;
 
-        img.onload = () => {
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, this.colorMode, this.colorMode, gl.UNSIGNED_BYTE, img);
-            gl.generateMipmap(gl.TEXTURE_2D);
-        };
+        this.textureUrl = url;
+
+        if(this.textureEnabled) {
+            img.onload = () => {
+                gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                gl.texImage2D(gl.TEXTURE_2D, 0, this.colorMode, this.colorMode,
+                    gl.UNSIGNED_BYTE, img);
+                gl.generateMipmap(gl.TEXTURE_2D);
+            };
+        }
 
         img.src = url;
         img.setAttribute('crossOrigin', '');
@@ -118,28 +90,44 @@ class Renderer3D {
 
     resetTexture() {
         let gl = this.gl;
-        gl.texImage2D(gl.TEXTURE_2D, 0, this.colorMode, 1, 1, 0, this.colorMode, gl.UNSIGNED_BYTE, new Uint8Array(this.color.map(v => v * 255)));
+        gl.texImage2D(gl.TEXTURE_2D, 0, this.colorMode, 1, 1, 0, this.colorMode,
+            gl.UNSIGNED_BYTE, new Uint8Array(this.color));
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     }
 
+    setTextureMode(textureEnabled) {
+        this.textureEnabled = textureEnabled;
+
+        if(textureEnabled) {
+            this.loadTexture(this.textureUrl);
+        }
+        else {
+            this.resetTexture();
+        }
+    }
+
     setGeometry(geometry) {
         this.geometry = geometry;
-        this._bufferArray(this.positionBuffer, new Float32Array(geometry));
+        this._bufferArray(this.buffers.position, new Float32Array(geometry));
     }
 
     setColor(color) {
-        this.color = [...color, this.alphaEnabled ? this.alphaValue / 255 : 1];
+        this.color = [...color, this.alphaEnabled ? this.alphaValue : 255];
+
+        if(!this.textureEnabled) {
+            this.resetTexture();
+        }
     }
 
     setNormals(normals) {
         this.normals = normals;
-        this._bufferArray(this.normalBuffer, new Float32Array(normals));
+        this._bufferArray(this.buffers.normal, new Float32Array(normals));
     }
 
     setTexcoords(texcoords) {
         this.texcoords = texcoords;
-        this._bufferArray(this.texcoordsBuffer, new Float32Array(texcoords));
+        this._bufferArray(this.buffers.texcoords, new Float32Array(texcoords));
     }
 
     setAlpha(alphaEnabled, value) {
@@ -152,12 +140,23 @@ class Renderer3D {
         this.setColor(this.color.slice(0, 3));
     }
 
-    _bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, array, usage);
+    clearViewport() {
+        let gl = this.gl;
+
+        // Clear the canvas.
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        if (this.alphaEnabled) {
+            gl.enable(gl.BLEND);
+            gl.disable(gl.DEPTH_TEST);
+        }
+        else {
+            gl.enable(gl.DEPTH_TEST);
+            gl.disable(gl.BLEND);
+        }
     }
 
-    resizeCanvasToDisplaySize() {
+    resizeViewportToDisplaySize() {
         let canvas = this.gl.canvas;
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
@@ -175,12 +174,10 @@ class Renderer3D {
 
         this.clearViewport();
 
-        gl.useProgram(this.programs[this.programIndex]);
+        let locations = this.locations;
 
-        let locations = this.locations[this.programIndex];
-
-        // Position
-        this._setVertexAttrib(locations.position, this.positionBuffer,
+        // Позиция
+        this._setVertexAttrib(locations.position, this.buffers.position,
             3,             // Кол-во компонент в одной вершине
             gl.FLOAT,      // Тип данных
             false,         // Нужно ли нормализовывать значения (переводить из 0-255 в 0-1)
@@ -188,85 +185,51 @@ class Renderer3D {
             0              // offset
         );
 
-        this._setVertexAttrib(locations.normal, this.normalBuffer, 3, gl.FLOAT, false, 0, 0);
+        // Нормали
+        this._setVertexAttrib(locations.normal, this.buffers.normal, 3, gl.FLOAT, false, 0, 0);
 
+        // Цвет
         gl.uniform4fv(locations.color, this.color);
+
+        // Освещение окружения
         gl.uniform1f(locations.ambientLight, this.ambientLight);
 
-        // set the light direction.
+        // Направление света
         gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize(this.lightDirection));
 
+        // Координаты текстур
         if(locations.texcoords) {
-            this._setVertexAttrib(locations.texcoords, this.texcoordsBuffer, 2, gl.FLOAT, false, 0, 0);
+            this._setVertexAttrib(locations.texcoords, this.buffers.texcoords, 2, gl.FLOAT, false, 0, 0);
         }
 
         let projectionMatrix = this._getProjectionMatrix();
         let viewMatrix = this._getViewMatrix();
-
-        // Compute a view projection matrix
-        let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
-
         let worldMatrix = this._getWorldMatrix();
+        let targetMatrix = this._getTargetMatrix();
+        let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
+        let targetViewProjectionMatrix = M4Math.multiply(viewProjectionMatrix, targetMatrix);
 
-        // Выводим объект в точке, в которую направлена камера
-        let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
-        targetMatrix = M4Math.scale(targetMatrix, ...this.scale);
-
-        this.render(locations, worldMatrix, viewProjectionMatrix, targetMatrix);
+        if(this.stencilEnabled) {
+            this._drawAllGeometryWithStencil(worldMatrix, viewProjectionMatrix, targetViewProjectionMatrix);
+        }
+        else {
+            this._drawAllGeometry(worldMatrix, viewProjectionMatrix, targetViewProjectionMatrix);
+        }
 
         requestAnimationFrame((now) => this.drawScene(now));
 
         this.lastUpdate = now;
     }
 
-    render(locations, worldMatrix, viewProjectionMatrix, targetMatrix) {
-
-        let gl = this.gl;
-
-        if (this.stencilEnabled) {
-            gl.enable(gl.STENCIL_TEST);
-            gl.stencilFunc(gl.ALWAYS, 1, 0xff);
-            gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
-        }
-
-        this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0), locations.worldViewProjection, targetMatrix);
-
-        if (this.stencilEnabled) {
-            gl.stencilFunc(gl.EQUAL, 1, 0xff);
-            gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
-        }
-
-        for (let i = 0; i < this.numObjects; ++i) {
-            this._drawGeometryOnCircle(i, locations.world, worldMatrix, locations.worldViewProjection, viewProjectionMatrix);
-        }
-
-        if (this.stencilEnabled) {
-            gl.disable(gl.STENCIL_TEST);
-        }
-    }
-
-    clearViewport() {
-        let gl = this.gl;
-
-        // Clear the canvas.
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        if(this.alphaEnabled) {
-            gl.enable(gl.BLEND);
-
-            gl.disable(gl.DEPTH_TEST);
-        }
-        else {
-            gl.enable(gl.DEPTH_TEST);
-
-            gl.disable(gl.BLEND);
-        }
-    }
-
     _updateObjectRotation(dt) {
         for (let i = 0; i < this.objectRotationRate.length; i++) {
             this.objectRotation[i] += this.objectRotationRate[i] * dt * 0.1;
         }
+    }
+
+    _bufferArray(buffer, array, usage = this.gl.STATIC_DRAW) {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, array, usage);
     }
 
     _setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
@@ -279,13 +242,45 @@ class Renderer3D {
         gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
+    _drawAllGeometry(worldMatrix, viewProjectionMatrix, targetViewProjectionMatrix) {
+        let locations = this.locations;
+
+        this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0),
+            locations.worldViewProjection, targetViewProjectionMatrix);
+
+        for (let i = 0; i < this.numObjects; ++i) {
+            this._drawGeometryOnCircle(i, locations.world, worldMatrix,
+                locations.worldViewProjection, viewProjectionMatrix);
+        }
+    }
+
+    _drawAllGeometryWithStencil(worldMatrix, viewProjectionMatrix, targetViewProjectionMatrix) {
+        let gl = this.gl;
+        let locations = this.locations;
+
+        gl.enable(gl.STENCIL_TEST);
+        gl.stencilFunc(gl.ALWAYS, 1, 0xff);
+        gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
+
+        this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0),
+            locations.worldViewProjection, targetViewProjectionMatrix);
+
+        gl.stencilFunc(gl.EQUAL, 1, 0xff);
+        gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+
+        for (let i = 0; i < this.numObjects; ++i) {
+            this._drawGeometryOnCircle(i, locations.world, worldMatrix,
+                locations.worldViewProjection, viewProjectionMatrix);
+        }
+
+        gl.disable(gl.STENCIL_TEST);
+    }
+
     _drawGeometryOnCircle(i, worldMatrixLocation, worldMatrix, worldViewProjectionLocation, viewProjectionMatrix) {
         let angle = i * Math.PI * 2 / this.numObjects;
         let x = Math.cos(angle) * this.sceneRadius;
         let y = Math.sin(angle) * this.sceneRadius;
 
-        // starting with the view projection matrix
-        // compute a matrix for the F
         let curMatrix = M4Math.translate(worldMatrix, x, 0, y);
         curMatrix = M4Math.yRotate(curMatrix, -angle);
         curMatrix = M4Math.xRotate(curMatrix, this.objectRotation[0]);
@@ -340,5 +335,11 @@ class Renderer3D {
         matrix = M4Math.yRotate(matrix, this.rotation[1]);
         matrix = M4Math.zRotate(matrix, this.rotation[2]);
         return matrix;
+    }
+
+    _getTargetMatrix() {
+        let targetMatrix = M4Math.scaling(...this.scale);
+        targetMatrix = M4Math.translate(targetMatrix, ...this.targetTranslation);
+        return targetMatrix;
     }
 }

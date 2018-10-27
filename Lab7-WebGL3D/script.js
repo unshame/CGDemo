@@ -19,7 +19,7 @@ let buttonUnmasked = $('#button_unmasked');
 let buttonMasked = $('#button_masked');
 
 // Цвета вершин
-let color = [66 / 255, 66 / 255, 66 / 255];
+let color = [66, 66, 66];
 
 // Свойства тора
 const torusProps = [
@@ -53,20 +53,20 @@ const geometryRef = [
 let mode = 'opaque';
 const modes = {
     opaque: () => {
+        renderer.setTextureMode(false);
         renderer.setAlpha(false);
-        renderer.useProgram(0);
         buttonOpaque.addClass('active');
     },
     textured: () => {
         renderer.setAlpha(false);
-        renderer.useProgram(1);
+        renderer.setTextureMode(true);
         $(sliders.texture.elem).show();
         buttonTextured.hide();
         buttonTextured.addClass('active');
     },
     translucent: () => {
+        renderer.setTextureMode(false);
         renderer.setAlpha(true);
-        renderer.useProgram(0);
         $(sliders.alpha.elem).show();
         buttonTranslucent.hide();
         buttonTranslucent.addClass('active');
@@ -111,12 +111,12 @@ buttonMasked.click(() => setStencil(true));
 buttonUnmasked.click(() => setStencil(false));
 
 /* Запуск */
+renderer.setColor(color);
+renderer.loadTexture(textures[0]);
 setGeometryType(geometryType);
 setPrimitive(primitiveType);
 setMode(mode);
 setStencil(renderer.stencilEnabled);
-renderer.resetTexture();
-renderer.loadTexture(textures[0]);
 requestAnimationFrame((now) => renderer.drawScene(now));
 
 
@@ -165,7 +165,6 @@ function updateGeometry() {
     renderer.setGeometry(vertices);
     renderer.setNormals(normals);
     renderer.setTexcoords(texcoords);
-    renderer.setColor(color);
 }
 
 function setStencil(stencilEnabled) {

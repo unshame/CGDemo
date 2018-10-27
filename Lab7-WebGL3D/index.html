@@ -115,48 +115,7 @@
     <script src="./scripts/ui.js"></script>
     <script src="./scripts/setupSliders.js"></script>
 
-    <!-- vertex shader -->
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
-        attribute vec4 a_position;
-        attribute vec3 a_normal;
-
-        uniform mat4 u_worldViewProjection;
-        uniform mat4 u_world;
-
-        varying vec3 v_normal;
-
-        void main() {
-            // Multiply the position by the matrix.
-            gl_Position = u_worldViewProjection * a_position;
-            v_normal = mat3(u_world) * a_normal;
-        }
-    </script>
-
-    <!-- fragment shader -->
-    <script id="3d-fragment-shader" type="x-shader/x-fragment">
-        precision mediump float;
-
-        varying vec3 v_normal;
-
-        uniform vec4 u_color;
-        uniform vec3 u_reverseLightDirection;
-        uniform float u_ambient_light;
-
-        void main() {
-            // because v_normal is a varying it's interpolated
-            // we it will not be a uint vector. Normalizing it
-            // will make it a unit vector again
-            vec3 normal = normalize(v_normal);
-            
-            float light = dot(normal, u_reverseLightDirection);
-
-            gl_FragColor = u_color;
-
-            gl_FragColor.rgb *= u_ambient_light + light;
-        }
-    </script>
-
-    <script id="3d-vertex-shader-light" type="x-shader/x-vertex">
         attribute vec4 a_position;
         attribute vec3 a_normal;
         attribute vec2 a_texcoord;
@@ -175,7 +134,7 @@
         }
     </script>
 
-    <script id="3d-fragment-shader-light" type="x-shader/x-fragment">
+    <script id="3d-fragment-shader" type="x-shader/x-fragment">
         precision mediump float;
 
         varying vec3 v_normal;
