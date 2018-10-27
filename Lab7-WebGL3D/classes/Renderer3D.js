@@ -188,9 +188,6 @@ class Renderer3D {
         // Нормали
         this._setVertexAttrib(locations.normal, this.buffers.normal, 3, gl.FLOAT, false, 0, 0);
 
-        // Цвет
-        gl.uniform4fv(locations.color, this.color);
-
         // Освещение окружения
         gl.uniform1f(locations.ambientLight, this.ambientLight);
 
