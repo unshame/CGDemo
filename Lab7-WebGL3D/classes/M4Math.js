@@ -65,7 +65,7 @@ const M4Math = {
         ];
     },
 
-    multiply: function(a, b) {
+    multiply(a, b) {
         let a00 = a[0 * 4 + 0], a01 = a[0 * 4 + 1], a02 = a[0 * 4 + 2], a03 = a[0 * 4 + 3],
             a10 = a[1 * 4 + 0], a11 = a[1 * 4 + 1], a12 = a[1 * 4 + 2], a13 = a[1 * 4 + 3],
             a20 = a[2 * 4 + 0], a21 = a[2 * 4 + 1], a22 = a[2 * 4 + 2], a23 = a[2 * 4 + 3],
@@ -95,23 +95,23 @@ const M4Math = {
         ];
     },
 
-    translate: function(m, tx, ty, tz) {
+    translate(m, tx, ty, tz) {
         return M4Math.multiply(m, M4Math.translation(tx, ty, tz));
     },
 
-    xRotate: function(m, angleInRadians) {
+    xRotate(m, angleInRadians) {
         return M4Math.multiply(m, M4Math.xRotation(angleInRadians));
     },
 
-    yRotate: function(m, angleInRadians) {
+    yRotate(m, angleInRadians) {
         return M4Math.multiply(m, M4Math.yRotation(angleInRadians));
     },
 
-    zRotate: function(m, angleInRadians) {
+    zRotate(m, angleInRadians) {
         return M4Math.multiply(m, M4Math.zRotation(angleInRadians));
     },
 
-    scale: function(m, sx, sy, sz) {
+    scale(m, sx, sy, sz) {
         return M4Math.multiply(m, M4Math.scaling(sx, sy, sz));
     },
 

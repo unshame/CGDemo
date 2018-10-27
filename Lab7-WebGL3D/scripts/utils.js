@@ -28,7 +28,7 @@ function loadShader(gl, shaderSource, shaderType) {
     if (!compiled) {
         // Something went wrong during compilation; get the error
         let lastError = gl.getShaderInfoLog(shader);
-        console.error("Error compiling shader '" + shader + "':" + lastError);
+        console.error(`Error compiling shader '${shader}':`, lastError);
         gl.deleteShader(shader);
         return null;
     }
@@ -67,7 +67,7 @@ function createProgram(gl, shaders, opt_attribs, opt_locations) {
     if (!linked) {
         // something went wrong with the link
         let lastError = gl.getProgramInfoLog(program);
-        console.error("Error in program linking:", lastError);
+        console.error('Error in program linking:', lastError);
 
         gl.deleteProgram(program);
         return null;
@@ -85,25 +85,25 @@ function createProgram(gl, shaders, opt_attribs, opt_locations) {
  * @return {WebGLShader} The created shader.
  */
 function createShaderFromScript(gl, scriptId, opt_shaderType) {
-    let shaderSource = "";
+    let shaderSource = '';
     let shaderType;
     let shaderScript = document.getElementById(scriptId);
 
     if (!shaderScript) {
-        throw ("Error: unknown script element " + scriptId);
+        throw (`Error: unknown script element ${scriptId}`);
     }
     shaderSource = shaderScript.text;
 
     if (!opt_shaderType) {
 
-        if (shaderScript.type === "x-shader/x-vertex") {
+        if (shaderScript.type === 'x-shader/x-vertex') {
             shaderType = gl.VERTEX_SHADER;
         }
-        else if (shaderScript.type === "x-shader/x-fragment") {
+        else if (shaderScript.type === 'x-shader/x-fragment') {
             shaderType = gl.FRAGMENT_SHADER;
         }
         else if (shaderType !== gl.VERTEX_SHADER && shaderType !== gl.FRAGMENT_SHADER) {
-            throw ("Error: unknown shader type");
+            throw ('Error: unknown shader type');
         }
     }
 
@@ -111,8 +111,8 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 }
 
 let defaultShaderType = [
-    "VERTEX_SHADER",
-    "FRAGMENT_SHADER",
+    'VERTEX_SHADER',
+    'FRAGMENT_SHADER',
 ];
 
 /**
