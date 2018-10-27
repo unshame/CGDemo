@@ -27,10 +27,14 @@ class Renderer3D {
             {
                 // look up where the vertex data needs to go.
                 position: gl.getAttribLocation(programs[0], 'a_position'),
-                color: gl.getAttribLocation(programs[0], 'a_vertex_color'),
+                //color: gl.getAttribLocation(programs[0], 'a_vertex_color'),
+                normal: gl.getAttribLocation(programs[0], 'a_normal'),
 
                 // lookup uniforms
-                matrix: gl.getUniformLocation(programs[0], 'u_matrix')
+                worldViewProjection: gl.getUniformLocation(programs[0], 'u_worldViewProjection'),
+                world: gl.getUniformLocation(programs[0], "u_world"),
+                color: gl.getUniformLocation(programs[0], 'u_color'),
+                reverseLightDirection: gl.getUniformLocation(programs[0], 'u_reverseLightDirection'),
             },
             {
                 // look up where the vertex data needs to go.
@@ -38,7 +42,7 @@ class Renderer3D {
                 texcoords: gl.getAttribLocation(programs[1], 'a_texcoord'),
 
                 // lookup uniforms
-                matrix: gl.getUniformLocation(programs[1], 'u_matrix')
+                worldViewProjection: gl.getUniformLocation(programs[1], 'u_worldViewProjection')
             }
         ];
 
@@ -47,7 +51,10 @@ class Renderer3D {
 
         this.colorBuffer = gl.createBuffer();
 
+        this.normalBuffer = gl.createBuffer();
+
         this.texcoordsBuffer = gl.createBuffer();
+
 
         this.texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
@@ -132,6 +139,11 @@ class Renderer3D {
         this._bufferArray(this.colorBuffer, new Uint8Array(this.colors));
     }
 
+    setNormals(normals) {
+        this.normals = normals;
+        this._bufferArray(this.normalBuffer, new Float32Array(normals));
+    }
+
     setTexcoords(texcoords) {
         this.texcoords = texcoords;
         this._bufferArray(this.texcoordsBuffer, new Float32Array(texcoords));
@@ -183,9 +195,12 @@ class Renderer3D {
         );
 
         // Color
-        if(locations.color) {
-            this._setVertexAttrib(locations.color, this.colorBuffer, 4, this.gl.UNSIGNED_BYTE, true, 0, 0);
-        }
+        this.gl.uniform4fv(locations.color, [0.2, 1, 0.2, 1]);
+
+        this._setVertexAttrib(locations.normal, this.normalBuffer, 3, this.gl.FLOAT, false, 0, 0);
+
+        // set the light direction.
+        this.gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize([0.5, 0.7, 0.5]));
 
         if(locations.texcoords) {
             this._setVertexAttrib(locations.texcoords, this.texcoordsBuffer, 2, this.gl.FLOAT, false, 0, 0);
@@ -198,14 +213,16 @@ class Renderer3D {
         let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
 
         // Выводим объект в точке, в которую направлена камера
-        let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
-        this._drawGeometryAt(targetMatrix);
+        //let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
 
-        let sceneMatrix = this._calculateSceneMatrix(viewProjectionMatrix);
 
-        for (let i = 0; i < this.numObjects; ++i) {
-            this._drawGeometryOnCircle(i, sceneMatrix);
-        }
+        let worldMatrix = this._getWorldMatrix();
+        let worldViewProjection = M4Math.multiply(viewProjectionMatrix, worldMatrix);
+        this._drawGeometryAt(locations.worldViewProjection, worldViewProjection, locations.world, worldMatrix);
+
+        // for (let i = 0; i < this.numObjects; ++i) {
+        //     this._drawGeometryOnCircle(i, sceneMatrix);
+        // }
 
         requestAnimationFrame((now) => this.drawScene(now));
 
@@ -246,7 +263,7 @@ class Renderer3D {
         gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
-    _drawGeometryOnCircle(i, matrix) {
+    _drawGeometryOnCircle(i, matrixLocation, matrix) {
         let angle = i * Math.PI * 2 / this.numObjects;
         let x = Math.cos(angle) * this.sceneRadius;
         let y = Math.sin(angle) * this.sceneRadius;
@@ -260,13 +277,13 @@ class Renderer3D {
         curMatrix = M4Math.zRotate(curMatrix, this.objectRotation[2]);
         curMatrix = M4Math.scale(curMatrix, ...this.scale);
 
-        this._drawGeometryAt(curMatrix);
+        this._drawGeometryAt(matrixLocation, curMatrix);
     }
 
-    _drawGeometryAt(matrix) {
-        let matrixLocation = this.locations[this.programIndex].matrix;
+    _drawGeometryAt(matrixLocation, matrix, worldMatrixLocation, worldMatrix) {
         // Set the matrix.
         this.gl.uniformMatrix4fv(matrixLocation, false, matrix);
+        this.gl.uniformMatrix4fv(worldMatrixLocation, false, worldMatrix);
 
         // Draw the geometry.
         let offset = 0;
@@ -299,9 +316,9 @@ class Renderer3D {
         return M4Math.inverse(cameraMatrix);
     }
 
-    _calculateSceneMatrix(matrix) {
-        matrix = M4Math.translate(matrix, ...this.translation);
-        matrix = M4Math.xRotate(matrix, this.rotation[0]);
+    _getWorldMatrix() {
+        //matrix = M4Math.translate(matrix, ...this.translation);
+        let matrix = M4Math.xRotation(this.rotation[0]);
         matrix = M4Math.yRotate(matrix, this.rotation[1]);
         matrix = M4Math.zRotate(matrix, this.rotation[2]);
         return matrix;

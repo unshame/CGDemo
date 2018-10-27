@@ -108,25 +108,40 @@
     <!-- vertex shader -->
     <script id="3d-vertex-shader" type="x-shader/x-vertex">
         attribute vec4 a_position;
-        attribute vec4 a_vertex_color;
+        attribute vec3 a_normal;
 
-        uniform mat4 u_matrix;
+        uniform mat4 u_worldViewProjection;
+        uniform mat4 u_world;
 
-        varying lowp vec4 v_color;
+        varying vec3 v_normal;
 
         void main() {
             // Multiply the position by the matrix.
-            gl_Position = u_matrix * a_position;
-            v_color = a_vertex_color;
+            gl_Position = u_worldViewProjection * a_position;
+            v_normal = mat3(u_world) * a_normal;
         }
     </script>
 
     <!-- fragment shader -->
     <script id="3d-fragment-shader" type="x-shader/x-fragment">
-        varying lowp vec4 v_color;
+        precision mediump float;
+
+        varying vec3 v_normal;
+
+        uniform vec4 u_color;
+        uniform vec3 u_reverseLightDirection;
 
         void main() {
-            gl_FragColor = v_color;
+            // because v_normal is a varying it's interpolated
+            // we it will not be a uint vector. Normalizing it
+            // will make it a unit vector again
+            vec3 normal = normalize(v_normal);
+
+            float light = dot(normal, u_reverseLightDirection);
+
+            gl_FragColor = u_color;
+
+            gl_FragColor.rgb *= light;
         }
     </script>
 
@@ -134,13 +149,13 @@
         attribute vec4 a_position;
         attribute vec2 a_texcoord;
         
-        uniform mat4 u_matrix;
+        uniform mat4 u_world;
         
         varying vec2 v_texcoord;
         
         void main() {
             // Multiply the position by the matrix.
-            gl_Position = u_matrix * a_position;
+            gl_Position = u_world * a_position;
             
             // Pass the texcoord to the fragment shader.
             v_texcoord = a_texcoord;

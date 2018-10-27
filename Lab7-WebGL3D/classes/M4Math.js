@@ -1,5 +1,5 @@
 const M4Math = {
-    perspective: function (fieldOfViewInRadians, aspect, near, far) {
+    perspective(fieldOfViewInRadians, aspect, near, far) {
         let f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
         let rangeInv = 1.0 / (near - far);
 
@@ -11,7 +11,7 @@ const M4Math = {
         ];
     },
 
-    translation: function (tx, ty, tz) {
+    translation(tx, ty, tz) {
         return [
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -20,7 +20,7 @@ const M4Math = {
         ];
     },
 
-    xRotation: function (angleInRadians) {
+    xRotation(angleInRadians) {
         let c = Math.cos(angleInRadians);
         let s = Math.sin(angleInRadians);
 
@@ -32,7 +32,7 @@ const M4Math = {
         ];
     },
 
-    yRotation: function (angleInRadians) {
+    yRotation(angleInRadians) {
         let c = Math.cos(angleInRadians);
         let s = Math.sin(angleInRadians);
 
@@ -44,7 +44,7 @@ const M4Math = {
         ];
     },
 
-    zRotation: function (angleInRadians) {
+    zRotation(angleInRadians) {
         let c = Math.cos(angleInRadians);
         let s = Math.sin(angleInRadians);
 
@@ -56,7 +56,7 @@ const M4Math = {
         ];
     },
 
-    scaling: function (sx, sy, sz) {
+    scaling(sx, sy, sz) {
         return [
             sx, 0, 0, 0,
             0, sy, 0, 0,
@@ -115,7 +115,7 @@ const M4Math = {
         return M4Math.multiply(m, M4Math.scaling(sx, sy, sz));
     },
 
-    lookAt: function (cameraPosition, target, up) {
+    lookAt(cameraPosition, target, up) {
         let zAxis = V3Math.normalize(
             V3Math.subtract(cameraPosition, target));
         let xAxis = V3Math.cross(up, zAxis);
@@ -132,7 +132,7 @@ const M4Math = {
         ];
     },
 
-    inverse: function (m) {
+    inverse(m) {
         let m00 = m[0 * 4 + 0], m01 = m[0 * 4 + 1], m02 = m[0 * 4 + 2], m03 = m[0 * 4 + 3],
             m10 = m[1 * 4 + 0], m11 = m[1 * 4 + 1], m12 = m[1 * 4 + 2], m13 = m[1 * 4 + 3],
             m20 = m[2 * 4 + 0], m21 = m[2 * 4 + 1], m22 = m[2 * 4 + 2], m23 = m[2 * 4 + 3],
@@ -170,5 +170,17 @@ const M4Math = {
             d * ((tmp_18 * m12 + tmp_23 * m32 + tmp_15 * m02) - (tmp_22 * m32 + tmp_14 * m02 + tmp_19 * m12)),
             d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) - (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02))
         ];
+    },
+
+    normalize(v, dst) {
+        dst = dst || new Float32Array(3);
+        var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+        // make sure we don't divide by 0.
+        if (length > 0.00001) {
+            dst[0] = v[0] / length;
+            dst[1] = v[1] / length;
+            dst[2] = v[2] / length;
+        }
+        return dst;
     }
 };

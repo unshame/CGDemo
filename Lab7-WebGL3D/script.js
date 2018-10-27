@@ -88,7 +88,7 @@ let renderer = new Renderer3D(canvas[0]);
 
 // Режимы отрисовки
 const primitiveTypes = [
-    renderer.gl.TRIANGLE_STRIP,
+    renderer.gl.TRIANGLES,
     renderer.gl.LINES
 ];
 
@@ -156,8 +156,9 @@ function setGeometryType(_geometryType) {
 function updateGeometry() {
     let ref = geometryRef[geometryType];
     ref.els.show();
-    let { vertices, texcoords } = ref.func(...ref.args);
+    let { vertices, texcoords, normals } = ref.func(...ref.args);
     renderer.setGeometry(vertices);
+    renderer.setNormals(normals);
     renderer.setTexcoords(texcoords);
     renderer.setColors(colors);
 }
