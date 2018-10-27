@@ -283,7 +283,7 @@ function setupSliders(renderer, textures) {
             max: 1,
             step: 0.01,
             precision: 2,
-            name: 'DirX'
+            name: 'DirectionX'
         },
 
         lightY: {
@@ -293,7 +293,7 @@ function setupSliders(renderer, textures) {
             max: 1,
             step: 0.01,
             precision: 2,
-            name: 'DirY'
+            name: 'DirectionY'
         },
 
         lightZ: {
@@ -303,7 +303,7 @@ function setupSliders(renderer, textures) {
             max: 1,
             step: 0.01,
             precision: 2,
-            name: 'DirZ'
+            name: 'DirectionZ'
         },
 
         ambient: {

@@ -51,24 +51,20 @@ canvas {
     width: 240px;
 }
 
-.buttons.modes .button_control {
-    width: 120px;
+.buttons.modes .button_control, .buttons.modes .slider_holder {
+    width: 124.8px;
 }
 
 .slider_holder.torus {
-    width: 116px;
+    width: 154px;
 }
 
 .slider_holder.cylinder {
-    width: 154px;
+    width: 205.33px;
 }
 
 .buttons.light .slider_holder  {
     width: 180px;
-}
-
-.slider_holder.cylinder.last {
-    width: 156px;
 }
 
 .slider_holder:active {

@@ -9,7 +9,7 @@ class Renderer3D {
         */
         this.canvas = canvas;
 
-        let gl = this.gl = canvas.getContext('webgl', {premultipliedAlpha: true});
+        let gl = this.gl = canvas.getContext('webgl', {stencil: 8});
 
         // Turn on culling. By default backfacing triangles
         // will be culled.
@@ -66,8 +66,6 @@ class Renderer3D {
         // Transformations
         this.resetTransform();
 
-        this.resetTexture();
-
         this.resizeCanvasToDisplaySize();
 
         this.useProgram(0);
@@ -100,6 +98,8 @@ class Renderer3D {
         this.alphaValue = 150;
         this.lightDirection = [0.5, 0.7, 0.5];
         this.ambientLight = 0.5;
+        this.stencilEnabled = false;
+        this.colorMode = this.gl.RGBA;
     }
 
     loadTexture(url) {
@@ -108,7 +108,7 @@ class Renderer3D {
 
         img.onload = () => {
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+            gl.texImage2D(gl.TEXTURE_2D, 0, this.colorMode, this.colorMode, gl.UNSIGNED_BYTE, img);
             gl.generateMipmap(gl.TEXTURE_2D);
         };
 
@@ -118,7 +118,7 @@ class Renderer3D {
 
     resetTexture() {
         let gl = this.gl;
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([66, 66, 66, 255]));
+        gl.texImage2D(gl.TEXTURE_2D, 0, this.colorMode, 1, 1, 0, this.colorMode, gl.UNSIGNED_BYTE, new Uint8Array(this.color.map(v => v * 255)));
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     }
@@ -168,35 +168,36 @@ class Renderer3D {
 
     drawScene(now) {
 
+        let gl = this.gl;
         let dt = now - this.lastUpdate;
 
         this._updateObjectRotation(dt);
 
         this.clearViewport();
 
-        this.gl.useProgram(this.programs[this.programIndex]);
+        gl.useProgram(this.programs[this.programIndex]);
 
         let locations = this.locations[this.programIndex];
 
         // Position
         this._setVertexAttrib(locations.position, this.positionBuffer,
             3,             // Кол-во компонент в одной вершине
-            this.gl.FLOAT, // Тип данных
+            gl.FLOAT,      // Тип данных
             false,         // Нужно ли нормализовывать значения (переводить из 0-255 в 0-1)
             0,             // stride
             0              // offset
         );
 
-        this._setVertexAttrib(locations.normal, this.normalBuffer, 3, this.gl.FLOAT, false, 0, 0);
+        this._setVertexAttrib(locations.normal, this.normalBuffer, 3, gl.FLOAT, false, 0, 0);
 
-        this.gl.uniform4fv(locations.color, this.color);
-        this.gl.uniform1f(locations.ambientLight, this.ambientLight);
+        gl.uniform4fv(locations.color, this.color);
+        gl.uniform1f(locations.ambientLight, this.ambientLight);
 
         // set the light direction.
-        this.gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize(this.lightDirection));
+        gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize(this.lightDirection));
 
         if(locations.texcoords) {
-            this._setVertexAttrib(locations.texcoords, this.texcoordsBuffer, 2, this.gl.FLOAT, false, 0, 0);
+            this._setVertexAttrib(locations.texcoords, this.texcoordsBuffer, 2, gl.FLOAT, false, 0, 0);
         }
 
         let projectionMatrix = this._getProjectionMatrix();
@@ -205,20 +206,42 @@ class Renderer3D {
         // Compute a view projection matrix
         let viewProjectionMatrix = M4Math.multiply(projectionMatrix, viewMatrix);
 
-        // Выводим объект в точке, в которую направлена камера
-        //let targetMatrix = M4Math.translate(viewProjectionMatrix, ...this.targetTranslation);
-
-
         let worldMatrix = this._getWorldMatrix();
-        //this._drawGeometryAt(locations.worldViewProjection, worldViewProjection, locations.world, worldMatrix);
+
+        // Выводим объект в точке, в которую направлена камера
+        let targetMatrix = M4Math.multiply(M4Math.translate(viewProjectionMatrix, ...this.targetTranslation), worldMatrix);
+
+        this.render(locations, worldMatrix, viewProjectionMatrix, targetMatrix);
+
+        requestAnimationFrame((now) => this.drawScene(now));
+
+        this.lastUpdate = now;
+    }
+
+    render(locations, worldMatrix, viewProjectionMatrix, targetMatrix) {
+
+        let gl = this.gl;
+
+        if (this.stencilEnabled) {
+            gl.enable(gl.STENCIL_TEST);
+            gl.stencilFunc(gl.ALWAYS, 1, 0xff);
+            gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
+        }
+
+        this._drawGeometryAt(locations.world, worldMatrix, locations.worldViewProjection, targetMatrix);
+
+        if (this.stencilEnabled) {
+            gl.stencilFunc(gl.EQUAL, 1, 0xff);
+            gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+        }
 
         for (let i = 0; i < this.numObjects; ++i) {
             this._drawGeometryOnCircle(i, locations.world, worldMatrix, locations.worldViewProjection, viewProjectionMatrix);
         }
 
-        requestAnimationFrame((now) => this.drawScene(now));
-
-        this.lastUpdate = now;
+        if (this.stencilEnabled) {
+            gl.disable(gl.STENCIL_TEST);
+        }
     }
 
     clearViewport() {

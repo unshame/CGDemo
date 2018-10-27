@@ -3,6 +3,7 @@ const Geometry = {
     makeTorus(radius, stripRadius, numStrips, numSections) {
 
         let vertices = [];
+        let normals = [];
         let texcoords = [];
 
         // Iterates along the big circle and then around a section
@@ -19,13 +20,18 @@ const Geometry = {
                     let y = (radius + stripRadius * Math.cos(sa)) * Math.sin(a); // Y
                     let z = stripRadius * Math.sin(sa); // Z
 
-                    _pushVertex(vertices, x, y, z);
-                    _pushVertex(texcoords, (i + v) / numStrips, j < numSections ? (j + 1) / numSections : 0);
+                    let nx = Math.cos(sa) * Math.cos(a);
+                    let ny = Math.cos(sa) * Math.sin(a);
+                    let nz = Math.sin(sa);
+
+                    multiPush(vertices, x, y, z);
+                    multiPush(normals, nx, ny, nz);
+                    multiPush(texcoords, (i + v) / numStrips, j < numSections ? (j + 1) / numSections : 0);
                 }
             }
         }
 
-        return { vertices, texcoords };
+        return { vertices, texcoords, normals };
     },
 
     makeCylinder(radius, height, numSides) {
@@ -39,12 +45,12 @@ const Geometry = {
             for (let i = 0; i <= numSides; i++) {
                 let x = radius * Math.cos(i / numSides * Math.PI * 2);
                 let z = radius * Math.sin(i / numSides * Math.PI * 2);
-                _pushVertex(vertices, invert ? x : 0, y, invert ? z : 0);
-                _pushVertex(vertices, invert ? 0 : x, y, invert ? 0 : z);
-                _pushVertex(normals, 0, invert ? 1 : -1, 0);
-                _pushVertex(normals, 0, invert ? 1 : -1, 0);
-                _pushVertex(texcoords, invert ? i / numSides : 0, 1);
-                _pushVertex(texcoords, invert ? 0 : i / numSides, 0);
+                multiPush(vertices, invert ? x : 0, y, invert ? z : 0);
+                multiPush(vertices, invert ? 0 : x, y, invert ? 0 : z);
+                multiPush(normals, 0, invert ? 1 : -1, 0);
+                multiPush(normals, 0, invert ? 1 : -1, 0);
+                multiPush(texcoords, invert ? i / numSides : 0, 1);
+                multiPush(texcoords, invert ? 0 : i / numSides, 0);
             }
         }
 
@@ -56,12 +62,12 @@ const Geometry = {
             let nz = Math.sin(i / numSides * Math.PI * 2);
             let x = radius * nx;
             let z = radius * nz;
-            _pushVertex(vertices, x, offsetY, z);
-            _pushVertex(vertices, x, y, z);
-            _pushVertex(normals, nx, 0, nz);
-            _pushVertex(normals, nx, 0, nz);
-            _pushVertex(texcoords, (numSides - i) / numSides, 1);
-            _pushVertex(texcoords, (numSides - i) / numSides, 0);
+            multiPush(vertices, x, offsetY, z);
+            multiPush(vertices, x, y, z);
+            multiPush(normals, nx, 0, nz);
+            multiPush(normals, nx, 0, nz);
+            multiPush(texcoords, (numSides - i) / numSides, 1);
+            multiPush(texcoords, (numSides - i) / numSides, 0);
         }
 
         drawCap(offsetY + height, true);
@@ -71,7 +77,7 @@ const Geometry = {
 
 };
 
-function _pushVertex(array, ...components) {
+function multiPush(array, ...components) {
     for(let component of components) {
         array.push(component);
     }

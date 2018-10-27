@@ -15,6 +15,8 @@ let buttonModes = $('.button_mode');
 let buttonTranslucent = $('#button_translucent');
 let buttonOpaque = $('#button_opaque');
 let buttonTextured = $('#button_textured');
+let buttonUnmasked = $('#button_unmasked');
+let buttonMasked = $('#button_masked');
 
 // Цвета вершин
 let color = [66 / 255, 66 / 255, 66 / 255];
@@ -105,11 +107,15 @@ buttonCylinder.click(() => setGeometryType(1));
 buttonOpaque.click(() => setMode('opaque'));
 buttonTextured.click(() => setMode('textured'));
 buttonTranslucent.click(() => setMode('translucent'));
+buttonMasked.click(() => setStencil(true));
+buttonUnmasked.click(() => setStencil(false));
 
 /* Запуск */
 setGeometryType(geometryType);
 setPrimitive(primitiveType);
 setMode(mode);
+setStencil(renderer.stencilEnabled);
+renderer.resetTexture();
 renderer.loadTexture(textures[0]);
 requestAnimationFrame((now) => renderer.drawScene(now));
 
@@ -121,6 +127,7 @@ function resetTransform() {
     setPrimitive(primitiveTypes[0]);
     setGeometryType(1);
     setMode('opaque');
+    setStencil(false);
     for(let key of Object.keys(sliders)) {
         sliders[key].updateValue(sliders[key].defaultValue);
     }
@@ -159,6 +166,11 @@ function updateGeometry() {
     renderer.setNormals(normals);
     renderer.setTexcoords(texcoords);
     renderer.setColor(color);
+}
+
+function setStencil(stencilEnabled) {
+    renderer.stencilEnabled = stencilEnabled;
+    toggleButtons(buttonUnmasked, buttonMasked, !stencilEnabled);
 }
 
 // Вспомогательная функция для кнопок-переключателей
