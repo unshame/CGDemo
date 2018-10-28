@@ -1,6 +1,7 @@
 window.pageNum = 9;
 
 let canvas = $('#canvas');                    // холст
+let fpsCounter = $('#fpsCounter');
 
 // Кнопки
 let buttonClear = $('#button_clear');         // ресет
@@ -84,7 +85,7 @@ const textures = [
 ];
 
 // Рендерер
-let renderer = new Renderer3D(canvas[0]);
+let renderer = new Renderer3D(canvas[0], fpsCounter[0]);
 
 // Режимы отрисовки
 const primitiveTypes = [

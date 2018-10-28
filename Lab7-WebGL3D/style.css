@@ -3,6 +3,10 @@ header {
 	background-color: #424242;
 }
 
+main {
+    position: relative;
+}
+
 canvas {
     cursor: default;
 }
@@ -162,6 +166,14 @@ canvas {
 
 .button_floating.home::after {
     background: url('../shared/images/home_grey.png');
+}
+
+#fpsCounter {
+    position: absolute;
+    top: 52px;
+    left: 4px;
+    font-size: 12px;
+    text-shadow: 1px 1px 1px black;
 }
 
 .github-corner svg {
