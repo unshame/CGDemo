@@ -112,6 +112,10 @@ header .title {
     transform: rotate(0);
 }
 
+.button_toolbar.fullscreen::before {
+    background-image: url('../images/fullscreen.png');
+}
+
 .button_toolbar.close::before {
     background-image: url('../images/close.png');
 }

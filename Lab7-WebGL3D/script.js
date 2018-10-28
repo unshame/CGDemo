@@ -5,6 +5,7 @@ let fpsCounter = $('#fpsCounter');
 
 // Кнопки
 let buttonClear = $('#button_clear');         // ресет
+let buttonFullscreen = $('#button_fullscreen');
 let buttonTriangles = $('#button_triangles'); // отрисовка треугольниками
 let buttonLines = $('#button_lines');         // отрисовка линиями
 let buttonTorus = $('#button_torus');         // объект - тор
@@ -99,6 +100,7 @@ let sliders = setupSliders(renderer, textures);   // Слайдеры
 
 // События при нажатии на кнопки
 buttonClear.click(() => resetTransform());
+buttonFullscreen.click(() => goFullscreen());
 buttonTriangles.click(() => setPrimitive(primitiveTypes[0]));
 buttonLines.click(() => setPrimitive(primitiveTypes[1]));
 buttonMore.click(() => moreControls.toggleClass('visible'));
@@ -179,3 +181,23 @@ function toggleButtons(a, b, cond) {
     on.addClass('active');
     off.removeClass('active');
 }
+
+function goFullscreen() {
+    let canvas = renderer.canvas;
+    let func = canvas.requestFullscreen || canvas.webkitRequestFullScreen || canvas.mozRequestFullScreen;
+    func.call(canvas);
+}
+
+(() => {
+    let canvas = renderer.canvas;
+    let width = canvas.clientWidth;
+    let height = canvas.clientHeight;
+    setInterval(() => {
+        if(canvas.clientWidth != width || canvas.clientHeight != height) {
+            renderer.resizeViewportToDisplaySize();
+            width = canvas.clientWidth;
+            height = canvas.clientHeight;
+            console.log('Resized to', width, height);
+        }
+    }, 1000);
+})();

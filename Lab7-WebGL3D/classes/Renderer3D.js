@@ -236,7 +236,7 @@ class Renderer3D {
         let canvas = this.gl.canvas;
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+        this.gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
     }
 
     // Выводит изображение во вьюпорт
