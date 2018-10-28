@@ -398,26 +398,42 @@ class Renderer3D {
         gl.stencilFunc(gl.ALWAYS, 1, 0xff);
         gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
 
-        // Временно ставим 100% прозрачность, чтобы сделать
+        // Временно ставим 100% прозрачность, чтобы маска корректно работала
         let alpha = this.alphaValue;
         let alphaEnabled = this.alphaEnabled;
         this.setAlpha(true, 0);
 
+        // Включаем возможности с учетом включенной прозрачности
+        if (!alphaEnabled) {
+            this.disableCapabilities();
+            this.enableCapabilities();
+        }
+
+        // Выключаем режим текстуры для центрального объекта
         let textureEnabled = this.textureEnabled;
-        if(this.textureEnabled) {
+        if(textureEnabled) {
             this.setTextureMode(false);
         }
 
-        // Выводим центральный объект
+        // Выводим центральный объект/маску
         this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0),
             locations.worldViewProjection, targetViewProjectionMatrix);
 
+        // Возвращаем значение прозрачности
         this.setAlpha(alphaEnabled, alpha);
 
+        // Восстанавливаем включенные возможности с учетом выключенной прозрачности
+        if (!alphaEnabled) {
+            this.disableCapabilities();
+            this.enableCapabilities();
+        }
+
+        // Восстанавливаем режим текстур
         if (textureEnabled) {
             this.setTextureMode(true);
         }
 
+        // Переключаем трафаретный буфер в режим наложения маски
         gl.stencilFunc(gl.EQUAL, 1, 0xff);
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
 
@@ -427,6 +443,7 @@ class Renderer3D {
                 locations.worldViewProjection, viewProjectionMatrix);
         }
 
+        // Выключаем трафаретный режим
         gl.disable(gl.STENCIL_TEST);
     }
 
