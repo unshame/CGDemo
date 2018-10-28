@@ -368,9 +368,9 @@ class Renderer3D {
         let gl = this.gl;
         // Включаем атрибут
         gl.enableVertexAttribArray(location);
-        // Bind the position buffer.
+        // gl.ARRAY_BUFFER = buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+        // Говорим WebGL как интерпретировать атрибут
         gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
     }
 
