@@ -247,6 +247,7 @@ class Renderer3D {
         // Дельта времени
         let dt = now - this.lastUpdate;
 
+        // Считаем FPS
         this._countFPS(now, dt);
 
         // Вращаем объекты сцены в соотвтветствии с прошедшим временем
@@ -299,6 +300,11 @@ class Renderer3D {
         else {
             this._drawAllGeometry(worldMatrix, viewProjectionMatrix, targetViewProjectionMatrix);
         }
+
+        // Ресетим атрибуты буферов
+        this._resetVertexAttrib(locations.position);
+        this._resetVertexAttrib(locations.normal);
+        this._resetVertexAttrib(locations.texcoords);
 
         // Отключаем включенные возможности рендерера
         this.disableCapabilities();
@@ -360,12 +366,17 @@ class Renderer3D {
     // Помещает массив вершин в память карты
     _setVertexAttrib(location, buffer, size, type, normalize, stride, offset) {
         let gl = this.gl;
-        // Turn on the attribute
+        // Включаем атрибут
         gl.enableVertexAttribArray(location);
         // Bind the position buffer.
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
         gl.vertexAttribPointer(location, size, type, normalize, stride, offset);
+    }
+
+    // Ресетит атрибут буфера массива
+    _resetVertexAttrib(location) {
+        this.gl.disableVertexAttribArray(location);
     }
 
 
@@ -491,23 +502,22 @@ class Renderer3D {
 
     // Возвращает матрицу точки наблюдения
     _getViewMatrix() {
-        // Use matrix math to compute a position on a circle where
-        // the camera is
+        // Рассчитываем позицию камеры на круге
         let cameraMatrix = M4Math.xRotation(this.cameraRotation[0]);
         cameraMatrix = M4Math.yRotate(cameraMatrix, this.cameraRotation[1]);
         cameraMatrix = M4Math.translate(cameraMatrix, ...this.cameraTranslation);
 
-        // Get the camera's postion from the matrix we computed
+        // Позиция из полученной матрицы
         let cameraPosition = [
             cameraMatrix[12],
             cameraMatrix[13],
             cameraMatrix[14],
         ];
 
-        // Compute the camera's matrix using look at.
+        // Рассчитываем матрицу камеры с учетом позиции цели наблюдения
         cameraMatrix = M4Math.lookAt(cameraPosition, this.targetTranslation, this.cameraUpVector);
 
-        // Make a view matrix from the camera matrix
+        // Инверсируем матрицу, чтобы получить матрицу точки наблюдения
         return M4Math.inverse(cameraMatrix);
     }
 
