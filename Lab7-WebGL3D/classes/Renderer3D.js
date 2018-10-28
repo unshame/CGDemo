@@ -13,26 +13,8 @@ class Renderer3D {
         // WebGL контекст
         let gl = this.gl = canvas.getContext('webgl', {stencil: 8});
 
-        // Программа с шейдерами
-        let program = this.program = createProgramFromScripts(gl, [
-            '3d-vertex-shader',
-            '3d-fragment-shader'
-        ]);
-
-        // Говорим контексту использовать нашу программу
-        gl.useProgram(this.program);
-
-        // Позиции переменных в коде шейдера
-        this.locations = {
-            position: gl.getAttribLocation(program, 'a_position'),
-            normal: gl.getAttribLocation(program, 'a_normal'),
-            texcoords: gl.getAttribLocation(program, 'a_texcoord'),
-
-            worldViewProjection: gl.getUniformLocation(program, 'u_worldViewProjection'),
-            world: gl.getUniformLocation(program, 'u_world'),
-            reverseLightDirection: gl.getUniformLocation(program, 'u_reverseLightDirection'),
-            ambientLight: gl.getUniformLocation(program, 'u_ambient_light'),
-        };
+        // Компилируем шейдеры
+        this.compileShaders();
 
         // Буферы для массивов вершин, нормалей и координат текстур
         this.buffers = {
@@ -61,6 +43,33 @@ class Renderer3D {
 
         // Устанавливаем размер вьюпорта по размеру холста
         this.resizeViewportToDisplaySize();
+    }
+
+    // Компилирует программу с шейдерами
+    compileShaders() {
+        let gl = this.gl;
+
+        // Программа с шейдерами
+        let program = this.program = createProgramFromScripts(gl, [
+            '3d-vertex-shader',
+            '3d-fragment-shader'
+        ]);
+
+
+        // Говорим контексту использовать нашу программу
+        gl.useProgram(this.program);
+
+        // Позиции переменных в коде шейдера
+        this.locations = {
+            position: gl.getAttribLocation(program, 'a_position'),
+            normal: gl.getAttribLocation(program, 'a_normal'),
+            texcoords: gl.getAttribLocation(program, 'a_texcoord'),
+
+            worldViewProjection: gl.getUniformLocation(program, 'u_worldViewProjection'),
+            world: gl.getUniformLocation(program, 'u_world'),
+            reverseLightDirection: gl.getUniformLocation(program, 'u_reverseLightDirection'),
+            ambientLight: gl.getUniformLocation(program, 'u_ambient_light'),
+        };
     }
 
 
