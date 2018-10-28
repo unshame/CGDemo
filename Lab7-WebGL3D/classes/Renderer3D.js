@@ -505,8 +505,8 @@ class Renderer3D {
 
     // Возвращает матрицу центрального объекта
     _getTargetMatrix() {
-        let targetMatrix = M4Math.scaling(...this.scale);
-        targetMatrix = M4Math.translate(targetMatrix, ...this.targetTranslation);
+        let targetMatrix = M4Math.translation(...this.targetTranslation);
+        targetMatrix = M4Math.scale(targetMatrix, ...this.scale);
         return targetMatrix;
     }
 }
