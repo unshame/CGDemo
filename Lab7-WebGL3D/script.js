@@ -194,7 +194,9 @@ function goFullscreen() {
     let canvas = renderer.canvas;
     let width = canvas.clientWidth;
     let height = canvas.clientHeight;
+
     setInterval(() => {
+
         if(canvas.clientWidth != width || canvas.clientHeight != height) {
             renderer.resizeViewportToDisplaySize();
             width = canvas.clientWidth;
@@ -207,28 +209,38 @@ function goFullscreen() {
 
 function saveValues() {
     let values = {};
+
     for (let key of Object.keys(sliders)) {
         values[key] = sliders[key].getValue();
     }
+
     localStorage.setItem('sliderValues', JSON.stringify(values));
+    return values;
 }
 
-function loadValues() {
-    let values = localStorage.getItem('sliderValues');
-    values = values && JSON.parse(values);
+function loadValues(values) {
 
     if(!values) {
-        return;
+        values = localStorage.getItem('sliderValues');
+        values = values && JSON.parse(values);
+    }
+
+    if(!values) {
+        return null;
     }
 
     for (let key of Object.keys(sliders)) {
+
         if(key in values) {
             sliders[key].updateValue(values[key]);
         }
     }
+
+    return values;
 }
 
 setInterval(() => {
+
     if (window.sliderValueChanged ) {
         saveValues();
         window.sliderValueChanged = false;
