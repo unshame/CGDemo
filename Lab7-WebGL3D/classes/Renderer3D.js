@@ -93,23 +93,22 @@ class Renderer3D {
     loadTexture(url) {
         let img = new Image();
 
+        this.img = img;
         this.textureUrl = url;
         this.textureLoaded = false;
-        this.img = null;
 
-        if(this.textureEnabled) {
-            img.onload = () => {
-                this.textureLoaded = true;
-                this.img = img;
+        img.onload = () => {
+
+            if (this.img != img) {
+                return;
+            }
+
+            this.textureLoaded = true;
+
+            if (this.textureEnabled) {
                 this.applyTexture(img);
-            };
-        }
-        else {
-            img.onload = () => {
-                this.textureLoaded = true;
-                this.img = img;
-            };
-        }
+            }
+        };
 
         img.src = url;
         img.setAttribute('crossOrigin', '');
