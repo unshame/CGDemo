@@ -6,19 +6,16 @@ const Geometry = {
         let normals = [];
         let texcoords = [];
 
-        // Iterates along the big circle and then around a section
-        for (let i = 0; i < numStrips; i++) { // Iterates over all strip rounds
-            for (let j = 0; j < numSections + 1 * (i == numStrips - 1); j++) {// Iterates along the torus section
-                for (let v = 0; v < 2; v++) {// Creates zigzag pattern (v equals 0 or 1)
+        for (let i = 0; i < numStrips; i++) {
+            for (let j = 0; j < numSections + 1 * (i == numStrips - 1); j++) {
+                for (let v = 0; v < 2; v++) {
 
-                    // Pre-calculation of angles
                     let a = 2 * Math.PI * (i + j / numSections + v) / numStrips;
                     let sa = 2 * Math.PI * j / numSections;
 
-                    // Coordinates on the surface of the torus
-                    let x = (radius + stripRadius * Math.cos(sa)) * Math.cos(a); // X
-                    let y = (radius + stripRadius * Math.cos(sa)) * Math.sin(a); // Y
-                    let z = stripRadius * Math.sin(sa); // Z
+                    let x = (radius + stripRadius * Math.cos(sa)) * Math.cos(a);
+                    let y = (radius + stripRadius * Math.cos(sa)) * Math.sin(a);
+                    let z = stripRadius * Math.sin(sa);
 
                     let nx = Math.cos(sa) * Math.cos(a);
                     let ny = Math.cos(sa) * Math.sin(a);
