@@ -96,6 +96,7 @@ class Renderer3D {
         this.stencilEnabled = false;
         this.primitiveType = this.gl.TRIANGLE_STRIP;
         this.fpsCounterEnabled = false;
+        this.shouldDrawTargetObject = true;
     }
 
     // Загружает текстуру, применяет только при textureEnabled
@@ -294,7 +295,7 @@ class Renderer3D {
         let targetViewProjectionMatrix = M4Math.multiply(viewProjectionMatrix, targetMatrix);
 
         // Выводим геометрию по полученным матрицам
-        if(this.stencilEnabled) {
+        if(this.stencilEnabled && this.shouldDrawTargetObject) {
             this._drawAllGeometryWithStencil(worldMatrix, viewProjectionMatrix, targetViewProjectionMatrix);
         }
         else {
@@ -387,8 +388,10 @@ class Renderer3D {
         let locations = this.locations;
 
         // Выводим центральный объект
-        this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0),
-            locations.worldViewProjection, targetViewProjectionMatrix);
+        if (this.shouldDrawTargetObject) {
+            this._drawGeometryAt(locations.world, M4Math.translation(0, 0, 0),
+                locations.worldViewProjection, targetViewProjectionMatrix);
+        }
 
         // Выводим объекты сцены на окружности
         for (let i = 0; i < this.numObjects; ++i) {
