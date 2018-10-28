@@ -90,7 +90,7 @@ let renderer = new Renderer3D(canvas[0], fpsCounter[0]);
 // Режимы отрисовки
 const primitiveTypes = [
     renderer.gl.TRIANGLE_STRIP,
-    renderer.gl.LINES
+    renderer.gl.LINE_STRIP
 ];
 
 let primitiveType = primitiveTypes[0];  // Текущие режим отрисовки
