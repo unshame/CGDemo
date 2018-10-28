@@ -1,4 +1,5 @@
 window.pageNum = 9;
+window.sliderValueChanged = false;
 
 let canvas = $('#canvas');                    // холст
 let fpsCounter = $('#fpsCounter');
@@ -120,6 +121,7 @@ setGeometryType(geometryType);
 setPrimitive(primitiveType);
 setMode(mode);
 setStencil(renderer.stencilEnabled);
+loadValues();
 requestAnimationFrame((now) => renderer.drawScene(now));
 
 
@@ -201,3 +203,34 @@ function goFullscreen() {
         }
     }, 1000);
 })();
+
+
+function saveValues() {
+    let values = {};
+    for (let key of Object.keys(sliders)) {
+        values[key] = sliders[key].getValue();
+    }
+    localStorage.setItem('sliderValues', JSON.stringify(values));
+}
+
+function loadValues() {
+    let values = localStorage.getItem('sliderValues');
+    values = values && JSON.parse(values);
+
+    if(!values) {
+        return;
+    }
+
+    for (let key of Object.keys(sliders)) {
+        if(key in values) {
+            sliders[key].updateValue(values[key]);
+        }
+    }
+}
+
+setInterval(() => {
+    if (window.sliderValueChanged ) {
+        saveValues();
+        window.sliderValueChanged = false;
+    }
+}, 1000);

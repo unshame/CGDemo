@@ -36,8 +36,10 @@ function createSlider(parent, options) {
     let valueElem = parent.querySelector('.slider_value');
     let sliderElem = parent.querySelector('.slider_slider');
 
-    function updateValue(value) {
-        valueElem.textContent = (value * step * uiMult).toFixed(uiPrecision);
+    function updateValue(val) {
+        value = val;
+        valueElem.textContent = (val * step * uiMult).toFixed(uiPrecision);
+        window.sliderValueChanged = true;
     }
 
     updateValue(value);
@@ -75,6 +77,9 @@ function createSlider(parent, options) {
             sliderElem.value = v;
             updateValue(v);
             fn(null, value * step);
+        },
+        getValue: () => {
+            return value;
         },
         defaultValue: value
     };
