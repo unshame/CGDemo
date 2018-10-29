@@ -113,6 +113,16 @@ buttonTextured.click(() => setMode('textured'));
 buttonTranslucent.click(() => setMode('translucent'));
 buttonMasked.click(() => setStencil(true));
 buttonUnmasked.click(() => setStencil(false));
+buttonMasked.bind('contextmenu', () => {
+    let gl = renderer.gl;
+    renderer.stencilOperator = renderer.stencilOperator === gl.EQUAL ? gl.NOTEQUAL : gl.EQUAL;
+    setStencil(true);
+    return false;
+});
+canvas.bind('contextmenu', () => {
+    renderer.fpsCounterEnabled = !renderer.fpsCounterEnabled;
+    return false;
+});
 
 /* Запуск */
 renderer.setColor(color);
