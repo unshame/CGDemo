@@ -97,6 +97,7 @@ class Renderer3D {
         this.primitiveType = this.gl.TRIANGLE_STRIP;
         this.fpsCounterEnabled = false;
         this.shouldDrawTargetObject = true;
+        this.stencilOperator = this.gl.EQUAL;
     }
 
     // Загружает текстуру, применяет только при textureEnabled
@@ -448,7 +449,7 @@ class Renderer3D {
         }
 
         // Переключаем трафаретный буфер в режим наложения маски
-        gl.stencilFunc(gl.EQUAL, 1, 0xff);
+        gl.stencilFunc(this.stencilOperator, 1, 0xff);
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
 
         // Выводим объекты сцены на окружности
