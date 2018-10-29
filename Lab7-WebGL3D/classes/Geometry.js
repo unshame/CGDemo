@@ -21,15 +21,21 @@ const Geometry = {
                     let ny = Math.cos(sa) * Math.sin(a);
                     let nz = Math.sin(sa);
 
+                    let ux = (i + v) / numStrips + (1 / numStrips) * (j / numSections);
+                    let pastHalf = j >= (numSections) / 2;
+                    let jj = pastHalf ? (numSections - j) : j;
+                    let uy = jj * 2 / numSections;
+
                     multiPush(vertices, x, y, z);
                     multiPush(normals, nx, ny, nz);
-                    multiPush(texcoords, (i + v) / numStrips, j < numSections ? (j + 1) / numSections : 0);
+                    multiPush(texcoords, ux, uy);
                 }
             }
         }
 
         return { vertices, texcoords, normals };
     },
+
 
     makeCylinder(radius, height, numSides) {
         let vertices = [];
