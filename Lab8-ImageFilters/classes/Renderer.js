@@ -2,12 +2,12 @@
 class Renderer {
 
     /**
-    * Рисует пиксели на холсте.
+    * Выводит изображение на холст.
     * @class
-    * @param {HTMLCanvasElement} canvas  HTML-элемент холст
-    * @param {number}            width   ширина холста
-    * @param {number}            height  высота холста
-    * @param {array}             clearColor   цвет рисования по холсту [r, g, b, a]
+    * @param {HTMLCanvasElement} canvas     элемент холст
+    * @param {number}            width      ширина холста
+    * @param {number}            height     высота холста
+    * @param {array}             clearColor цвет чистого холста
     */
     constructor(canvas, width, height, clearColor) {
 
@@ -27,13 +27,13 @@ class Renderer {
         this.height = height;
 
         /**
-        * Массив, представляющий пиксели холста.
-        * @type {array}
+        * Объект, содержащий массив, представляющий пиксели холста.
+        * @type {ImageData}
         */
         this.canvasData = this.ctx.getImageData(0, 0, width, height);
 
         /**
-        * Установленный цвет рисования на холсте.
+        * Цвет очистки холста.
         * @type {array}
         */
         this.clearColor = clearColor;
@@ -62,6 +62,7 @@ class Renderer {
         this.ctx.putImageData(canvasData || this.canvasData, 0, 0);
     }
 
+    /** Восстанавливает значение массива пикселей в соответствии с текущим отображаемым изображением. */
     restore() {
         this.canvasData = this.ctx.getImageData(0, 0, this.width, this.height);
     }
@@ -82,6 +83,10 @@ class Renderer {
         }
     }
 
+    /**
+    * Выводит изображение на холст.
+    * @param  {Image} image объект изображения
+    */
     drawImage(image) {
         this.width = image.width;
         this.height = image.height;
@@ -89,6 +94,13 @@ class Renderer {
         this.restore();
     }
 
+    /**
+    * Применяет матрицу конволюции к переданному массиву пикселей.
+    * @param {ImageData} canvasData объект, содержащий массив пикселей.
+    * @param {array}     kernel     матрица конволюции
+    *
+    * @return {ImageData} объект, содержащий массив пикселей с примененной матрицой конволюции
+    */
     convoluteCanvasData(canvasData, kernel) {
 
         let side = Math.round(Math.sqrt(kernel.length));

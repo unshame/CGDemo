@@ -2,50 +2,73 @@
 class FilterCanvasInterface {
 
     /**
-    * Холст для рисования линий и окружностей по алгоритму Брезенхема.
-    * Конструктор создает рендерер для рисования пикселей на холсте и массив для хранения фигур для рисования.
+    * Холст для применения матрицы конволюции к изображению.
+    * Конструктор создает рендерер для отображения изображения на холсте.
     * @class
-    * @param {HTMLCanvasElement} canvas  HTML-элемент холст
-    * @param {number}            width   ширина холста
-    * @param {number}            height  высота холста
-    * @param {array}             clearColor   цвет рисования по холсту [r, g, b, a]
+    * @param {HTMLCanvasElement}  canvas          элемент холст
+    * @param {number}             width           ширина холста
+    * @param {number}             height          высота холста
+    * @param {array}              clearColor      цвет чистого холста
+    * @param {array}              kernel          матрица конволюции
+    * @param {boolean}            shouldConvolute нужно ли применять матрицу конволюции по умолчанию
+    * @param {HTMLAnchorEelement} saveAnchor      элемент ссылки для сохранения изображения
     */
     constructor(canvas, width, height, clearColor, kernel, shouldConvolute, saveAnchor) {
 
         /**
-        * Объект, рисующий пиксели на холсте.
+        * Объект, отображающий изображение на холсте.
         * @type {Renderer}
         */
         this.renderer = new Renderer(canvas, width, height, clearColor);
 
+        /**
+        * Матрица конволюции.
+        * @type {array}
+        */
         this.kernel = kernel;
 
+        /**
+        * Нужно ли применять матрицу конволюции при апдейте.
+        * @type {boolean}
+        */
         this.shouldConvolute = shouldConvolute;
 
+        /**
+        * элемент ссылки для сохранения изображения
+        * @type {HTMLAnchorEelement}
+        */
         this.saveAnchor = saveAnchor;
 
         this.renderer.clearCanvas();
     }
 
-    /* Очищает холст и выводит все фигуры из массива. */
+    /* Выводит изображение на холст с или без применения матрицы конволюции. */
     update() {
         let convolutedCanvasData = this.shouldConvolute && this.renderer.convoluteCanvasData(this.renderer.canvasData, this.kernel);
         this.renderer.update(convolutedCanvasData);
         this.updateSaveAnchor();
     }
 
-    /** Очищает массив и холст. */
+    /** Очищает холст. */
     clear() {
         this.renderer.clearCanvas();
         this.renderer.update();
         this.updateSaveAnchor();
     }
 
+    /**
+    * Устанавливает режим конволюции (вкл/выкл) и обновляет холст.
+    * @param {boolean} enabled включен ли режим конволюции
+    */
     setConvolution(enabled) {
         this.shouldConvolute = enabled;
         this.update();
     }
 
+    /**
+    * Загружает и выводит изображение из файла.
+    * @param  {File} file объект файла
+    */
     loadImageFromFile(file) {
 
         if(!file) {
@@ -58,6 +81,10 @@ class FilterCanvasInterface {
         fileReader.readAsDataURL(file);
     }
 
+    /**
+    * Загружает изображение по адресу.
+    * @param  {string} url адрес изображения
+    */
     loadImage(url) {
         let img = new Image();
 
@@ -70,6 +97,7 @@ class FilterCanvasInterface {
         img.setAttribute('crossOrigin', '');
     }
 
+    /** Обновляет ссылку для сохранения изображения. */
     updateSaveAnchor() {
         this.renderer.canvas.toBlob((blob) => {
             console.log('Generated image blob');
