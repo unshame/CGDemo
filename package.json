@@ -8,7 +8,8 @@
     "doc3": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab3-FloodFill/doc  -r ./Lab3-FloodFill/README.md ./Lab3-FloodFill/classes",
     "doc4": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab4-Cohen-Sutherland/doc  -r ./Lab4-Cohen-Sutherland/README.md ./Lab4-Cohen-Sutherland/classes",
     "doc5": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab5-Sutherland-Hodgman/doc  -r ./Lab5-Sutherland-Hodgman/README.md ./Lab5-Sutherland-Hodgman/classes",
-    "doc8": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab8-ImageFilters/doc  -r ./Lab8-ImageFilters/README.md ./Lab8-ImageFilters/classes"
+    "doc8": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab8-ImageFilters/doc  -r ./Lab8-ImageFilters/README.md ./Lab8-ImageFilters/classes",
+    "doc9": "jsdoc -c ./shared/doc-templates/config.json -d ./Lab9-ImageAnalysis/doc  -r ./Lab9-ImageAnalysis/README.md ./Lab9-ImageAnalysis/classes"
   },
   "repository": {
     "type": "git",
