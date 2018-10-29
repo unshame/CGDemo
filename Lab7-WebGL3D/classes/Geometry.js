@@ -52,8 +52,13 @@ const Geometry = {
                 multiPush(vertices, invert ? 0 : x, y, invert ? 0 : z);
                 multiPush(normals, 0, invert ? 1 : -1, 0);
                 multiPush(normals, 0, invert ? 1 : -1, 0);
-                multiPush(texcoords, invert ? i / numSides : 0, 1);
-                multiPush(texcoords, invert ? 0 : i / numSides, 0);
+
+                let pastHalf = i >= (numSides) / 2;
+                let ii = pastHalf ? (numSides - i) : i;
+                let ux = ii * 2 / numSides;
+
+                multiPush(texcoords, invert ? ux : 0, 1);
+                multiPush(texcoords, invert ? 0 : ux, 0);
             }
         }
 
