@@ -26,6 +26,8 @@ function createSlider(parent, options) {
     max /= step;
     value /= step;
 
+    let initialValue = value;
+
     parent.innerHTML = `
       <div class="slider_outer">
         <span class="slider_label">${name}</span>
@@ -51,9 +53,9 @@ function createSlider(parent, options) {
     }
 
     function resetValue(event) {
-        updateValue(value);
-        sliderElem.value = value;
-        fn(event, value * step);
+        updateValue(initialValue);
+        sliderElem.value = initialValue;
+        fn(event, initialValue * step);
         event.preventDefault();
     }
 
