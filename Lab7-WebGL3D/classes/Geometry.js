@@ -22,9 +22,14 @@ const Geometry = {
                     let nz = Math.sin(sa);
 
                     let ux = (i + v) / numStrips + (1 / numStrips) * (j / numSections);
-                    let pastHalf = j >= (numSections) / 2;
+                    let half = (numSections) / 2;
+                    let pastHalf = j > (numSections) / 2;
+                    let leftover = half % 1 ? 1 / numSections : 0;
+                    if(pastHalf) {
+                        leftover = -leftover;
+                    }
                     let jj = pastHalf ? (numSections - j) : j;
-                    let uy = jj * 2 / numSections;
+                    let uy = jj * 2 / numSections - leftover * (jj / half);
 
                     multiPush(vertices, x, y, z);
                     multiPush(normals, nx, ny, nz);
