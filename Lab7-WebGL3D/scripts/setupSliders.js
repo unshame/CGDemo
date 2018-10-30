@@ -195,7 +195,7 @@ function setupSliders(renderer, textures) {
                 updateGeometry();
             },
             min: 1,
-            max: 100,
+            max: 200,
             name: 'S Radius',
             scrollStep: 5
         },
