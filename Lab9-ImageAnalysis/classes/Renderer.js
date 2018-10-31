@@ -111,7 +111,7 @@ class Renderer {
         let max = 255;
 
         for (let i = 0; i < rgb.length; i++) {
-            rgb[i].length = max;
+            rgb[i].length = max + 1;
             rgb[i].fill(0);
         }
 
