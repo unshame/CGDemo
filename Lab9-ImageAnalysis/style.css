@@ -11,6 +11,7 @@ canvas {
     height: 500px;
     background: white;
     display: none;
+    user-select: none;
 }
 
 #stats {
