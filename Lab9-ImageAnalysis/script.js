@@ -36,7 +36,7 @@ canvasInterface.loadImage('./default_image.png');
 fileInputLabel.html('default_image.png');
 
 $(() => {
-    let plotlyUrl = 'https://cdn.plot.ly/plotly-latest.min.js';
+    let plotlyUrl = '../shared/lib/plotly.min.js';
     $.getScript(plotlyUrl, (d) => {
         canvasInterface.drawHistogram();
     });
