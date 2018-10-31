@@ -195,9 +195,9 @@ function toggleButtons(a, b, cond) {
 }
 
 function goFullscreen() {
-    let canvas = renderer.canvas;
-    let func = canvas.requestFullscreen || canvas.webkitRequestFullScreen || canvas.mozRequestFullScreen;
-    func.call(canvas);
+    let screen = $('#screen')[0];
+    let func = screen.requestFullscreen || screen.webkitRequestFullScreen || screen.mozRequestFullScreen;
+    func.call(screen);
 }
 
 (() => {

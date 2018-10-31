@@ -9,6 +9,12 @@ main {
 
 canvas {
     cursor: default;
+    height: 100%;
+}
+
+#screen {
+    position: relative;
+    height: 540px;
 }
 
 .button_control {
@@ -170,7 +176,7 @@ canvas {
 
 #fpsCounter {
     position: absolute;
-    top: 52px;
+    top: 4px;
     left: 4px;
     font-size: 12px;
     text-shadow: 1px 1px 1px black;
