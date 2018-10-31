@@ -2,15 +2,16 @@
 class CanvasAnalysisInterface {
 
     /**
-    * Холст для рисования линий и окружностей по алгоритму Брезенхема.
-    * Конструктор создает рендерер для рисования пикселей на холсте и массив для хранения фигур для рисования.
-    * @class
-    * @param {HTMLCanvasElement} canvas  HTML-элемент холст
-    * @param {number}            width   ширина холста
-    * @param {number}            height  высота холста
-    * @param {array}             clearColor   цвет рисования по холсту [r, g, b, a]
+    * Холст для анализа изображений.
+    * Конструктор создает рендерер для отображения изображения.
+    * @param {HTMLCanvasElement} canvas     элемент холст
+    * @param {number}            width      ширина холста
+    * @param {number}            height     высота холста
+    * @param {array}             clearColor цвет чистого холста
+    * @param {HTMLElement}       graphNode  элемент для отображения гистограмы
+    * @param {HTMLElement}       statsNode  элемент для отображения статистики
     */
-    constructor(canvas, width, height, clearColor, grpahNode, statsNode) {
+    constructor(canvas, width, height, clearColor, graphNode, statsNode) {
 
         /**
         * Объект, рисующий пиксели на холсте.
@@ -18,30 +19,38 @@ class CanvasAnalysisInterface {
         */
         this.renderer = new Renderer(canvas, width, height, clearColor);
 
-        this.grpahNode = grpahNode;
+        /**
+        * Элемент страницы для отображения гистограммы.
+        * @type {HTMLElement}
+        */
+        this.graphNode = graphNode;
+
+        /**
+        * Элемент для отображения статистики.
+        * @type {HTMLElement}
+        */
         this.statsNode = statsNode;
 
         this.renderer.clearCanvas();
     }
 
-    /* Очищает холст и выводит все фигуры из массива. */
+    /* Очищает холст и гистограмму. */
     update() {
         this.renderer.update();
         this.drawHistogram();
     }
 
-    /** Очищает массив и холст. */
+    /** Обновляет изображение на холсте и гистограмму. */
     clear() {
         this.renderer.clearCanvas();
         this.renderer.update();
         this.drawHistogram();
     }
 
-    setConvolution(enabled) {
-        this.shouldConvolute = enabled;
-        this.update();
-    }
-
+    /**
+    * Загружает и выводит изображение из файла.
+    * @param  {File} file объект файла
+    */
     loadImageFromFile(file) {
 
         if(!file) {
@@ -54,6 +63,10 @@ class CanvasAnalysisInterface {
         fileReader.readAsDataURL(file);
     }
 
+    /**
+    * Загружает изображение по адресу.
+    * @param  {string} url адрес изображения
+    */
     loadImage(url) {
         let img = new Image();
 
@@ -66,6 +79,7 @@ class CanvasAnalysisInterface {
         img.src = url;
     }
 
+    /** Выводит гистограмму и статистику изображения. */
     drawHistogram() {
 
         if (!window.Plotly) {
@@ -99,10 +113,17 @@ class CanvasAnalysisInterface {
             }
         };
 
-        Plotly.newPlot(this.grpahNode, data, layout);
+        Plotly.newPlot(this.graphNode, data, layout);
         this.statsNode.innerHTML = this._formatStats(ms, colors);
     }
 
+    /**
+    * Форматирует статистику.
+    * @param {array} stats  статистика
+    * @param {array} colors цвета статистики
+    *
+    * @return {string} форматированная статистика
+    */
     _formatStats(stats, colors) {
         let fmt = '';
 

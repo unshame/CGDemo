@@ -4,10 +4,10 @@ class Renderer {
     /**
     * Рисует пиксели на холсте.
     * @class
-    * @param {HTMLCanvasElement} canvas  HTML-элемент холст
-    * @param {number}            width   ширина холста
-    * @param {number}            height  высота холста
-    * @param {array}             clearColor   цвет рисования по холсту [r, g, b, a]
+    * @param {HTMLCanvasElement} canvas     элемент холст
+    * @param {number}            width      ширина холста
+    * @param {number}            height     высота холста
+    * @param {array}             clearColor цвет чистого холста
     */
     constructor(canvas, width, height, clearColor) {
 
@@ -28,18 +28,20 @@ class Renderer {
 
         /**
         * Массив, представляющий пиксели холста.
-        * @type {array}
+        * @type {ImageData}
         */
         this.canvasData = this.ctx.getImageData(0, 0, width, height);
 
         /**
-        * Установленный цвет рисования на холсте.
+        * Цвет чистого холста.
         * @type {array}
         */
         this.clearColor = clearColor;
     }
 
-    /** Ширина холста. */
+    /** Ширина холста.
+    * @type {number}
+    */
     get width() {
         return this.canvas.width;
     }
@@ -48,7 +50,9 @@ class Renderer {
         this.canvas.width = width;
     }
 
-    /** Высота холста. */
+    /** Высота холста.
+    * @type {number}
+    */
     get height() {
         return this.canvas.height;
     }
@@ -58,10 +62,11 @@ class Renderer {
     }
 
     /** Обновляет изображение на холсте. */
-    update(canvasData) {
-        this.ctx.putImageData(canvasData || this.canvasData, 0, 0);
+    update() {
+        this.ctx.putImageData(this.canvasData, 0, 0);
     }
 
+    /** Восстанавливает значение массива пикселей в соответствии с текущим отображаемым изображением. */
     restore() {
         this.canvasData = this.ctx.getImageData(0, 0, this.width, this.height);
     }
@@ -74,7 +79,7 @@ class Renderer {
                 let index = (x + y * this.width) * 4;
                 let canvasData = this.canvasData;
 
-                canvasData.data[index] = this.clearColor[0];
+                canvasData.data[index + 0] = this.clearColor[0];
                 canvasData.data[index + 1] = this.clearColor[1];
                 canvasData.data[index + 2] = this.clearColor[2];
                 canvasData.data[index + 3] = this.clearColor[3];
@@ -82,6 +87,10 @@ class Renderer {
         }
     }
 
+    /**
+    * Выводит изображение на холст.
+    * @param  {Image} image объект изображения
+    */
     drawImage(image) {
         this.width = image.width;
         this.height = image.height;
@@ -89,6 +98,10 @@ class Renderer {
         this.restore();
     }
 
+    /**
+    * Собирает и возвращает значения для гистограммы и статистику по каждому цвету.
+    * @return {array} [гистограммы, статистика]
+    */
     getHistogramData() {
         let w = this.canvasData.width;
         let h = this.canvasData.height;

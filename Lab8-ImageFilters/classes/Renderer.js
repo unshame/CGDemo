@@ -39,7 +39,9 @@ class Renderer {
         this.clearColor = clearColor;
     }
 
-    /** Ширина холста. */
+    /** Ширина холста.
+    * @type {number}
+    */
     get width() {
         return this.canvas.width;
     }
@@ -48,7 +50,9 @@ class Renderer {
         this.canvas.width = width;
     }
 
-    /** Высота холста. */
+    /** Высота холста.
+    * @type {number}
+    */
     get height() {
         return this.canvas.height;
     }
@@ -57,7 +61,10 @@ class Renderer {
         this.canvas.height = height;
     }
 
-    /** Обновляет изображение на холсте. */
+    /** 
+    * Обновляет изображение на холсте.
+    * @param  {ImageData} canvasData новое изображение
+    */
     update(canvasData) {
         this.ctx.putImageData(canvasData || this.canvasData, 0, 0);
     }
@@ -75,7 +82,7 @@ class Renderer {
                 let index = (x + y * this.width) * 4;
                 let canvasData = this.canvasData;
 
-                canvasData.data[index] = this.clearColor[0];
+                canvasData.data[index + 0] = this.clearColor[0];
                 canvasData.data[index + 1] = this.clearColor[1];
                 canvasData.data[index + 2] = this.clearColor[2];
                 canvasData.data[index + 3] = this.clearColor[3];
