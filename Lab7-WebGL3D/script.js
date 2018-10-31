@@ -119,7 +119,7 @@ buttonMasked.bind('contextmenu', () => {
     setStencil(true);
     return false;
 });
-canvas.bind('contextmenu', () => {
+canvas.click(() => {
     renderer.fpsCounterEnabled = !renderer.fpsCounterEnabled;
     return false;
 });

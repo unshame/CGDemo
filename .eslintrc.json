@@ -25,6 +25,7 @@
         "semi": "warn"
     },
     "globals": {
-        "$": true
+        "$": true,
+        "convertToBrushEvent": true
     }
 }

@@ -60,6 +60,10 @@ canvas.mousedown((event) => brush.start(event));
 canvas.mousemove((event) => brush.update(event));
 canvas.mouseup((event) => brush.end(event));
 canvas.mouseout((event) => brush.end(event));
+canvas.bind('touchstart', (event) => brush.start(convertToBrushEvent(event, canvas)));
+canvas.bind('touchmove', (event) => brush.update(convertToBrushEvent(event, canvas)));
+canvas.bind('touchcancel', (event) => brush.end(convertToBrushEvent(event, canvas)));
+canvas.bind('touchend', (event) => brush.end(convertToBrushEvent(event, canvas)));
 
 setClip(clip, true);
 
