@@ -281,7 +281,7 @@ class Renderer3D {
         gl.uniform1f(locations.ambientLight, this.ambientLight);
 
         // Вектор направление света
-        gl.uniform3fv(locations.reverseLightDirection, M4Math.normalize(this.lightDirection));
+        gl.uniform3fv(locations.reverseLightDirection, V3Math.normalize(this.lightDirection));
 
         // Высчитываем свдиг, поворот и мастаб сцены, точки наблюдения, освещения и центрального объекта
         let projectionMatrix = this._getProjectionMatrix();  // Матрица проекции с перспективой

@@ -170,17 +170,5 @@ const M4Math = {
             d * ((tmp_18 * m12 + tmp_23 * m32 + tmp_15 * m02) - (tmp_22 * m32 + tmp_14 * m02 + tmp_19 * m12)),
             d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) - (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02))
         ];
-    },
-
-    normalize(v, dst) {
-        dst = dst || new Float32Array(3);
-        var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-        // make sure we don't divide by 0.
-        if (length > 0.00001) {
-            dst[0] = v[0] / length;
-            dst[1] = v[1] / length;
-            dst[2] = v[2] / length;
-        }
-        return dst;
     }
 };

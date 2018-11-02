@@ -5,8 +5,7 @@ const V3Math = {
     },
 
     normalize(v) {
-        var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-        // make sure we don't divide by 0.
+        let length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
         if (length > 0.00001) {
             return [v[0] / length, v[1] / length, v[2] / length];
         } else {
