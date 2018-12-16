@@ -1,1 +1,1 @@
-https://unshame.github.io/CGDemo/Lab9-ImageAnalysis
+https://unshame.github.io/CGDemo/MO-OptimizationMethods
