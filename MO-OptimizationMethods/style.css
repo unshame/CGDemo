@@ -1,0 +1,63 @@
+header {
+    background-color: #01579B;
+}
+
+canvas {
+    cursor: default;
+}
+
+#graph {
+    width: 800px;
+    height: 500px;
+    background: white;
+    user-select: none;
+}
+
+#stats {
+    height: 40px;
+    background: white;
+    text-align: center;
+}
+
+.button_control {
+    color: #01579B;
+    cursor: pointer;
+}
+
+.button_control.active {
+    background: #01579B;
+}
+
+.button_control.button_canvas, .button_control.button_canvas::before {
+    border-radius: 24px 0 0 24px;
+    padding-left: 56px;
+}
+
+.button_control.button_canvas::after {
+    top: 0;
+    left: 8px;
+    background: url('../shared/images/image_orange.png');
+}
+
+.button_control.active.button_canvas::after {
+    background: url('../shared/images/image.png');
+}
+
+.button_control.button_graph, .button_control.button_graph::before {
+    border-radius: 0 24px 24px 0;
+    padding-right: 56px;
+}
+
+.button_control.button_graph::after {
+    top: 0;
+    right: 8px;
+    background: url('../shared/images/poll_orange.png');
+}
+
+.button_control.active.button_graph::after {
+    background: url('../shared/images/poll.png');
+}
+
+.github-corner svg {
+    fill: #01579B;
+}
