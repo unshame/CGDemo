@@ -19,8 +19,26 @@
                 <div id="graph" class="analysis"></div>
                 <div id="stats"  class="analysis"></div>
             </div>
-            <div class="buttons">
-            </div>
+            <form class="controls" id="controls">
+                <input id="doPlot" type="submit" value="Optimize">
+                Given y(x) = <input id="getY" type="text" value="2 * x * x - 12 * x" size="15">, 
+                defined on [a, b],
+                where a = <input id="a" size="3" type="number" value="0">
+                and b = a + <input id="ab" type="number" value="10">,<br>
+                find <select id="limit">
+                    <option value="min">min</option>
+                    <option value="max">max</option>
+                </select>
+                using <select id="method">
+                    <option value="dichotomy">Dichotomy</option>
+                    <option value="goldenRatio">Golden Ratio</option>
+                    <option value="fibonacci">Fibonacci</option>
+                </select> method
+                with l = <input id="l" type="number" value="0.1" step="0.01">
+                and step <input id="ep" type="number" value="0.01" step="0.01">.
+                Delay <input id="interval" type="number" value="500" step="100" style="width: 60px">.
+                
+            </form>
         </main>
         <script src="../shared/scripts/polyfills.js"></script>
         <script src="../shared/lib/jquery.min.js"></script>

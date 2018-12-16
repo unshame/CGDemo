@@ -1,6 +1,7 @@
+/* exported OptimizationMethods */
 const OptimizationMethods = {
 
-    dichotomy: function*(getY, { a, b, l, ep, sign = -1 }) {
+    dichotomy: function*(getY, { a, b, l, ep, sign }) {
         let L = b - a;
 
         while (L > l) {
@@ -25,11 +26,11 @@ const OptimizationMethods = {
         return [a, b];
     },
 
-    goldenRatio: function* (getY, { a, b, ep, sign = -1 }) {
+    goldenRatio: function* (getY, { a, b, l, sign }) {
         let c = 1.618;
         let L = b - a;
 
-        while (L > ep) {
+        while (L > l) {
 
             let x1 = a + L / c;
             let x2 = b - L / c;
@@ -51,7 +52,7 @@ const OptimizationMethods = {
         return [a, b];
     },
 
-    fibonacci: function* (getY, { a, b, l, ep, sign = -1 }) {
+    fibonacci: function* (getY, { a, b, l, ep, sign }) {
 
         function fib(num) {
             var a = 1, b = 0, temp;

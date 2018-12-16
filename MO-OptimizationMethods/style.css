@@ -1,3 +1,40 @@
+input[type="number"] {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font: inherit;
+    width: 50px;
+}
+
+.controls {
+    display: none;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    padding: 16px;
+    line-height: 30px;
+    margin-top: 30px;
+}
+
+.controls input, .controls select {
+    border: 1px dashed gray;
+    height: 20px;
+}
+
+#doPlot {
+    float: right;
+    height: 60px;
+    width: 100px;
+    background: #01579B;
+    border: 1px solid gray;
+    border-radius: 5px;
+    color: white;
+}
+
+#doPlot:active {
+    padding-top: 2px;
+}
+
 header {
     background-color: #01579B;
 }
@@ -21,6 +58,12 @@ header {
     font-weight: bold;
     text-align: center;
     opacity: 0.2;
+    color: #01579B;
+}
+
+.elevated.loaded::before {
+    content: '↓ PRESS BUTTON ↓';
+    font-size: 80px;
 }
 
 #graph {

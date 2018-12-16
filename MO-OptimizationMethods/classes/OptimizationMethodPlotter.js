@@ -1,24 +1,28 @@
 /* exported OptimizationMethodPlotter */
 class OptimizationMethodPlotter {
 
-    constructor(graphId) {
+    constructor(graphId, resultId) {
         this.graphId = graphId;
+        this.resultId = resultId;
 
         this.intervalId = null;
     }
 
     /** Выводит гистограмму и статистику изображения. */
-    plotGraph(getY, optimizationMethod, interval = 200, params) {
+    plotGraph(getY, optimizationMethod, interval, params) {
 
         if (!window.Plotly) {
             return;
         }
 
-        let { a, b } = params;
+        let resultNode = document.getElementById(this.resultId);
+        resultNode.innerHTML = '';
+
+        let { a, b, step } = params;
         Plotly.newPlot(
             this.graphId,
-            this._generateTraces(getY, a, b),
-            this._getLayout()
+            this._generateTraces(getY, a, b, step),
+            this._generateLayout(a, b)
         );
 
         let optimize = optimizationMethod(getY, params);
@@ -40,6 +44,7 @@ class OptimizationMethodPlotter {
                     x: [[newA], [newB]],
                     y: [[getY(newA)], [getY(newB)]]
                 }, [1, 2]).catch(err => { });
+
                 return;
             }
 
@@ -58,17 +63,22 @@ class OptimizationMethodPlotter {
                     [getY(newA), getY(newB)]
                 ]
             }, [1, 2, 3]).catch(err => { });
+
+            resultNode.innerHTML = `${params.sign == 1 ? 'Max' : 'Min'}: [${newA.toFixed(2)}, ${newB.toFixed(2)}]`;
         }, interval);
     }
 
-    _generateTraces(getY, a, b) {
+    _generateTraces(getY, a, b, step) {
         let xs = [];
         let ys = [];
 
-        for (let i = a; i <= b; i++) {
+        for (let i = a; i < b; i = Math.min(b, i + step)) {
             xs.push(i);
             ys.push(getY(i));
         }
+
+        xs.push(b);
+        ys.push(getY(b));
 
         let solutionStepsA = {
             x: [a],
@@ -104,19 +114,23 @@ class OptimizationMethodPlotter {
             name: 'Function',
             mode: 'lines',
             line: { shape: 'spline' },
-            type: 'scatter'
+            type: 'scatter',
+            hoverinfo: 'none'
         };
 
         return [plot, solutionStepsA, solutionStepsB, solution];
     }
 
-    _getLayout() {
+    _generateLayout(a, b) {
         return {
             legend: {
                 y: 0.5,
                 traceorder: 'reversed',
                 font: { size: 16 },
                 yref: 'paper'
+            },
+            xaxis: {
+                range: [a - 1, b + 1]
             }
         };
     }
