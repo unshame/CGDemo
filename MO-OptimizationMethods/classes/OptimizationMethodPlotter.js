@@ -32,12 +32,17 @@ class OptimizationMethodPlotter {
             clearInterval(this.intervalId);
         }
 
+        let counter = 0;
+
         this.intervalId = setInterval(() => {
+
+            counter++;
 
             let iteration = optimize.next();
             let [newA, newB] = iteration.value;
             allAs.push(newA);
             allBs.push(newB);
+
 
             if (!iteration.done) {
                 Plotly.restyle(this.graphId, {
@@ -64,7 +69,7 @@ class OptimizationMethodPlotter {
                 ]
             }, [1, 2, 3]).catch(err => { });
 
-            resultNode.innerHTML = `${params.sign == 1 ? 'Max' : 'Min'}: [${newA.toFixed(2)}, ${newB.toFixed(2)}]`;
+            resultNode.innerHTML = `${params.sign == 1 ? 'Max' : 'Min'}: [${newA.toFixed(2)}, ${newB.toFixed(2)}], found in ${counter} steps.`;
         }, interval);
     }
 
