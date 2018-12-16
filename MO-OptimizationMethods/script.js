@@ -28,7 +28,7 @@ function plot() {
                 l: parseFloat($('#l').val()),
                 ep: parseFloat($('#ep').val()),
                 sign: $('#limit').val() == 'max' ? 1 : -1,
-                step: 0.5
+                step: 0.1
             }
         );
     }
