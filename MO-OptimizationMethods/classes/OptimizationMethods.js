@@ -65,7 +65,6 @@ const OptimizationMethods = {
             return b;
         }
 
-        let m1;
         let L = b - a;
         let n = (b - a) / l;
         let k1 = 1, k = 1, p = 1, count = 1;
@@ -80,7 +79,7 @@ const OptimizationMethods = {
         while (count > 0) {
 
             L = b - a;
-            m1 = (L) / fib(count);
+            let m1 = L / fib(count);
             let x1 = a + m1 * fib(count - 2);
             let y1 = getY(x1);
             let x2 = b - m1 * fib(count - 2);
