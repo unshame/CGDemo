@@ -55,12 +55,10 @@ const OptimizationMethods = {
     fibonacci: function* (getY, { a, b, l, ep, sign }) {
 
         function fib(num) {
-            var a = 1, b = 0, temp;
+            let a = 1, b = 0;
 
             while (num >= 0) {
-                temp = a;
-                a = a + b;
-                b = temp;
+                [a, b] = [a + b, a];
                 num--;
             }
 
