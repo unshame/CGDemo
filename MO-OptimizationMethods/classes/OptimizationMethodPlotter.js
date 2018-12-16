@@ -129,7 +129,8 @@ class OptimizationMethodPlotter {
     _generateLayout(a, b) {
         return {
             legend: {
-                y: 0.5,
+                y: 1.1,
+                orientation: 'h',
                 traceorder: 'reversed',
                 font: { size: 16 },
                 yref: 'paper'
